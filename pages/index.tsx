@@ -1,5 +1,5 @@
 export default function Home() {
-  return <div>Eren</div>
+  return <div>Ayşegül</div>
 }
 
 /* export const getStaticProps: GetStaticProps = async () => {
