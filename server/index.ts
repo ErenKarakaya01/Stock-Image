@@ -35,7 +35,9 @@ server.prepare().then(() => {
 
   db.connect((err: any) => {
     if (err) throw err
+
     console.log("Connected to ClearDB!")
+    
     setInterval(function () {
       db.query("SELECT 1", (err: any, rows: object[]) => {
         if (err) throw err
