@@ -7,6 +7,9 @@
       "dom",
       "es2017"
     ],
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
     "baseUrl": ".",
     "moduleResolution": "node",
     "strict": true,
@@ -35,5 +38,5 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ]
+, "next.config.js"  ]
 }

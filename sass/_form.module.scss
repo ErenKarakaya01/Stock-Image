@@ -1,0 +1,25 @@
+.grid {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+
+  .col {
+    height: 100vh;
+    margin-left: auto;
+    margin-right: 4em;
+
+    .divider {
+      margin: 0 2.5em;
+    }
+
+    .center {
+      height: 100%;
+      display: inline-flex;
+
+      .form {
+        width: 100%;
+      }
+    }
+  }
+}

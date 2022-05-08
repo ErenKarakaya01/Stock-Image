@@ -1,6 +1,8 @@
-export default function Home() {
+const Home = () => {
   return <div>Ayşegül</div>
 }
+
+export default Home
 
 /* export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = getSortedPostsData()

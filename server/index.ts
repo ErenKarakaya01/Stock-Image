@@ -14,17 +14,21 @@ const db_config = {
   database: "heroku_39f5874a1a20466",
 }
 
-server.prepare().then(() => {
+server.prepare().then(async () => {
   const app = express()
+
+  // Body parser middlewares
+  app.use(express.json())
+  app.use(express.urlencoded())
 
   let connection: any
 
-  function handleDisconnect() {
-    connection = mysql.createConnection(db_config) 
+  const handleDisconnect = async () => {
+    connection = await mysql.createConnection(db_config) 
     // Recreate the connection, since
     // the old one cannot be reused.
 
-    connection.connect(function (err: any) {
+    await connection.connect((err: any) => {
       // The server is either down
       if (err) {
         // or restarting (takes a while sometimes).
@@ -35,20 +39,23 @@ server.prepare().then(() => {
     }) 
     // process asynchronous requests in the meantime.
     // If you're also serving http, display a 503 error.
-    connection.on("error", function (err: any) {
+    connection.on("error", async (err: any) => {
       console.log("db error", err)
       if (err.code === "PROTOCOL_CONNECTION_LOST") {
         // Connection to the MySQL server is usually
-        handleDisconnect() // lost due to either server restart, or a
+        // lost due to either server restart, or a
       } else {
         // connnection idle timeout (the wait_timeout
         // server variable configures this)
         throw err
       }
+      await handleDisconnect()
+      console.log("connected to db")
     })
   }
 
-  handleDisconnect()
+  await handleDisconnect()
+
   connection.query("select 1", (err: string, rows: object[]) => {
     if (err) throw err
     console.log(rows)
