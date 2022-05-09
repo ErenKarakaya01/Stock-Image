@@ -3,6 +3,7 @@
   width: 100%;
   overflow: hidden;
   margin: 0;
+  position: relative;
 
   .col {
     height: 100vh;
@@ -10,7 +11,15 @@
     margin-right: 4em;
 
     .divider {
-      margin: 0 2.5em;
+      margin-right: 2.5em;
+    }
+
+    .image {
+      width: 100%;
+
+      img {
+        width: 70%;
+      }
     }
 
     .center {
@@ -21,5 +30,35 @@
         width: 100%;
       }
     }
+  }
+
+  .portal {
+    position: absolute;
+    top: -10em;
+    width: 120vw;
+    height: 120vh;
+    z-index: -2;
+    overflow: hidden;
+    opacity: 0.2;
+    filter: blur(0.2em);
+    transform: rotate(-5deg);
+  }
+}
+
+.backgroundCol {
+  padding: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: absolute;
+
+  .background {
+    width: 80%;
+    z-index: -1;
+    position: relative;
+    left: 7rem;
+    overflow: hidden;
+    transform: rotate(-12deg);
   }
 }
