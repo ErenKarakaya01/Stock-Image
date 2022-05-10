@@ -2,14 +2,11 @@ import {
   Button,
   Group,
   PasswordInput,
-  Radio,
-  RadioGroup,
   TextInput,
 } from "@mantine/core"
 import { useForm } from "@mantine/form"
 import { UseFormReturnType } from "@mantine/form/lib/use-form"
 import Link from "next/link"
-import { FormEventHandler } from "react"
 import formStyles from "../sass/style.module.scss"
 
 const LoginForm = () => {
