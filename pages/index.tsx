@@ -1,5 +1,11 @@
+import { Grid } from "@mantine/core"
+import NavbarSimple from "components/NavbarSimple"
+import mainpagesyles from "../sass/style.module.scss"
+
 const Home = () => {
-  return <div>Ayşegül</div>
+  return <Grid columns={24} className={mainpagesyles.grid}>
+    <NavbarSimple />
+  </Grid >
 }
 
 export default Home

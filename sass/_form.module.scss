@@ -18,7 +18,7 @@
       width: 100%;
 
       img {
-        width: 70%;
+        width: 50%;
       }
     }
 
@@ -35,13 +35,28 @@
   .portal {
     position: absolute;
     top: -10em;
+    left: -17em;
     width: 120vw;
     height: 120vh;
     z-index: -2;
-    overflow: hidden;
     opacity: 0.2;
     filter: blur(0.2em);
-    transform: rotate(-5deg);
+    transform: rotate(-4deg);
+
+    .background {
+      width: 80%;
+      z-index: -1;
+      position: relative;
+      left: 7rem;
+  
+      .paper {
+        border-radius: 0;
+  
+        .image {
+          margin-bottom: 2em;
+        }
+      }
+    }
   }
 }
 
@@ -50,15 +65,22 @@
   height: 100%;
   display: flex;
   align-items: center;
-  overflow: hidden;
   position: absolute;
+  overflow: hidden;
 
   .background {
     width: 80%;
     z-index: -1;
     position: relative;
     left: 7rem;
-    overflow: hidden;
     transform: rotate(-12deg);
+
+    .paper {
+      border-radius: 0;
+
+      .image {
+        margin-bottom: 2em;
+      }
+    }
   }
 }
