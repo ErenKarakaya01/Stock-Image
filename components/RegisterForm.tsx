@@ -8,7 +8,6 @@ import {
 } from "@mantine/core"
 import { useForm } from "@mantine/form"
 import { UseFormReturnType } from "@mantine/form/lib/use-form"
-import { EventHandler, useEffect } from "react"
 import Link from "next/link"
 import formStyles from "../sass/style.module.scss"
 
