@@ -1,0 +1,61 @@
+.grid {
+  width: 100vw;
+  height: 100vh;
+
+  .navbar {
+    height: 100vh;
+    width: 17em;
+    display: inline-flex;
+    padding: 1em;
+  }
+
+  .pageContent {
+    display: inline-block;
+    width: calc(100vw - 17em);
+    height: 100vh;
+    padding: 3em;
+    margin: 0;
+    overflow-y: scroll;
+
+    .header {
+      height: fit-content;
+      width: 100%;
+    }
+
+    .divider {
+      width: 100%;
+      height: fit-content;
+    }
+
+    .images {
+      width: 100%;
+      height: max-content;
+
+      .column {
+        padding: 0.7em;
+
+        .imageCard {
+          max-width: 100%;
+          max-height: 100%;
+          padding: 0;
+          background-color: rgba(180, 180, 180, 0.066);
+
+          .image {
+            max-width: 100%;
+            max-height: 100%;
+            margin: 0;
+
+            img {
+              max-width: 100%;
+              max-height: 100%;
+            }
+          }
+
+          .info {
+            padding: 1em;
+          }
+        }
+      }
+    }
+  }
+}

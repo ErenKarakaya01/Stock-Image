@@ -10,7 +10,10 @@ import {
   Receipt2,
   SwitchHorizontal,
   Logout,
+  Search
 } from 'tabler-icons-react';
+import Link from 'next/link';
+import pagestyles from "../sass/style.module.scss"
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon');
@@ -18,17 +21,15 @@ const useStyles = createStyles((theme, _params, getRef) => {
     header: {
       paddingBottom: theme.spacing.md,
       marginBottom: theme.spacing.md * 1.5,
-      borderBottom: `1px solid ${
-        theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
-      }`,
+      borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
+        }`,
     },
 
     footer: {
       paddingTop: theme.spacing.md,
       marginTop: theme.spacing.md,
-      borderTop: `1px solid ${
-        theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
-      }`,
+      borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
+        }`,
     },
 
     link: {
@@ -45,6 +46,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
       '&:hover': {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
         color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+        cursor: "pointer",
 
         [`& .${icon}`]: {
           color: theme.colorScheme === 'dark' ? theme.white : theme.black,
@@ -74,8 +76,8 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const data = [
-  { link: '', label: 'Notifications', icon: BellRinging },
-  { link: '', label: 'Billing', icon: Receipt2 },
+  { link: '/browse', label: 'Browse', icon: Search },
+  { link: '/b', label: 'Billing', icon: Receipt2 },
   { link: '', label: 'Security', icon: Fingerprint },
   { link: '', label: 'SSH Keys', icon: Key },
   { link: '', label: 'Databases', icon: DatabaseImport },
@@ -85,25 +87,20 @@ const data = [
 
 export default function NavbarSimple() {
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState('Billing');
 
   const links = data.map((item) => (
-    <a
-      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
-      href={item.link}
-      key={item.label}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(item.label);
-      }}
-    >
-      <item.icon className={classes.linkIcon} />
-      <span>{item.label}</span>
-    </a>
+    <Link href={item.link} key={item.label}>
+      <div
+        className={classes.link}
+      >
+        <item.icon className={classes.linkIcon} />
+        <span>{item.label}</span>
+      </div>
+    </Link>
   ));
 
   return (
-    <Navbar height={"100%"} width={{ sm: 300 }} p="md">
+    <Navbar className={pagestyles.navbar}>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
           <Code sx={{ fontWeight: 700 }}>v3.1.2</Code>
@@ -112,15 +109,15 @@ export default function NavbarSimple() {
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+        <div className={classes.link} onClick={(event) => event.preventDefault()}>
           <SwitchHorizontal className={classes.linkIcon} />
           <span>Change account</span>
-        </a>
+        </div>
 
-        <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+        <div className={classes.link} onClick={(event) => event.preventDefault()}>
           <Logout className={classes.linkIcon} />
           <span>Logout</span>
-        </a>
+        </div>
       </Navbar.Section>
     </Navbar>
   );

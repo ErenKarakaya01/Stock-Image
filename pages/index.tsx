@@ -1,9 +1,9 @@
 import { Grid } from "@mantine/core"
 import NavbarSimple from "components/NavbarSimple"
-import mainpagesyles from "../sass/style.module.scss"
+import pagestyles from "../sass/style.module.scss"
 
 const Home = () => {
-  return <Grid columns={24} className={mainpagesyles.grid}>
+  return <Grid columns={24} className={pagestyles.grid}>
     <NavbarSimple />
   </Grid >
 }

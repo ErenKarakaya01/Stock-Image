@@ -7,12 +7,12 @@ const server = next({ dev })
 const handle = server.getRequestHandler()
 const mysql = require("mysql")
 
-const db_config = {
+/* const db_config = {
   host: "eu-cdbr-west-02.cleardb.net",
   user: "b1bc500c66092e",
   password: "e868a98a",
   database: "heroku_39f5874a1a20466",
-}
+} */
 
 server.prepare().then(async () => {
   const app = express()
@@ -24,7 +24,7 @@ server.prepare().then(async () => {
   let connection: any
 
   const handleDisconnect = async () => {
-    connection = await mysql.createConnection(db_config) 
+    connection = await mysql.createConnection("mysql://ht8g9jqdwjgvijkn:slw5d31f56s7uoa7@i54jns50s3z6gbjt.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/lsunasu7vjaz9dy9") 
     // Recreate the connection, since
     // the old one cannot be reused.
 

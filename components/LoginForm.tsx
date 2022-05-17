@@ -26,32 +26,19 @@ const LoginForm = () => {
     }),
   })
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-
-    let err: string = "error"
-
-    form.onSubmit(values => console.log(values))
-
-    if (err)
-      form.setErrors({ name: "Email or Password Wrong!" })
-  }
-
   return (
     <form
       className={formStyles.form}
-      onSubmit={handleSubmit}
+      onSubmit={form.onSubmit((values) => console.log(values))}
     >
 
       <TextInput
-        required
         label="Email"
         placeholder="Email"
         {...form.getInputProps("email")}
       />
 
       <PasswordInput
-        required
         label="Password"
         placeholder="Password"
         {...form.getInputProps("password")}

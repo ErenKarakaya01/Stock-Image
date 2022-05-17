@@ -56,12 +56,6 @@ const RegisterForm = () => {
     }),
   })
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-
-    form.onSubmit((values) => console.log(values))
-  }
-
   /* useEffect(() => {
     form.setErrors({ name: "gfds" })
   }, []) */
@@ -69,45 +63,40 @@ const RegisterForm = () => {
   return (
     <form
       className={formStyles.form}
-      onSubmit={handleSubmit}
+      onSubmit={form.onSubmit((values) => console.log(values))}
     >
-      <TextInput
-        required
+      <TextInput  
         label="Name"
         placeholder="Name"
         {...form.getInputProps("name")}
       />
 
       <TextInput
-        required
         label="Surname"
         placeholder="Surname"
         {...form.getInputProps("surname")}
       />
 
       <TextInput
-        required
         label="Email"
         placeholder="Email"
         {...form.getInputProps("email")}
       />
 
       <PasswordInput
-        required
         label="Password"
         placeholder="Password"
         {...form.getInputProps("password")}
       />
 
       <PasswordInput
-        required
         mt="sm"
         label="Confirm password"
         placeholder="Confirm password"
         {...form.getInputProps("confirmPassword")}
       />
 
-      <RadioGroup label="Select your role" required {...form.getInputProps("role")}>
+      <RadioGroup label="Select your role" {...form.getInputProps("role")}>
         <Radio value="customer" label="Customer" />
         <Radio value="creator" label="Creator" />
       </RadioGroup>
