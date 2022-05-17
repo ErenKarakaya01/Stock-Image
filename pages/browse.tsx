@@ -1,8 +1,9 @@
 import NavbarSimple from 'components/NavbarSimple'
 import React from 'react'
 import pagestyles from "../sass/style.module.scss"
-import { Group, Grid, Col, Paper, Select, Divider, Box, Card, Text, Badge, Highlight } from "@mantine/core"
+import { Group, Grid, Col, Paper, Select, Divider, Box, Card, Text, Badge, Highlight, Button } from "@mantine/core"
 import { Search } from "tabler-icons-react"
+import Link from "next/link"
 
 const a = () => {
   const data = Array(50).fill(0).map((_, index) => `Item ${index}`)
@@ -46,6 +47,26 @@ const a = () => {
         />
         <Grid className={pagestyles.images}>
           <Col span={3} className={pagestyles.column}>
+            <Link href="b">
+              <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
+                <Card.Section className={pagestyles.image}>
+                  <img src="/images/beyaz2.jpg" />
+                </Card.Section>
+
+                <Group className={pagestyles.info}>
+                  <Text><b>Name: </b>Fjord Adventures</Text>
+                  <Text><b>Category: </b>Fjord Adventures</Text>
+                </Group>
+                <Group position="apart" className={pagestyles.priceButton}>
+                  <Badge color="pink" variant="light" size="xl">
+                    $45
+                  </Badge>
+                  <Button variant="outline" radius={"xl"} gradient={{ from: 'teal', to: 'blue', deg: 60 }}>
+                    Buy
+                  </Button>
+                </Group>
+              </Card>
+            </Link>
             <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
               <Card.Section className={pagestyles.image}>
                 <img src="/images/beyaz2.jpg" />
@@ -76,31 +97,63 @@ const a = () => {
             </Card>
           </Col>
           <Col span={3} className={pagestyles.column}>
-            <Card className={pagestyles.imageCard}>
+            <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
               <Card.Section className={pagestyles.image}>
-                <img src="/images/beyaz1.jpg" />
+                <img src="/images/beyaz2.jpg" />
               </Card.Section>
+
+              <Group className={pagestyles.info}>
+                <Text><b>Name: </b>Fjord Adventures</Text>
+                <Text><b>Category: </b>Fjord Adventures</Text>
+                <Badge color="pink" variant="light">
+                  On Sale
+                </Badge>
+              </Group>
             </Card>
           </Col>
           <Col span={3} className={pagestyles.column}>
-            <Card className={pagestyles.imageCard}>
+            <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
               <Card.Section className={pagestyles.image}>
                 <img src="/images/beyaz1.jpg" />
               </Card.Section>
+
+              <Group className={pagestyles.info}>
+                <Text><b>Name: </b>Fjord Adventures</Text>
+                <Text><b>Category: </b>Fjord Adventures</Text>
+                <Badge color="pink" variant="light">
+                  On Sale
+                </Badge>
+              </Group>
             </Card>
           </Col>
           <Col span={3} className={pagestyles.column}>
-            <Card className={pagestyles.imageCard}>
+            <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
               <Card.Section className={pagestyles.image}>
-                <img src="/images/beyaz1.jpg" />
+                <img src="/images/beyaz2.jpg" />
               </Card.Section>
+
+              <Group className={pagestyles.info}>
+                <Text><b>Name: </b>Fjord Adventures</Text>
+                <Text><b>Category: </b>Fjord Adventures</Text>
+                <Badge color="pink" variant="light">
+                  On Sale
+                </Badge>
+              </Group>
             </Card>
           </Col>
           <Col span={3} className={pagestyles.column}>
-            <Card className={pagestyles.imageCard}>
+            <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
               <Card.Section className={pagestyles.image}>
                 <img src="/images/beyaz1.jpg" />
               </Card.Section>
+
+              <Group className={pagestyles.info}>
+                <Text><b>Name: </b>Fjord Adventures</Text>
+                <Text><b>Category: </b>Fjord Adventures</Text>
+                <Badge color="pink" variant="light">
+                  On Sale
+                </Badge>
+              </Group>
             </Card>
           </Col>
         </Grid>

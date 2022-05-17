@@ -35,24 +35,31 @@
         padding: 0.7em;
 
         .imageCard {
-          max-width: 100%;
-          max-height: 100%;
+          width: 100%;
           padding: 0;
           background-color: rgba(180, 180, 180, 0.066);
+          margin: 1em 0;
 
           .image {
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
             margin: 0;
 
             img {
-              max-width: 100%;
-              max-height: 100%;
+              width: 100%;
             }
           }
 
           .info {
             padding: 1em;
+          }
+
+          .priceButton {
+            margin: 1em;
+          }
+
+          &:hover {
+            cursor: pointer;
+            background-color: rgba(180, 180, 180, 0.274);
           }
         }
       }
