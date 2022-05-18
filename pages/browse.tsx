@@ -30,12 +30,15 @@ const a = () => {
   ])
 
   const handleLike = (image_id: number) => {
+    let temp = data1
+
     data1.forEach((v, i) => {
       if (v.image_id === image_id) {
-        setData1([])
-        setData1([...data1, {...data1[i], liked: !data1[i].liked}])
+        temp[i].liked = !temp[i].liked
       }
     })
+    setData1([])
+    setData1([...data1])
   }
 
   return (
@@ -63,6 +66,7 @@ const a = () => {
             data={data}
           />
         </Group>
+
         <Divider
           className={pagestyles.divider}
           my="xs"
@@ -75,6 +79,7 @@ const a = () => {
             </>
           }
         />
+
         <Grid className={pagestyles.images}>
           {[0, 1, 2, 3].map((value, index) => (
             <Col key={index} span={3} className={pagestyles.column}>
@@ -85,21 +90,19 @@ const a = () => {
                       <img src={v.base64_url} />
                     </Card.Section>
                   </Link>
+
                   <Group direction="column" className={pagestyles.info}>
                     <Text><b>Name: </b>{v.name}</Text>
                     <Text><b>Category: </b>{v.category}</Text>
                   </Group>
+
                   <Group position="apart" className={pagestyles.priceButton}>
                     <Badge color="pink" variant="light" size="xl">
                       {"$" + v.price}
                     </Badge>
 
-                    <IconButton onClick={() => {
-                      console.log(v.liked)
-                      handleLike(v.image_id)
-                    }}>
+                    <IconButton onClick={() => handleLike(v.image_id)}>
                       {v.liked === true ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon color="error" />}
-                      {console.log("rerendered")}
                     </IconButton>
 
                     <Link href={`/image/${v.image_id}`}>
@@ -107,41 +110,10 @@ const a = () => {
                         Buy
                       </Button>
                     </Link>
-
                   </Group>
                 </Card >
               ))}
             </Col>
-          ))}
-          {data1.map(v => (
-            <Card key={v.image_id} className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
-              <Link href={`/image/${v.image_id}`}>
-                <Card.Section className={pagestyles.image}>
-                  <img src={v.base64_url} />
-                </Card.Section>
-              </Link>
-              <Group direction="column" className={pagestyles.info}>
-                <Text><b>Name: </b>{v.name}</Text>
-                <Text><b>Category: </b>{v.category}</Text>
-              </Group>
-              <Group position="apart" className={pagestyles.priceButton}>
-                <Badge color="pink" variant="light" size="xl">
-                  {"$" + v.price}
-                </Badge>
-
-                <IconButton onClick={() => handleLike(v.image_id)}>
-                  {v.liked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon color="error" />}
-                  {console.log("rerendered")}
-                </IconButton>
-
-                <Link href={`/image/${v.image_id}`}>
-                  <Button variant="outline" radius={"xl"} gradient={{ from: 'teal', to: 'blue', deg: 60 }}>
-                    Buy
-                  </Button>
-                </Link>
-
-              </Group>
-            </Card >
           ))}
         </Grid>
       </Grid>
