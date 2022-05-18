@@ -1,12 +1,42 @@
 import NavbarSimple from 'components/NavbarSimple'
-import React from 'react'
+import React, { useState } from 'react'
 import pagestyles from "../sass/style.module.scss"
 import { Group, Grid, Col, Paper, Select, Divider, Box, Card, Text, Badge, Highlight, Button } from "@mantine/core"
 import { Search } from "tabler-icons-react"
 import Link from "next/link"
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { IconButton } from "@mui/material"
 
 const a = () => {
+  interface ImageObject {
+    image_id: number,
+    name: string,
+    category: string,
+    price: number,
+    base64_url: string,
+    liked: boolean
+  }
+
   const data = Array(50).fill(0).map((_, index) => `Item ${index}`)
+
+  const [data1, setData1] = useState<ImageObject[]>([
+    { image_id: 1, name: "eren", category: "adar", price: 31, base64_url: "/images/beyaz1.jpg", liked: true },
+    { image_id: 2, name: "eren", category: "adar", price: 31, base64_url: "/images/beyaz2.jpg", liked: false },
+    { image_id: 3, name: "eren", category: "adar", price: 31, base64_url: "/images/beyaz3.jpg", liked: true },
+    { image_id: 4, name: "eren", category: "adar", price: 31, base64_url: "/images/beyaz4.jpg", liked: false },
+    { image_id: 5, name: "eren", category: "adar", price: 31, base64_url: "/images/beyaz5.jpg", liked: true },
+    { image_id: 6, name: "eren", category: "adar", price: 31, base64_url: "/images/beyaz6.jpg", liked: true }
+  ])
+
+  const handleLike = (image_id: number) => {
+    data1.forEach((v, i) => {
+      if (v.image_id === image_id) {
+        setData1([])
+        setData1([...data1, {...data1[i], liked: !data1[i].liked}])
+      }
+    })
+  }
 
   return (
     <Grid className={pagestyles.grid}>
@@ -46,116 +76,73 @@ const a = () => {
           }
         />
         <Grid className={pagestyles.images}>
-          <Col span={3} className={pagestyles.column}>
-            <Link href="b">
-              <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
-                <Card.Section className={pagestyles.image}>
-                  <img src="/images/beyaz2.jpg" />
-                </Card.Section>
+          {[0, 1, 2, 3].map((value, index) => (
+            <Col key={index} span={3} className={pagestyles.column}>
+              {data1.filter((_, i) => i % 4 === value).map(v => (
+                <Card key={v.image_id} className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
+                  <Link href={`/image/${v.image_id}`}>
+                    <Card.Section className={pagestyles.image}>
+                      <img src={v.base64_url} />
+                    </Card.Section>
+                  </Link>
+                  <Group direction="column" className={pagestyles.info}>
+                    <Text><b>Name: </b>{v.name}</Text>
+                    <Text><b>Category: </b>{v.category}</Text>
+                  </Group>
+                  <Group position="apart" className={pagestyles.priceButton}>
+                    <Badge color="pink" variant="light" size="xl">
+                      {"$" + v.price}
+                    </Badge>
 
-                <Group className={pagestyles.info}>
-                  <Text><b>Name: </b>Fjord Adventures</Text>
-                  <Text><b>Category: </b>Fjord Adventures</Text>
-                </Group>
-                <Group position="apart" className={pagestyles.priceButton}>
-                  <Badge color="pink" variant="light" size="xl">
-                    $45
-                  </Badge>
+                    <IconButton onClick={() => {
+                      console.log(v.liked)
+                      handleLike(v.image_id)
+                    }}>
+                      {v.liked === true ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon color="error" />}
+                      {console.log("rerendered")}
+                    </IconButton>
+
+                    <Link href={`/image/${v.image_id}`}>
+                      <Button variant="outline" radius={"xl"} gradient={{ from: 'teal', to: 'blue', deg: 60 }}>
+                        Buy
+                      </Button>
+                    </Link>
+
+                  </Group>
+                </Card >
+              ))}
+            </Col>
+          ))}
+          {data1.map(v => (
+            <Card key={v.image_id} className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
+              <Link href={`/image/${v.image_id}`}>
+                <Card.Section className={pagestyles.image}>
+                  <img src={v.base64_url} />
+                </Card.Section>
+              </Link>
+              <Group direction="column" className={pagestyles.info}>
+                <Text><b>Name: </b>{v.name}</Text>
+                <Text><b>Category: </b>{v.category}</Text>
+              </Group>
+              <Group position="apart" className={pagestyles.priceButton}>
+                <Badge color="pink" variant="light" size="xl">
+                  {"$" + v.price}
+                </Badge>
+
+                <IconButton onClick={() => handleLike(v.image_id)}>
+                  {v.liked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon color="error" />}
+                  {console.log("rerendered")}
+                </IconButton>
+
+                <Link href={`/image/${v.image_id}`}>
                   <Button variant="outline" radius={"xl"} gradient={{ from: 'teal', to: 'blue', deg: 60 }}>
                     Buy
                   </Button>
-                </Group>
-              </Card>
-            </Link>
-            <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
-              <Card.Section className={pagestyles.image}>
-                <img src="/images/beyaz2.jpg" />
-              </Card.Section>
+                </Link>
 
-              <Group className={pagestyles.info}>
-                <Text><b>Name: </b>Fjord Adventures</Text>
-                <Text><b>Category: </b>Fjord Adventures</Text>
-                <Badge color="pink" variant="light">
-                  On Sale
-                </Badge>
               </Group>
-            </Card>
-          </Col>
-          <Col span={3} className={pagestyles.column}>
-            <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
-              <Card.Section className={pagestyles.image}>
-                <img src="/images/beyaz1.jpg" />
-              </Card.Section>
-
-              <Group className={pagestyles.info}>
-                <Text><b>Name: </b>Fjord Adventures</Text>
-                <Text><b>Category: </b>Fjord Adventures</Text>
-                <Badge color="pink" variant="light">
-                  On Sale
-                </Badge>
-              </Group>
-            </Card>
-          </Col>
-          <Col span={3} className={pagestyles.column}>
-            <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
-              <Card.Section className={pagestyles.image}>
-                <img src="/images/beyaz2.jpg" />
-              </Card.Section>
-
-              <Group className={pagestyles.info}>
-                <Text><b>Name: </b>Fjord Adventures</Text>
-                <Text><b>Category: </b>Fjord Adventures</Text>
-                <Badge color="pink" variant="light">
-                  On Sale
-                </Badge>
-              </Group>
-            </Card>
-          </Col>
-          <Col span={3} className={pagestyles.column}>
-            <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
-              <Card.Section className={pagestyles.image}>
-                <img src="/images/beyaz1.jpg" />
-              </Card.Section>
-
-              <Group className={pagestyles.info}>
-                <Text><b>Name: </b>Fjord Adventures</Text>
-                <Text><b>Category: </b>Fjord Adventures</Text>
-                <Badge color="pink" variant="light">
-                  On Sale
-                </Badge>
-              </Group>
-            </Card>
-          </Col>
-          <Col span={3} className={pagestyles.column}>
-            <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
-              <Card.Section className={pagestyles.image}>
-                <img src="/images/beyaz2.jpg" />
-              </Card.Section>
-
-              <Group className={pagestyles.info}>
-                <Text><b>Name: </b>Fjord Adventures</Text>
-                <Text><b>Category: </b>Fjord Adventures</Text>
-                <Badge color="pink" variant="light">
-                  On Sale
-                </Badge>
-              </Group>
-            </Card>
-          </Col>
-          <Col span={3} className={pagestyles.column}>
-            <Card className={pagestyles.imageCard} shadow="xl" radius={"lg"}>
-              <Card.Section className={pagestyles.image}>
-                <img src="/images/beyaz1.jpg" />
-              </Card.Section>
-
-              <Group className={pagestyles.info}>
-                <Text><b>Name: </b>Fjord Adventures</Text>
-                <Text><b>Category: </b>Fjord Adventures</Text>
-                <Badge color="pink" variant="light">
-                  On Sale
-                </Badge>
-              </Group>
-            </Card>
-          </Col>
+            </Card >
+          ))}
         </Grid>
       </Grid>
     </Grid>

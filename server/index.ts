@@ -45,12 +45,12 @@ server.prepare().then(async () => {
     })
   }
 
-  await handleDisconnect()
+  /* await handleDisconnect()
 
   connection.query("select 1", (err: string, rows: object[]) => {
     if (err) throw err
     console.log(rows)
-  })
+  }) */
 
   app.all("*", (req: any, res: any) => {
     return handle(req, res)
