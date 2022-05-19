@@ -8,12 +8,13 @@ import {
   TwoFA,
   DatabaseImport,
   Receipt2,
+  CurrencyDollar,
   SwitchHorizontal,
   Logout,
   Search
 } from 'tabler-icons-react';
 import Link from 'next/link';
-import pagestyles from "../sass/style.module.scss"
+import pageStyles from "../sass/style.module.scss"
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon');
@@ -44,7 +45,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
       fontWeight: 500,
 
       '&:hover': {
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.blue[0],
         color: theme.colorScheme === 'dark' ? theme.white : theme.black,
         cursor: "pointer",
 
@@ -77,7 +78,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 const data = [
   { link: '/browse', label: 'Browse', icon: Search },
-  { link: '/b', label: 'Billing', icon: Receipt2 },
+  { link: '/purchases', label: 'Purchases', icon: Receipt2 },
   { link: '', label: 'Security', icon: Fingerprint },
   { link: '', label: 'SSH Keys', icon: Key },
   { link: '', label: 'Databases', icon: DatabaseImport },
@@ -100,7 +101,7 @@ export default function NavbarSimple() {
   ));
 
   return (
-    <Navbar className={pagestyles.navbar}>
+    <Navbar className={pageStyles.navbar}>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
           <Code sx={{ fontWeight: 700 }}>v3.1.2</Code>
