@@ -1,5 +1,5 @@
 import { Accordion, AccordionProps, createStyles } from '@mantine/core';
-import { Plus } from 'tabler-icons-react';
+import { CurrencyDollar } from 'tabler-icons-react';
 
 const useStyles = createStyles((theme, _params, getRef) => ({
   icon: { ref: getRef('icon') },
@@ -18,15 +18,23 @@ const useStyles = createStyles((theme, _params, getRef) => ({
 
   item: {
     borderBottom: 0,
-    overflow: 'hidden',
     transition: `box-shadow 150ms ${theme.transitionTimingFunction}`,
     border: '1px solid transparent',
     borderRadius: theme.radius.sm,
+    overflow: "hidden",
+
+    "&:hover": {
+      outline: `1px solid ${theme.colors.indigo[3]}`,
+    }
   },
 
   itemOpened: {
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.white,
     borderColor: theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.indigo[3],
+
+    "&:hover": {
+      outline: "none",
+    },
 
     [`& .${getRef('control')}`]: {
       opacity: 1,
@@ -44,7 +52,7 @@ const useStyles = createStyles((theme, _params, getRef) => ({
 
 const StyledAccordion = (props: AccordionProps) => {
   const { classes } = useStyles();
-  return <Accordion classNames={classes} icon={<Plus size={16} />} {...props} />;
+  return <Accordion classNames={classes} icon={<CurrencyDollar size={16} />} {...props} />;
 }
 
 export default StyledAccordion

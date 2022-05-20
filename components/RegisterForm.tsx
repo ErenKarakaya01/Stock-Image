@@ -9,7 +9,7 @@ import {
 import { useForm } from "@mantine/form"
 import { UseFormReturnType } from "@mantine/form/lib/use-form"
 import Link from "next/link"
-import formStyles from "../sass/style.module.scss"
+import formStyles from "../sass/form.module.scss"
 
 const RegisterForm = () => {
   interface FormValues {

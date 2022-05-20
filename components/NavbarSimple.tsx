@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import { createStyles, Navbar, Group, Code } from '@mantine/core';
 import {
-  BellRinging,
   Fingerprint,
   Key,
   Settings,
   TwoFA,
   DatabaseImport,
   Receipt2,
-  CurrencyDollar,
+  Upload,
   SwitchHorizontal,
   Logout,
   Search
 } from 'tabler-icons-react';
 import Link from 'next/link';
-import pageStyles from "../sass/style.module.scss"
+import pageStyles from "../sass/pages.module.scss"
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon');
@@ -78,8 +77,8 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 const data = [
   { link: '/browse', label: 'Browse', icon: Search },
-  { link: '/purchases', label: 'Purchases', icon: Receipt2 },
-  { link: '', label: 'Security', icon: Fingerprint },
+  { link: '/upload', label: 'Upload', icon: Upload },
+  { link: '/trades', label: 'Trades', icon: Receipt2 },
   { link: '', label: 'SSH Keys', icon: Key },
   { link: '', label: 'Databases', icon: DatabaseImport },
   { link: '', label: 'Authentication', icon: TwoFA },
@@ -87,7 +86,7 @@ const data = [
 ];
 
 export default function NavbarSimple() {
-  const { classes, cx } = useStyles();
+  const { classes } = useStyles();
 
   const links = data.map((item) => (
     <Link href={item.link} key={item.label}>
@@ -104,7 +103,7 @@ export default function NavbarSimple() {
     <Navbar className={pageStyles.navbar}>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
-          <Code sx={{ fontWeight: 700 }}>v3.1.2</Code>
+          <Code sx={{ fontWeight: 700 }}>npm run dev</Code>
         </Group>
         {links}
       </Navbar.Section>

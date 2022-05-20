@@ -2,6 +2,7 @@ import { AppProps } from "next/app"
 import Head from "next/head"
 import { MantineProvider } from "@mantine/core"
 import { TypographyStylesProvider } from "@mantine/core"
+import { NotificationsProvider } from '@mantine/notifications';
 import "../sass/global.css"
 import "@fontsource/roboto/300.css"
 import "@fontsource/roboto/400.css"
@@ -30,7 +31,9 @@ const App = (props: AppProps) => {
         }}
       >
         <TypographyStylesProvider>
-          <Component {...pageProps} />
+          <NotificationsProvider>
+            <Component {...pageProps} />
+          </NotificationsProvider>
         </TypographyStylesProvider>
       </MantineProvider>
     </>

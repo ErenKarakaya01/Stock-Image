@@ -1,6 +1,7 @@
 import NavbarSimple from 'components/NavbarSimple'
 import React, { useState } from 'react'
-import browseStyles from "../sass/style.module.scss"
+import browseStyles from "../sass/browse.module.scss"
+import pageStyles from "../sass/pages.module.scss"
 import { Group, Grid, Col, Paper, Select, Divider, Box, Card, Text, Badge, Highlight, Button, ScrollArea, Image } from "@mantine/core"
 import { Search } from "tabler-icons-react"
 import Link from "next/link"
@@ -39,10 +40,10 @@ const Browse = () => {
   }
 
   return (
-    <Grid className={browseStyles.grid}>
+    <Grid className={pageStyles.grid}>
       <NavbarSimple />
       <ScrollArea style={{ height: "101vh" }}>
-        <Grid className={browseStyles.pageContent}>
+        <Grid className={pageStyles.pageContent}>
           <Group position="apart" grow className={browseStyles.header}>
             <Select
               placeholder="Name"
@@ -83,7 +84,7 @@ const Browse = () => {
               <Col key={index} span={3} className={browseStyles.column}>
                 {data1.filter((_, i) => i % 4 === value).map(v => (
                   <Card key={v.image_id} className={browseStyles.imageCard} shadow="xl" radius={"lg"}>
-                    <Link href={`/image/${v.image_id}`}>
+                    <Link href={`/images/${v.image_id}`}>
                       <Card.Section className={browseStyles.image}>
                         <Image src={v.base64_url} alt={v.name} />
                       </Card.Section>

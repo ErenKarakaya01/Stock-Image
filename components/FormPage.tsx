@@ -1,4 +1,4 @@
-import formStyles from "../sass/style.module.scss"
+import formStyles from "../sass/form.module.scss"
 import { Grid, Col, Center, Stack } from "@mantine/core"
 import { Divider, Chip } from "@mui/material"
 import FormPageBackground from "components/FormPageBackground"
