@@ -1,0 +1,52 @@
+.accordionItem {
+  padding: 1em;
+  margin: 1em;
+  border-radius: 1em;
+
+  h3 {
+    margin: 0;
+  }
+
+  .card {
+    height: fit-content;
+    width: 100%;
+    padding: 0;
+    border-radius: 1em;
+    outline: 1px solid #91a7ff;
+
+    .grid {
+      height: fit-content;
+      width: 100%;
+
+      .col3 {
+        margin: 0;
+        height: fit-content;
+        padding: 0;
+
+        .image {
+          max-width: 100%;
+          max-height: 100%;
+          padding: 0;
+          margin: 0;
+
+          img {
+            margin: 0;
+          }
+        }
+      }
+
+      .col9 {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 2em;
+
+        .row {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+}

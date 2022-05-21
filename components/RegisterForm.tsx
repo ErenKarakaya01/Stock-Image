@@ -11,15 +11,17 @@ import { UseFormReturnType } from "@mantine/form/lib/use-form"
 import Link from "next/link"
 import formStyles from "../sass/form.module.scss"
 
+
+interface FormValues {
+  name: string // regular field, same as inferred type
+  surname: string
+  email: string
+  password: string
+  confirmPassword: string
+  role: "customer" | "creator" // union, more specific than inferred type (string)
+}
+
 const RegisterForm = () => {
-  interface FormValues {
-    name: string // regular field, same as inferred type
-    surname: string
-    email: string
-    password: string
-    confirmPassword: string
-    role: "customer" | "creator" // union, more specific than inferred type (string)
-  }
 
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {

@@ -4,6 +4,32 @@
   .group {
     height: 100%;
 
+    .inputGrid {
+      height: 17em;
+
+      .col1 {
+        max-height: 100%;
+
+        .button {
+          width: 100%;
+          margin-top: 1em;
+        }
+      }
+      .col2 {
+        max-height: 100%;
+
+        .center {
+          width: 100%;
+          height: 100%;
+
+          .image {
+            max-width: 90%;
+            max-height: 90%;
+          }
+        }
+      }
+    }
+
     .dropzone {
       width: 100%;
     }

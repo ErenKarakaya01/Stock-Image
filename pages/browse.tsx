@@ -9,19 +9,21 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { IconButton } from "@mui/material"
 
+
+interface Image {
+  image_id: number,
+  name: string,
+  category: string,
+  price: number,
+  base64_url: string,
+  liked: boolean
+}
+
 const Browse = () => {
-  interface ImageObject {
-    image_id: number,
-    name: string,
-    category: string,
-    price: number,
-    base64_url: string,
-    liked: boolean
-  }
 
   const data = Array(50).fill(0).map((_, index) => `Item ${index}`)
 
-  const [data1, setData1] = useState<ImageObject[]>([
+  const [data1, setData1] = useState<Image[]>([
     { image_id: 1, name: "eren", category: "adar", price: 31, base64_url: "/images/beyaz1.jpg", liked: true },
     { image_id: 2, name: "eren", category: "adar", price: 31, base64_url: "/images/beyaz2.jpg", liked: false },
     { image_id: 3, name: "eren", category: "adar", price: 31, base64_url: "/images/beyaz3.jpg", liked: true },

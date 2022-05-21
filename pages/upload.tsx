@@ -6,34 +6,30 @@ import {
   Radio,
   RadioGroup,
   TextInput,
+  Center,
 } from "@mantine/core"
 import NavbarSimple from "components/NavbarSimple"
 import StyledDropzone from "components/StyledDropzone"
 import { showNotification } from '@mantine/notifications'
 import { useForm } from "@mantine/form"
 import { UseFormReturnType } from "@mantine/form/lib/use-form"
-import { CurrencyDollar } from "tabler-icons-react"
+import { CurrencyDollar, Photo } from "tabler-icons-react"
+
+
+interface FormValues {
+  name: string // regular field, same as inferred type
+  category: string
+  price: number
+}
 
 const Upload = () => {
   const [img, setImg] = useState<any | null>(null)
 
-  interface FormValues {
-    name: string // regular field, same as inferred type
-    surname: string
-    email: string
-    password: string
-    confirmPassword: string
-    role: "customer" | "creator" // union, more specific than inferred type (string)
-  }
-
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {
       name: "",
-      surname: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      role: "customer",
+      category: "",
+      price: 0,
     },
 
     validate: (values: FormValues) => ({
@@ -43,21 +39,13 @@ const Upload = () => {
           : values.name.length >= 60
             ? "Too Long Name"
             : null,
-      surname:
-        values.surname.length <= 1
-          ? "Too Short Surname"
-          : values.surname.length >= 60
-            ? "Too Long Surname"
+      category:
+        values.category.length <= 1
+          ? "Too Short Category"
+          : values.category.length >= 60
+            ? "Too Long Category"
             : null,
-      email: /^\S+@\S+$/.test(values.email) ? null : "Invalid email",
-      password:
-        values.password.length <= 8
-          ? "Password Needs To Be At Least 8 Characters"
-          : null,
-      confirmPassword:
-        values.password !== values.confirmPassword
-          ? "Passwords Did Not Match"
-          : null,
+      price: typeof values.price !== "number" ? "Price Must Be Number" : null
     }),
   })
 
@@ -83,7 +71,7 @@ const Upload = () => {
                   weight={700}
                   style={{ fontFamily: 'Greycliff CF, sans-serif' }}
                 >
-                  TRADES
+                  UPLOAD
                 </Text>
               </Group>
               <Divider
@@ -97,25 +85,36 @@ const Upload = () => {
                   </>
                 }
               />
-              <Group direction="column" grow>
-                <TextInput
-                  label="Name"
-                  placeholder="Name"
-                  {...form.getInputProps("name")}
-                />
+              <Grid className={uploadStyles.inputGrid}>
+                <Col className={uploadStyles.col1} span={6}>
+                  <TextInput
+                    label="Name"
+                    placeholder="Name"
+                    {...form.getInputProps("name")}
+                  />
 
-                <TextInput
-                  label="Surname"
-                  placeholder="Surname"
-                  {...form.getInputProps("surname")}
-                />
+                  <TextInput
+                    label="Category"
+                    placeholder="Category"
+                    {...form.getInputProps("category")}
+                  />
 
-                <TextInput
-                  label="Email"
-                  placeholder="Email"
-                  {...form.getInputProps("email")}
-                />
-              </Group>
+                  <TextInput
+                    label="Price"
+                    placeholder="Price"
+                    {...form.getInputProps("price")}
+                  />
+                  <Button  className={uploadStyles.button} type="submit">Submit</Button>
+                </Col>
+                <Col className={uploadStyles.col2} span={6}>
+                  <Center className={uploadStyles.center}>
+                    {img ?
+                      (<img className={uploadStyles.image} src={URL.createObjectURL(img)} alt={img.name} />)
+                      : <Photo size={"50%"}
+                      />}
+                  </Center>
+                </Col>
+              </Grid>
 
               <StyledDropzone img={img} setImg={setImg} />
             </Group>

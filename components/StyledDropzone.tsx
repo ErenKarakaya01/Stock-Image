@@ -31,7 +31,7 @@ function ImageUploadIcon({
 
 export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme, img: any) => (
   <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
-    <ImageUploadIcon status={status} style={{ color: getIconColor(status, theme) }} size={80} />
+    <ImageUploadIcon status={{ accepted: img !== null, rejected: false }} style={{ color: getIconColor(status, theme) }} size={80} />
 
     <div>
       {img ? (
@@ -49,7 +49,7 @@ export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme, im
             Drag images here or click to select files
           </Text>
           <Text size="sm" color="dimmed" inline mt={7}>
-            Attach as many files as you like, each file should not exceed 5mb
+            Attach only one file, the file should not exceed 16mb
           </Text>
         </>
       )}
@@ -71,7 +71,7 @@ export default function StyledDropzone({ img, setImg }: { img: any, setImg: Reac
           color: 'green',
         })
       }}
-      onReject={(files) => {
+      onReject={() => {
         showNotification({
           autoClose: 5000,
           title: "File Was Not Selected",

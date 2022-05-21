@@ -9,11 +9,13 @@ import { UseFormReturnType } from "@mantine/form/lib/use-form"
 import Link from "next/link"
 import formStyles from "../sass/form.module.scss"
 
+
+interface FormValues {
+  email: string
+  password: string
+}
+
 const LoginForm = () => {
-  interface FormValues {
-    email: string
-    password: string
-  }
 
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {

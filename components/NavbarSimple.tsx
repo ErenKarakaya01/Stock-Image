@@ -10,7 +10,8 @@ import {
   Upload,
   SwitchHorizontal,
   Logout,
-  Search
+  Search,
+  Photo
 } from 'tabler-icons-react';
 import Link from 'next/link';
 import pageStyles from "../sass/pages.module.scss"
@@ -79,7 +80,7 @@ const data = [
   { link: '/browse', label: 'Browse', icon: Search },
   { link: '/upload', label: 'Upload', icon: Upload },
   { link: '/trades', label: 'Trades', icon: Receipt2 },
-  { link: '', label: 'SSH Keys', icon: Key },
+  { link: '/gallery', label: 'Gallery', icon: Photo },
   { link: '', label: 'Databases', icon: DatabaseImport },
   { link: '', label: 'Authentication', icon: TwoFA },
   { link: '', label: 'Other Settings', icon: Settings },
@@ -103,7 +104,9 @@ export default function NavbarSimple() {
     <Navbar className={pageStyles.navbar}>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
-          <Code sx={{ fontWeight: 700 }}>npm run dev</Code>
+          <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
+            <Code sx={{ fontWeight: 700 }}>npm run dev</Code>
+          </a>
         </Group>
         {links}
       </Navbar.Section>
