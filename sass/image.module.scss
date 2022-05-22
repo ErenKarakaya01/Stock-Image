@@ -1,0 +1,31 @@
+.col1 {
+  display: flex;
+  align-items: center;
+  padding: 1em;
+
+  .image {
+    max-width: 100%;
+    padding: 1em 1em 2em 1em;
+  }
+}
+
+.col2 {
+  padding: 8em;
+
+  .columnGroup {
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+
+    .row {
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+
+      .text {
+        color: #339AF0;
+        font-size: 1.5em;
+      }
+    }
+  }
+}

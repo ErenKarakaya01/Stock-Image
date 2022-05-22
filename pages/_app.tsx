@@ -8,9 +8,17 @@ import "@fontsource/roboto/300.css"
 import "@fontsource/roboto/400.css"
 import "@fontsource/roboto/500.css"
 import "@fontsource/roboto/700.css"
+import AOS from "aos"
+import "aos/dist/aos.css"
+import { useEffect } from "react"
 
 const App = (props: AppProps) => {
   const { Component, pageProps } = props
+
+  useEffect(() => {
+    AOS.init()
+    AOS.refresh()
+  }, [])
 
   return (
     <>

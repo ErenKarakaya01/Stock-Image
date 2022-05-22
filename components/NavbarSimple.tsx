@@ -11,7 +11,8 @@ import {
   SwitchHorizontal,
   Logout,
   Search,
-  Photo
+  Photo,
+  Users
 } from 'tabler-icons-react';
 import Link from 'next/link';
 import pageStyles from "../sass/pages.module.scss"
@@ -112,10 +113,13 @@ export default function NavbarSimple() {
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <div className={classes.link} onClick={(event) => event.preventDefault()}>
-          <SwitchHorizontal className={classes.linkIcon} />
-          <span>Change account</span>
-        </div>
+        <Link href="/creators">
+          <div className={classes.link}>
+            <Users className={classes.linkIcon} />
+            <span>Creators</span>
+          </div>
+        </Link>
+
 
         <div className={classes.link} onClick={(event) => event.preventDefault()}>
           <Logout className={classes.linkIcon} />

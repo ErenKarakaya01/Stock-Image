@@ -106,7 +106,7 @@ const Browse = () => {
                         {v.liked === true ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon color="error" />}
                       </IconButton>
 
-                      <Link href={`/image/${v.image_id}`}>
+                      <Link href={`/images/${v.image_id}`}>
                         <Button variant="outline" radius={"xl"} gradient={{ from: 'teal', to: 'blue', deg: 60 }}>
                           Buy
                         </Button>
@@ -120,7 +120,6 @@ const Browse = () => {
         </Grid>
       </ScrollArea>
     </Grid>
-
   )
 }
 

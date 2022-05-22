@@ -1,0 +1,91 @@
+.creators {
+  height: 100%;
+
+  .col {
+    height: 100%;
+
+    .card {
+      height: 100%;
+
+      .imageSection {
+        height: 20em;
+        margin-bottom: 2em;
+
+        .aspectRatio {
+          position: relative;
+          margin: auto;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          aspect-ratio: 1 / 1;
+          height: 100%;
+
+          .imageBackground {
+            position: absolute;
+            border-radius: 50%;
+            animation: circleAnimation 3s ease-out;
+            overflow: hidden;
+          }
+
+          .image {
+            width: 85%;
+            height: 85%;
+            position: absolute;
+            margin: auto;
+            border-radius: 50%;
+          }
+
+          @keyframes circleAnimation {
+            100% {
+              transform: rotate(2160deg);
+            }
+          }
+        }
+      }
+
+      .infoSection {
+        height: calc(100% - 20em);
+        font-family: monospace;
+
+        div {
+          margin: 1em 0;
+          font-size: 1.2em;
+        }
+
+        .nickname {
+          font-size: 2em;
+        }
+
+        .footer {
+          .linkedin {
+            color: rgba(0,69,173,255);
+            &:hover {
+              color: rgb(0, 90, 225);
+            }
+          }
+
+          .github {
+            color: rgba(104,104,104,255);
+            &:hover {
+              color: rgb(133, 133, 133);
+            }
+          }
+
+          .twitter {
+            color: rgba(0,151,197,255);
+            &:hover {
+              color: rgb(0, 176, 229);
+            }
+          }
+
+          .mail {
+            color: rgba(236,48,255,255);
+            &:hover {
+              color: rgb(240, 109, 255);
+            }
+          }
+        }
+      }
+    }
+  }
+}
