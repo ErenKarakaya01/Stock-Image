@@ -1,18 +1,24 @@
-const express = require("express")
-const next = require("next")
+import path from "path"
+import express from "express"
+import next from "next"
+import passport from "passport"
+import session from "express-session"
+import cookieParser from "cookie-parser"
+import cors from "cors"
+
+const MemoryStore = require("memorystore")(session)
+const mysql = require("mysql2/promise")
 
 const port = process.env.PORT || 3000
 const dev = process.env.NODE_ENV !== "production"
 const server = next({ dev })
 const handle = server.getRequestHandler()
-const mysql = require("mysql")
 
-/* const db_config = {
-  host: "eu-cdbr-west-02.cleardb.net",
-  user: "b1bc500c66092e",
-  password: "e868a98a",
-  database: "heroku_39f5874a1a20466",
-} */
+const db_config = {
+  host: "localhost",
+  user: "root",
+  database: "DBMS",
+}
 
 server.prepare().then(async () => {
   const app = express()
@@ -21,10 +27,48 @@ server.prepare().then(async () => {
   app.use(express.json())
   app.use(express.urlencoded())
 
+  app.use(express.static(path.join(__dirname, "public")))
+
+  // Session middleware
+  app.use(
+    session({
+      secret: "secret",
+      resave: true,
+      saveUninitialized: true,
+      cookie: { maxAge: 86400000 },
+      store: new MemoryStore({
+        checkPeriod: 86400000, // prune expired entries every 24h
+      }),
+    })
+  )
+
+  // Passport middleware
+  app.use(passport.initialize())
+  app.use(passport.session())
+  require("./config/passport")(passport)
+
+  // Cookieparser middleware
+  app.use(cookieParser())
+
+  // CORS middleware
+  app.use((_req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Headers", "X-Requested-With")
+    next()
+  })
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+    })
+  )
+
   let connection: any
 
   const handleDisconnect = async () => {
-    connection = await mysql.createConnection("mysql://ht8g9jqdwjgvijkn:slw5d31f56s7uoa7@i54jns50s3z6gbjt.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/lsunasu7vjaz9dy9") 
+    /* "mysql://ht8g9jqdwjgvijkn:slw5d31f56s7uoa7@i54jns50s3z6gbjt.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/lsunasu7vjaz9dy9" */
+    connection = await mysql.createConnection(
+      db_config
+    )
     // Recreate the connection, since
     // the old one cannot be reused.
 
@@ -33,10 +77,10 @@ server.prepare().then(async () => {
       if (err) {
         // or restarting (takes a while sometimes).
         console.log("error when connecting to db:", err)
-        setTimeout(handleDisconnect, 2000) 
+        setTimeout(handleDisconnect, 2000)
         // We introduce a delay before attempting to reconnect,
       } // to avoid a hot loop, and to allow our node script to
-    }) 
+    })
     // process asynchronous requests in the meantime.
     // If you're also serving http, display a 503 error.
     connection.on("error", async () => {
@@ -45,19 +89,13 @@ server.prepare().then(async () => {
     })
   }
 
-  /* await handleDisconnect()
-
-  connection.query("select 1", (err: string, rows: object[]) => {
-    if (err) throw err
-    console.log(rows)
-  }) */
+  handleDisconnect().then(() => console.log("DB Connected!"))
 
   app.all("*", (req: any, res: any) => {
     return handle(req, res)
   })
 
-  app.listen(port, (err: any) => {
-    if (err) throw err
+  app.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`)
   })
 })

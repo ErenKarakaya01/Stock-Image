@@ -67,7 +67,7 @@ const creators = () => {
               <Card.Section className={creatorsStyles.imageSection}>
                 <AspectRatio className={creatorsStyles.aspectRatio} ratio={1 / 1}>
                   <img className={creatorsStyles.imageBackground} src="/images/circle.png" alt="circle" />
-                  <img className={creatorsStyles.image} src="/images/beyaz1.jpg" />
+                  <img className={creatorsStyles.image} src="/images/sprinkai.jpg" />
                 </AspectRatio>
               </Card.Section>
 
@@ -101,8 +101,45 @@ const creators = () => {
               </Card.Section>
             </Card>
           </Col>
+          
           <Col className={creatorsStyles.col} span={6} data-aos="fade-left" data-aos-duration="1200">
-            gasdgs
+            <Card className={creatorsStyles.card}>
+              <Card.Section className={creatorsStyles.imageSection}>
+                <AspectRatio className={creatorsStyles.aspectRatio} ratio={1 / 1}>
+                  <img className={creatorsStyles.imageBackground} src="/images/circle.png" alt="circle" />
+                  <img className={creatorsStyles.image} src="/images/rosselia.jpg" />
+                </AspectRatio>
+              </Card.Section>
+
+              <Card.Section className={creatorsStyles.infoSection}>
+                <Group className={creatorsStyles.nickname} position="center">
+                  {aysegulNickname}
+                </Group>
+                <Group position="apart" grow>
+                  <Text variant="gradient" gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}>
+                    {aysegulName}
+                  </Text>
+                  <Text variant="gradient" gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}>
+                    {aysegulSurname}
+                  </Text>
+                </Group>
+
+                <Group className={creatorsStyles.footer} position="center">
+                  <a href="https://www.linkedin.com/in/eren-karakaya-b1a034206/">
+                    <BrandLinkedin className={creatorsStyles.linkedin} size={30} />
+                  </a>
+                  <a href="https://www.linkedin.com/in/eren-karakaya-b1a034206/">
+                    <BrandGithub className={creatorsStyles.github} size={30} />
+                  </a>
+                  <a href="https://www.linkedin.com/in/eren-karakaya-b1a034206/">
+                    <BrandTwitter className={creatorsStyles.twitter} size={30} />
+                  </a>
+                  <a href="https://www.linkedin.com/in/eren-karakaya-b1a034206/">
+                    <Mail className={creatorsStyles.mail} size={30} />
+                  </a>
+                </Group>
+              </Card.Section>
+            </Card>
           </Col>
         </Grid>
       </Grid>
