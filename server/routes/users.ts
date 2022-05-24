@@ -9,14 +9,36 @@ const passport = require("passport")
 
 // Get isAuthenticated
 router.get("/isauthenticated", (req: any, res: any) => {
-  console.log(req.user)
   res.send({ isAuthenticated: req.isAuthenticated() })
 })
 
-/* // Get user info
-router.get("/getuser", ensureAuthenticated, (req: any, res: any) => {
+// Get user info
+router.get("/getuser", async (req: any, res: any) => {
+  interface LooseObject {
+    [key: string]: any
+}
 
-}) */
+  let userObject: LooseObject = {
+    created_at: req.user.created_at,
+    name: req.user.name,
+    surname: req.user.surname,
+    email: req.user.email,
+    id: req.user.id,
+  }
+
+  let customer = await table("customer").findOne({ id: req.user.id })
+
+  if (customer) {
+    userObject.type = "customer"
+  } else {
+    let creator = await table("creator").findOne({ id: req.user.id })
+
+    userObject.type = "creator"
+    userObject.balance = creator.balance
+  }
+
+  res.send({ user: userObject })
+})
 
 // Register
 router.post("/register", (req: any, res: any) => {

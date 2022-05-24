@@ -46,7 +46,6 @@ module.exports = function (passport: any) {
     table("user")
       .findOne({ id: id })
       .then((user) => {
-        console.log(user)
         done(null, user)
       })
   })

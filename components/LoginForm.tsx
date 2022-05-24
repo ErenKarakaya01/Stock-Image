@@ -1,16 +1,13 @@
-import {
-  Button,
-  Group,
-  PasswordInput,
-  TextInput,
-} from "@mantine/core"
+import { Button, Group, PasswordInput, TextInput } from "@mantine/core"
 import { useForm } from "@mantine/form"
 import { UseFormReturnType } from "@mantine/form/lib/use-form"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import formStyles from "../sass/form.module.scss"
 import axios from "axios"
-
+import { useEffect, useContext } from "react"
+import { showNotification } from "@mantine/notifications"
+import UserContext from "components/contexts/user"
 
 interface FormValues {
   email: string
@@ -18,8 +15,8 @@ interface FormValues {
 }
 
 const LoginForm = () => {
-
   const router = useRouter()
+  const { user, setUser } = useContext(UserContext)
 
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {
@@ -35,17 +32,31 @@ const LoginForm = () => {
   const handleSubmit = (values: FormValues) => {
     axios
       .post("/users/login", values)
-      .then(({ data }) => {
-        if (data.isLoggedIn)
-          router.push("/trades")
+      .then(async ({ data }) => {
+        if (data.isLoggedIn) {
+          const { data } = await axios.get("/users/getuser")
+
+          setUser!(data.user)
+
+          if (data.user.type === "customer") {
+            router.push("/browse")
+          } else router.push("/gallery")
+        } else {
+          data.errors.forEach((v: string) =>
+            showNotification({
+              autoClose: 5000,
+              title: "Error",
+              message: v,
+              color: "red",
+            })
+          )
+        }
       })
       .catch((e: any) => console.log(e))
   }
 
   const handleTest = () => {
-    axios
-      .get("/users/isauthenticated")
-      .then((res: any) => console.log(res))
+    axios.get("/users/getuser").then((res: any) => console.log(res))
   }
 
   return (
@@ -53,7 +64,6 @@ const LoginForm = () => {
       className={formStyles.form}
       onSubmit={form.onSubmit((values) => handleSubmit(values))}
     >
-
       <TextInput
         label="Email"
         placeholder="Email"
@@ -67,9 +77,7 @@ const LoginForm = () => {
       />
 
       <Group position="apart" mt="md">
-        <Link href="/register">
-          Register
-        </Link>
+        <Link href="/register">Register</Link>
         <Button type="submit">Submit</Button>
         <Button onClick={handleTest}>asgd</Button>
       </Group>

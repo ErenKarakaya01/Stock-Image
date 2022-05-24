@@ -1,5 +1,5 @@
 import NavbarSimple from 'components/NavbarSimple'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import browseStyles from "../sass/browse.module.scss"
 import pageStyles from "../sass/pages.module.scss"
 import { Group, Grid, Col, Paper, Select, Divider, Box, Card, Text, Badge, Highlight, Button, ScrollArea, Image } from "@mantine/core"
@@ -8,6 +8,7 @@ import Link from "next/link"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { IconButton } from "@mui/material"
+import UserContext from "components/contexts/user"
 
 
 interface Image {
@@ -20,8 +21,13 @@ interface Image {
 }
 
 const Browse = () => {
+  const { user } = useContext(UserContext)
 
   const data = Array(50).fill(0).map((_, index) => `Item ${index}`)
+
+  useEffect(() => {
+    console.log(user)
+  }, [])
 
   const [data1, setData1] = useState<Image[]>([
     { image_id: 1, name: "eren", category: "adar", price: 31, base64_url: "/images/beyaz1.jpg", liked: true },
