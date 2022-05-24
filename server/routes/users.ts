@@ -1,27 +1,34 @@
-import table from "server/database/table"
+import table from "../database/table"
 
 const express = require("express")
 const router = express.Router()
 const bcrypt = require("bcryptjs")
 const passport = require("passport")
-/* const { ensureAuthenticated } = require("../config/auth") */
+
+/* const { forwardAuthenticated } = require("../config/auth") */
 
 // Get isAuthenticated
 router.get("/isauthenticated", (req: any, res: any) => {
+  console.log(req.user)
   res.send({ isAuthenticated: req.isAuthenticated() })
 })
 
+/* // Get user info
+router.get("/getuser", ensureAuthenticated, (req: any, res: any) => {
+
+}) */
+
 // Register
 router.post("/register", (req: any, res: any) => {
-  const { name, email, password, password2 } = req.body
+  const { name, surname, email, password, confirmPassword, type } = req.body
   let errors: string[] = []
 
   // Checking the errors
-  if (!name || !email || !password || !password2) {
+  if (!name || !email || !password || !confirmPassword) {
     errors.push("Please enter all fields")
   }
 
-  if (password != password2) {
+  if (password != confirmPassword) {
     errors.push("Passwords do not match")
   }
 
@@ -35,46 +42,61 @@ router.post("/register", (req: any, res: any) => {
       errors,
     })
   } else {
-    table("user").findOne({ email: email }).execute().then((users: any[]) => {
-      let user = users[0]
-      if (user) {
-        errors.push("Email already exists")
-        res.send({
-          isRegistered: false,
-          errors,
-        })
-      } else {
-        const newUser = {
-          // Creating new user
-          name,
-          email,
-          password,
-        }
-
-        bcrypt.genSalt(10, (_err: any, salt: string) => {
-          // Encrypting the password
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err
-            newUser.password = hash
-            newUser
-              .save()
-              .then((user) => {
-                res.send({
-                  isRegistered: true,
-                  errors,
-                })
-              })
-              .catch((err) => console.log(err))
+    table("user")
+      .findOne({ email: email })
+      .then((user: any) => {
+        if (user) {
+          errors.push("Email already exists")
+          res.send({
+            isRegistered: false,
+            errors,
           })
-        })
-      }
-    })
+        } else {
+          const created_at = new Date()
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " ")
+
+          // Creating new user
+          const newUser = {
+            name,
+            surname,
+            email,
+            password,
+            created_at,
+          }
+
+          bcrypt.genSalt(10, (_err: any, salt: string) => {
+            // Encrypting the password
+            bcrypt.hash(newUser.password, salt, (err: any, hash: string) => {
+              if (err) throw err
+              newUser.password = hash
+              table("user")
+                .insertOne(newUser)
+                .then((_) => {
+                  table("user")
+                    .findOne({ email: email })
+                    .then(({ id }) => {
+                      if (type === "customer") {
+                        table("customer").insertOne({ id: id })
+                      } else {
+                        table("creator").insertOne({ id: id, balance: 0 })
+                      }
+
+                      res.sendStatus(200)
+                    })
+                })
+                .catch((err) => console.log(err))
+            })
+          })
+        }
+      })
   }
 })
 
 // Login
-router.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
+router.post("/login", (req: any, res: any, next: any) => {
+  passport.authenticate("local", (err: any, user: any, _info: any) => {
     if (err) {
       return next(err)
     }
@@ -86,7 +108,7 @@ router.post("/login", (req, res, next) => {
       })
     }
 
-    req.logIn(user, (err) => {
+    req.logIn(user, (err: any) => {
       if (err) {
         return next(err)
       }
@@ -96,7 +118,7 @@ router.post("/login", (req, res, next) => {
 })
 
 // Logout
-router.get("/logout", ensureAuthenticated, (req, res) => {
+router.get("/logout", (req: any, res: any) => {
   req.logout()
   res.end()
 })

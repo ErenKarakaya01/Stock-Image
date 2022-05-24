@@ -8,6 +8,7 @@ import {
 } from "@mantine/core"
 import { useForm } from "@mantine/form"
 import { UseFormReturnType } from "@mantine/form/lib/use-form"
+import axios from "axios"
 import Link from "next/link"
 import formStyles from "../sass/form.module.scss"
 
@@ -18,7 +19,7 @@ interface FormValues {
   email: string
   password: string
   confirmPassword: string
-  role: "customer" | "creator" // union, more specific than inferred type (string)
+  type: "customer" | "creator" // union, more specific than inferred type (string)
 }
 
 const RegisterForm = () => {
@@ -30,7 +31,7 @@ const RegisterForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
-      role: "customer",
+      type: "customer",
     },
 
     validate: (values: FormValues) => ({
@@ -38,14 +39,14 @@ const RegisterForm = () => {
         values.name.length <= 1
           ? "Too Short Name"
           : values.name.length >= 60
-          ? "Too Long Name"
-          : null,
+            ? "Too Long Name"
+            : null,
       surname:
         values.surname.length <= 1
           ? "Too Short Surname"
           : values.surname.length >= 60
-          ? "Too Long Surname"
-          : null,
+            ? "Too Long Surname"
+            : null,
       email: /^\S+@\S+$/.test(values.email) ? null : "Invalid email",
       password:
         values.password.length <= 8
@@ -58,16 +59,19 @@ const RegisterForm = () => {
     }),
   })
 
-  /* useEffect(() => {
-    form.setErrors({ name: "gfds" })
-  }, []) */
+  const handleSubmit = (values: FormValues) => {
+    axios
+      .post("/users/register", values)
+      .then(() => console.log("success"))
+      .catch((e: any) => console.log(e))
+  }
 
   return (
     <form
       className={formStyles.form}
-      onSubmit={form.onSubmit((values) => console.log(values))}
+      onSubmit={form.onSubmit((values) => handleSubmit(values))}
     >
-      <TextInput  
+      <TextInput
         label="Name"
         placeholder="Name"
         {...form.getInputProps("name")}
@@ -98,7 +102,7 @@ const RegisterForm = () => {
         {...form.getInputProps("confirmPassword")}
       />
 
-      <RadioGroup label="Select your role" {...form.getInputProps("role")}>
+      <RadioGroup label="Select your type" {...form.getInputProps("type")}>
         <Radio value="customer" label="Customer" />
         <Radio value="creator" label="Creator" />
       </RadioGroup>

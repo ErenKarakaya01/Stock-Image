@@ -1,10 +1,9 @@
-const mysql = require('mysql2/promise')
+const query = require("./db_config")
 
 export default class Query {
   private table: string
   private select: string
   private where: string
-  
 
   constructor(table: string) {
     this.table = table
@@ -27,26 +26,29 @@ export default class Query {
   public setWhere = (value: string) => {
     this.where = value
   }
-  
-  findOne = (columns: any) => {
-    let where: string = Object.keys(columns).map(key => `${key} = ${columns[key]}`).join(" AND ")
+
+  findOne = async (columns: any) => {
+    let where: string = Object.keys(columns)
+      .map((key) => `${key} = \"${columns[key]}\"`)
+      .join(" AND ")
+
     this.setWhere(where)
-    return this
+
+    let queryString: string = `SELECT ${this.select} FROM ${this.table} WHERE ${this.where};`
+
+    let rows = await query(queryString)
+
+    return rows[0]
   }
 
-  insertOne = () => {
-    
-  }
+  insertOne = async (columns: any) => {
+    let columnItems = `(${Object.keys(columns).join(",")})`
+    let valueItems = `(${Object.values(columns).map(v => `\"${v}\"`).join(",")})`
 
-  execute = async () => {
-    try {
-      let query: string = `SELECT ${this.select} FROM ${this.table} WHERE ${this.where};`
+    let queryString: string = `INSERT INTO ${this.table} ${columnItems} VALUES ${valueItems};`
 
-      const [rows,] = await mysql.query(query)
+    let rows = await query(queryString)
 
-      return rows
-    } catch (err) {
-      console.log(err)
-    }
+    return rows
   }
 }

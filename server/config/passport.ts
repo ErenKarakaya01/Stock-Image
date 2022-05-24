@@ -13,9 +13,8 @@ module.exports = function (passport: any) {
           .findOne({
             email: email,
           })
-          .execute()
-          .then((user: any[]) => {
-            if (user.length === 0) {
+          .then((user: any) => {
+            if (!user) {
               return done(null, false, {
                 message: "That email is not registered",
               })
@@ -24,11 +23,11 @@ module.exports = function (passport: any) {
             // Match password
             bcrypt.compare(
               password,
-              user[0].password,
+              user.password,
               (err: any, isMatch: any) => {
                 if (err) throw err
                 if (isMatch) {
-                  return done(null, user[0])
+                  return done(null, user)
                 } else {
                   return done(null, false, { message: "Password incorrect" })
                 }
@@ -46,7 +45,9 @@ module.exports = function (passport: any) {
   passport.deserializeUser(function (id: any, done: any) {
     table("user")
       .findOne({ id: id })
-      .execute()
-      .then((user) => done("error", user[0]))
+      .then((user) => {
+        console.log(user)
+        done(null, user)
+      })
   })
 }
