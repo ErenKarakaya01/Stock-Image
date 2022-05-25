@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import AuthenticateContext from "components/contexts/authenticate"
+import Loading from "components/Loading"
+import { showNotification } from "@mantine/notifications"
 
 const NotAuthenticated = ({ children }: { children: any }) => {
   const { isAuth } = useContext(AuthenticateContext)
@@ -10,11 +12,18 @@ const NotAuthenticated = ({ children }: { children: any }) => {
   useEffect(() => {
     if (isAuth === null) return
 
-    if (isAuth) router.push("/trades")
-    else setLoad(true)
+    if (isAuth) {
+      showNotification({
+        autoClose: 5000,
+        title: "Already Logged In!",
+        message: "You are already logged in",
+        color: "red",
+      })
+      router.push("/trades")
+    } else setLoad(true)
   }, [isAuth])
 
-  if (!load) return null
+  if (!load) return <Loading />
 
   return <>{children}</>
 }

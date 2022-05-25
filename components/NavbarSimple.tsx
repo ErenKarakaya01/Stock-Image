@@ -17,6 +17,10 @@ import {
 import Link from "next/link"
 import pageStyles from "../sass/pages.module.scss"
 import UserContext from "components/contexts/user"
+import AuthenticateContext from "components/contexts/authenticate"
+import { useRouter } from "next/router"
+import axios from "axios"
+import { showNotification } from "@mantine/notifications"
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef("icon")
@@ -108,7 +112,9 @@ const data = [
 
 export default function NavbarSimple() {
   const { classes } = useStyles()
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
+  const { isAuth, setIsAuth } = useContext(AuthenticateContext)
+  const router = useRouter()
 
   const links = data
     .filter((v) => v.type === user?.type || v.type === "everyone")
@@ -120,6 +126,22 @@ export default function NavbarSimple() {
         </div>
       </Link>
     ))
+
+  const handleLogout = async () => {
+    const { data } = await axios.get("/users/logout")
+
+    if (data.isLoggedOut) {
+      setUser!(null)
+      setIsAuth!(false)
+      router.push("/login")
+    } else
+      showNotification({
+        autoClose: 5000,
+        title: "Error",
+        message: "An unknown error occurred",
+        color: "red",
+      })
+  }
 
   return (
     <Navbar className={pageStyles.navbar}>
@@ -142,7 +164,7 @@ export default function NavbarSimple() {
 
         <div
           className={classes.link}
-          onClick={(event) => event.preventDefault()}
+          onClick={handleLogout}
         >
           <Logout className={classes.linkIcon} />
           <span>Logout</span>

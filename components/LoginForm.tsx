@@ -60,7 +60,7 @@ const LoginForm = () => {
   }
 
   const handleTest = () => {
-    axios.get("/users/getuser").then((res: any) => console.log(res))
+    axios.get("/users/isauthenticated").then((res: any) => console.log(res))
   }
 
   return (

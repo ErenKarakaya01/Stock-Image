@@ -5,7 +5,7 @@ const router = express.Router()
 const bcrypt = require("bcryptjs")
 const passport = require("passport")
 
-/* const { forwardAuthenticated } = require("../config/auth") */
+const { ensureAuthenticated ,forwardAuthenticated } = require("../config/auth")
 
 // Get isAuthenticated
 router.get("/isauthenticated", (req: any, res: any) => {
@@ -13,7 +13,7 @@ router.get("/isauthenticated", (req: any, res: any) => {
 })
 
 // Get user info
-router.get("/getuser", async (req: any, res: any) => {
+router.get("/getuser", ensureAuthenticated, async (req: any, res: any) => {
   interface LooseObject {
     [key: string]: any
   }
@@ -41,7 +41,7 @@ router.get("/getuser", async (req: any, res: any) => {
 })
 
 // Register
-router.post("/register", (req: any, res: any) => {
+router.post("/register", forwardAuthenticated, (req: any, res: any) => {
   const { name, surname, email, password, confirmPassword, type } = req.body
   let errors: string[] = []
 
@@ -117,7 +117,7 @@ router.post("/register", (req: any, res: any) => {
 })
 
 // Login
-router.post("/login", (req: any, res: any, next: any) => {
+router.post("/login", forwardAuthenticated, (req: any, res: any, next: any) => {
   passport.authenticate("local", (err: any, user: any, _info: any) => {
     if (err) {
       return next(err)
@@ -140,9 +140,11 @@ router.post("/login", (req: any, res: any, next: any) => {
 })
 
 // Logout
-router.get("/logout", (req: any, res: any) => {
-  req.logout()
-  res.end()
+router.get("/logout", ensureAuthenticated, (req: any, res: any, next: any) => {
+  req.logout((err: any) => {
+    if (err) { return next(err); }
+  });
+  res.send({ isLoggedOut: true })
 })
 
 module.exports = router
