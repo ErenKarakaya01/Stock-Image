@@ -15,11 +15,20 @@ import AuthenticateContext from "components/contexts/authenticate"
 import UserContext from "components/contexts/user"
 import axios from "axios"
 
+interface User {
+  id: number
+  name: string
+  surname: string
+  email: string
+  type: "customer" | "creator"
+  created_at: string
+}
+
 const App = (props: AppProps) => {
   const { Component, pageProps } = props
 
-  const [isAuth, setIsAuth] = useState<true | false>(false)
-  const [user, setUser] = useState<any>(null)
+  const [isAuth, setIsAuth] = useState<true | false | null>(null)
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
     AOS.init()

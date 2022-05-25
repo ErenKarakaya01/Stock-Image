@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { createStyles, Navbar, Group, Code } from '@mantine/core';
+import React, { useState, useContext } from "react"
+import { createStyles, Navbar, Group, Code } from "@mantine/core"
 import {
   Fingerprint,
   Key,
@@ -12,94 +12,114 @@ import {
   Logout,
   Search,
   Photo,
-  Users
-} from 'tabler-icons-react';
-import Link from 'next/link';
+  Users,
+} from "tabler-icons-react"
+import Link from "next/link"
 import pageStyles from "../sass/pages.module.scss"
+import UserContext from "components/contexts/user"
 
 const useStyles = createStyles((theme, _params, getRef) => {
-  const icon = getRef('icon');
+  const icon = getRef("icon")
   return {
     header: {
       paddingBottom: theme.spacing.md,
       marginBottom: theme.spacing.md * 1.5,
-      borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
-        }`,
+      borderBottom: `1px solid ${
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[4]
+          : theme.colors.gray[2]
+      }`,
     },
 
     footer: {
       paddingTop: theme.spacing.md,
       marginTop: theme.spacing.md,
-      borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
-        }`,
+      borderTop: `1px solid ${
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[4]
+          : theme.colors.gray[2]
+      }`,
     },
 
     link: {
       ...theme.fn.focusStyles(),
-      display: 'flex',
-      alignItems: 'center',
-      textDecoration: 'none',
+      display: "flex",
+      alignItems: "center",
+      textDecoration: "none",
       fontSize: theme.fontSizes.sm,
-      color: theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7],
+      color:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[1]
+          : theme.colors.gray[7],
       padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
       borderRadius: theme.radius.sm,
       fontWeight: 500,
 
-      '&:hover': {
-        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.blue[0],
-        color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+      "&:hover": {
+        backgroundColor:
+          theme.colorScheme === "dark"
+            ? theme.colors.dark[6]
+            : theme.colors.blue[0],
+        color: theme.colorScheme === "dark" ? theme.white : theme.black,
         cursor: "pointer",
 
         [`& .${icon}`]: {
-          color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+          color: theme.colorScheme === "dark" ? theme.white : theme.black,
         },
       },
     },
 
     linkIcon: {
       ref: icon,
-      color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6],
+      color:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[2]
+          : theme.colors.gray[6],
       marginRight: theme.spacing.sm,
     },
 
     linkActive: {
-      '&, &:hover': {
+      "&, &:hover": {
         backgroundColor:
-          theme.colorScheme === 'dark'
+          theme.colorScheme === "dark"
             ? theme.fn.rgba(theme.colors[theme.primaryColor][8], 0.25)
             : theme.colors[theme.primaryColor][0],
-        color: theme.colorScheme === 'dark' ? theme.white : theme.colors[theme.primaryColor][7],
+        color:
+          theme.colorScheme === "dark"
+            ? theme.white
+            : theme.colors[theme.primaryColor][7],
         [`& .${icon}`]: {
-          color: theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 5 : 7],
+          color:
+            theme.colors[theme.primaryColor][
+              theme.colorScheme === "dark" ? 5 : 7
+            ],
         },
       },
     },
-  };
-});
+  }
+})
 
 const data = [
-  { link: '/browse', label: 'Browse', icon: Search },
-  { link: '/upload', label: 'Upload', icon: Upload },
-  { link: '/trades', label: 'Trades', icon: Receipt2 },
-  { link: '/gallery', label: 'Gallery', icon: Photo },
-  { link: '', label: 'Databases', icon: DatabaseImport },
-  { link: '', label: 'Authentication', icon: TwoFA },
-  { link: '', label: 'Other Settings', icon: Settings },
-];
+  { link: "/browse", label: "Browse", icon: Search, type: "customer" },
+  { link: "/upload", label: "Upload", icon: Upload, type: "creator" },
+  { link: "/trades", label: "Trades", icon: Receipt2, type: "everyone" },
+  { link: "/gallery", label: "Gallery", icon: Photo, type: "creator" },
+]
 
 export default function NavbarSimple() {
-  const { classes } = useStyles();
+  const { classes } = useStyles()
+  const { user } = useContext(UserContext)
 
-  const links = data.map((item) => (
-    <Link href={item.link} key={item.label}>
-      <div
-        className={classes.link}
-      >
-        <item.icon className={classes.linkIcon} />
-        <span>{item.label}</span>
-      </div>
-    </Link>
-  ));
+  const links = data
+    .filter((v) => v.type === user?.type || v.type === "everyone")
+    .map((item) => (
+      <Link href={item.link} key={item.label}>
+        <div className={classes.link}>
+          <item.icon className={classes.linkIcon} />
+          <span>{item.label}</span>
+        </div>
+      </Link>
+    ))
 
   return (
     <Navbar className={pageStyles.navbar}>
@@ -120,12 +140,14 @@ export default function NavbarSimple() {
           </div>
         </Link>
 
-
-        <div className={classes.link} onClick={(event) => event.preventDefault()}>
+        <div
+          className={classes.link}
+          onClick={(event) => event.preventDefault()}
+        >
           <Logout className={classes.linkIcon} />
           <span>Logout</span>
         </div>
       </Navbar.Section>
     </Navbar>
-  );
+  )
 }

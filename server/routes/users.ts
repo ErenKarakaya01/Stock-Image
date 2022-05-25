@@ -16,7 +16,7 @@ router.get("/isauthenticated", (req: any, res: any) => {
 router.get("/getuser", async (req: any, res: any) => {
   interface LooseObject {
     [key: string]: any
-}
+  }
 
   let userObject: LooseObject = {
     created_at: req.user.created_at,

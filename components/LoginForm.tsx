@@ -8,6 +8,7 @@ import axios from "axios"
 import { useEffect, useContext } from "react"
 import { showNotification } from "@mantine/notifications"
 import UserContext from "components/contexts/user"
+import AuthenticateContext from "components/contexts/authenticate"
 
 interface FormValues {
   email: string
@@ -17,6 +18,7 @@ interface FormValues {
 const LoginForm = () => {
   const router = useRouter()
   const { user, setUser } = useContext(UserContext)
+  const { isAuth, setIsAuth } = useContext(AuthenticateContext)
 
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {
@@ -34,9 +36,11 @@ const LoginForm = () => {
       .post("/users/login", values)
       .then(async ({ data }) => {
         if (data.isLoggedIn) {
+          setIsAuth!(true)
           const { data } = await axios.get("/users/getuser")
 
           setUser!(data.user)
+          console.log(user)
 
           if (data.user.type === "customer") {
             router.push("/browse")

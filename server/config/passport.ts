@@ -44,6 +44,7 @@ module.exports = function (passport: any) {
 
   passport.deserializeUser(function (id: any, done: any) {
     table("user")
+      .select(["id", "name", "surname", "email", "created_at"])
       .findOne({ id: id })
       .then((user) => {
         done(null, user)

@@ -2,8 +2,8 @@ import { createContext, Dispatch, SetStateAction } from "react"
 
 
 interface Authenticate {
-  isAuth?: boolean,
-  setIsAuth?: Dispatch<SetStateAction<boolean>>
+  isAuth?: boolean | null,
+  setIsAuth?: Dispatch<SetStateAction<boolean | null>>
 }
 
 export default createContext<Authenticate>({})

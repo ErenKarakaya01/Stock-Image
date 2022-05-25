@@ -2,29 +2,35 @@ const query = require("./db_config")
 
 export default class Query {
   private table: string
-  private select: string
+  private selectColumns: string
   private where: string
 
   constructor(table: string) {
     this.table = table
-    this.select = "*"
+    this.selectColumns = "*"
     this.where = "true"
   }
 
-  public getSelect = () => {
+  /* private getSelect = () => {
     return this.select
+  } */
+
+  private setSelectColumns = (value: string) => {
+    this.selectColumns = value
   }
 
-  public setSelect = (value: string) => {
-    this.select = value
-  }
-
-  public getWhere = () => {
+  /* private getWhere = () => {
     return this.where
+  } */
+
+  private setWhere = (value: string) => {
+    this.where = value
   }
 
-  public setWhere = (value: string) => {
-    this.where = value
+  select = (columns: string[]) => {
+    this.setSelectColumns(columns.join(","))
+
+    return this
   }
 
   findOne = async (columns: any) => {
@@ -34,7 +40,7 @@ export default class Query {
 
     this.setWhere(where)
 
-    let queryString: string = `SELECT ${this.select} FROM ${this.table} WHERE ${this.where};`
+    let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} WHERE ${this.where};`
 
     let rows = await query(queryString)
 

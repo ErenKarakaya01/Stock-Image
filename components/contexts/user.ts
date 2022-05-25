@@ -1,8 +1,17 @@
-import { createContext, Dispatch } from "react"
+import { createContext, Dispatch, SetStateAction } from "react"
+
+interface UserModal {
+  id: number,
+  name: string,
+  surname: string,
+  email: string,
+  type: "customer" | "creator"
+  created_at: string
+}
 
 interface User {
-  user?: any,
-  setUser?: Dispatch<any>
+  user?: UserModal | null,
+  setUser?: Dispatch<SetStateAction<UserModal | null>>
 }
 
 export default createContext<User>({})
