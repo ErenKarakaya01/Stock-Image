@@ -1,27 +1,30 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import AuthenticateContext from "components/contexts/authenticate"
 import UserContext from "components/contexts/user"
 
-const CreatorProtected = ({ children }: { children: any }) => {
+const CustomerProtected = ({ children }: { children: any }) => {
   const { isAuth } = useContext(AuthenticateContext)
   const { user } = useContext(UserContext)
   const router = useRouter()
+  const [isAuthLoaded, setIsAuthLoaded] = useState(false)
+  const [isUserLoaded, setIsUserLoaded] = useState(false)
 
   useEffect(() => {
-    if (!isAuth)
-      router.push("/login")
+    if (isAuth === null || user === null || user === undefined) return
+
+    if (!isAuth) router.push("/login")
     else {
-      if (user!.type !== "creator")
-        router.push("/browse")
+      setIsAuthLoaded(true)
+
+      if (user.type !== "creator") router.push("/browse")
+      else setIsUserLoaded(true)
     }
-  }, [])
+  }, [isAuth, user])
 
-  if (isAuth === null) return null
+  if (!isAuthLoaded || !isUserLoaded) return null
 
-  return (<>
-  {children}
-  </>)
+  return <>{children}</>
 }
 
-export default CreatorProtected
+export default CustomerProtected

@@ -2,34 +2,27 @@ import { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import AuthenticateContext from "components/contexts/authenticate"
 import UserContext from "components/contexts/user"
-import axios from "axios"
 
 const CustomerProtected = ({ children }: { children: any }) => {
+  const { isAuth } = useContext(AuthenticateContext)
+  const { user } = useContext(UserContext)
   const router = useRouter()
-  const [isAuthFetched, setIsAuthFetched] = useState(false)
-  const [isUserFetched, setIsUserFetched] = useState(false)
+  const [isAuthLoaded, setIsAuthLoaded] = useState(false)
+  const [isUserLoaded, setIsUserLoaded] = useState(false)
 
   useEffect(() => {
-    ;(async () => {
-      const { data } = await axios.get("/users/isauthenticated")
-      setIsAuthFetched(true)
-      console.log(data.isAuthenticated)
+    if (isAuth === null || user === null || user === undefined) return
 
-      if (data.isAuthenticated) {
-        const { data } = await axios.get("/users/getuser")
+    if (!isAuth) router.push("/login")
+    else {
+      setIsAuthLoaded(true)
 
-        if (data.user.type !== "customer") {
-          setIsUserFetched(true)
-          router.push("/browse")
-        }
-        setIsUserFetched(true)
-      } else {
-        router.push("/login")
-      }
-    })()
-  }, [])
+      if (user.type !== "customer") router.push("/trades")
+      else setIsUserLoaded(true)
+    }
+  }, [isAuth, user])
 
-  if (!isAuthFetched || !isUserFetched) return null
+  if (!isAuthLoaded || !isUserLoaded) return null
 
   return <>{children}</>
 }
