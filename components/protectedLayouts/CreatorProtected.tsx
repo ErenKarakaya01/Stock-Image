@@ -9,11 +9,12 @@ const CustomerProtected = ({ children }: { children: any }) => {
   const { isAuth } = useContext(AuthenticateContext)
   const { user } = useContext(UserContext)
   const router = useRouter()
-  const [isAuthLoaded, setIsAuthLoaded] = useState(false)
+  const [isAuthLoaded, setIsAuthLoaded] = useState<boolean | null>(null)
   const [isUserLoaded, setIsUserLoaded] = useState(false)
 
   useEffect(() => {
     if (isAuth === null || user === null || user === undefined) return
+    if (isAuthLoaded !== null) return
 
     if (!isAuth) {
       showNotification({

@@ -7,10 +7,11 @@ import { showNotification } from "@mantine/notifications"
 const Authenticated = ({ children }: { children: any }) => {
   const { isAuth } = useContext(AuthenticateContext)
   const router = useRouter()
-  const [load, setLoad] = useState(false)
+  const [load, setLoad] = useState<boolean | null>(null)
 
   useEffect(() => {
     if (isAuth === null) return
+    if (load !== null) return
 
     if (!isAuth) {
       showNotification({
@@ -20,7 +21,9 @@ const Authenticated = ({ children }: { children: any }) => {
         color: "red",
       })
       router.push("/login")
-    } else setLoad(true)
+    } else {
+      setLoad(true)
+    }
   }, [isAuth])
 
   if (!load) return <Loading />
