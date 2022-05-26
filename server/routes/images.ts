@@ -11,7 +11,7 @@ router.post("/upload", ensureAuthenticated, async (req: any, res: any) => {
     const { name, category, price, base64_url, creator_id } = req.body
     const upload_date = new Date().toISOString().slice(0, 19).replace("T", " ")
 
-    table("image").insertOne({
+    await table("image").insertOne({
       creator_id: creator_id,
       name: name,
       category: category,
@@ -50,9 +50,37 @@ router.get("/browse/:id", ensureAuthenticated, async (req: any, res: any) => {
     const { id } = req.params
     console.log(id)
 
-    const images = await table("image").select(["image_id", "name", "category", "price", "base64_url"]).find({ 1: 1 })
+    let likes = (
+      await table("likes").select(["image_id"]).find({ id: id })
+    ).map((v: any) => v.image_id)
+
+    let images = (await table("image")
+      .select(["image_id", "name", "category", "price", "base64_url"])
+      .find()).map((v: any) => {
+        return {
+          ...v,
+          liked: likes.includes(v.image_id)
+        }
+      })
+
+    console.log(likes)
 
     res.send({ images: images })
+  } catch (e) {
+    console.log(e)
+  }
+})
+
+router.post("/toggle_like", async (req: any, res: any) => {
+  try {
+    const { id, image_id } = req.body
+
+    const liked = await table("likes").findOne({ id: id, image_id: image_id })
+
+    if (liked) await table("likes").deleteOne({ id: id, image_id: image_id })
+    else await table("likes").insertOne({ id: id, image_id: image_id })
+
+    res.send({ isToggled: true })
   } catch (e) {
     console.log(e)
   }

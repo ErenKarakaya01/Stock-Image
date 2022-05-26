@@ -33,12 +33,14 @@ export default class Query {
     return this
   }
 
-  find = async (columns: any) => {
-    let where: string = Object.keys(columns)
-      .map((key) => `${key} = \"${columns[key]}\"`)
-      .join(" AND ")
+  find = async (columns?: any) => {
+    if (columns) {
+      let where: string = Object.keys(columns)
+        .map((key) => `${key} = \"${columns[key]}\"`)
+        .join(" AND ")
 
-    this.setWhere(where)
+      this.setWhere(where)
+    }
 
     let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} WHERE ${this.where};`
 
@@ -63,12 +65,28 @@ export default class Query {
 
   insertOne = async (columns: any) => {
     let columnItems = `(${Object.keys(columns).join(",")})`
-    let valueItems = `(${Object.values(columns).map(v => `\"${v}\"`).join(",")})`
+    let valueItems = `(${Object.values(columns)
+      .map((v) => `\"${v}\"`)
+      .join(",")})`
 
     let queryString: string = `INSERT INTO ${this.table} ${columnItems} VALUES ${valueItems};`
 
     let rows = await query(queryString)
 
     return rows
+  }
+
+  deleteOne = async (columns: any) => {
+    let where: string = Object.keys(columns)
+      .map((key) => `${key} = \"${columns[key]}\"`)
+      .join(" AND ")
+
+    this.setWhere(where)
+
+    let queryString: string = `DELETE FROM ${this.table} WHERE ${this.where};`
+
+    let rows = await query(queryString)
+
+    return rows[0]
   }
 }

@@ -50,12 +50,15 @@ const Browse = () => {
 
     (async () => {
       const { data } = await axios.get(`/images/browse/${user!.id}`)
-      console.log(data.images)
+
       setImages(data.images)
     })()
   }, [user])
 
-  const handleLike = (image_id: number) => {
+  const handleLike = async (image_id: number) => {
+    const { data } = await axios.post("/images/toggle_like", { id: user!.id, image_id: image_id })
+    console.log(data)
+
     images.forEach((v, i) => {
       if (v.image_id === image_id) {
         images[i].liked = !images[i].liked
