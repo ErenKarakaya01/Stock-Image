@@ -34,7 +34,6 @@ interface Image {
   category: string
   price: number
   base64_url: string
-  resolution: string
   size: string
   extension: string
   upload_date: string
@@ -107,9 +106,6 @@ const ImagePage = ({ image }: { image: Image }) => {
                   Category: {image.category}
                 </Text>
                 <Text className={imageStyles.text}>Price: {image.price}</Text>
-                <Text className={imageStyles.text}>
-                  Resolution: {image.resolution}
-                </Text>
               </Group>
               <Group className={imageStyles.row} grow>
                 <Text className={imageStyles.text}>Size: {image.size}</Text>
@@ -147,7 +143,6 @@ const data1: Image[] = [
     category: "adar",
     price: 31,
     base64_url: "/images/beyaz1.jpg",
-    resolution: "1x1",
     size: "1mb",
     extension: ".jpg",
     upload_date: "1.2.2001",
@@ -160,7 +155,6 @@ const data1: Image[] = [
     category: "adar",
     price: 31,
     base64_url: "/images/beyaz1.jpg",
-    resolution: "1x1",
     size: "1mb",
     extension: ".jpg",
     upload_date: "1.2.2001",
@@ -173,7 +167,6 @@ const data1: Image[] = [
     category: "adar",
     price: 31,
     base64_url: "/images/beyaz1.jpg",
-    resolution: "1x1",
     size: "1mb",
     extension: ".jpg",
     upload_date: "1.2.2001",
@@ -186,7 +179,6 @@ const data1: Image[] = [
     category: "adar",
     price: 31,
     base64_url: "/images/beyaz1.jpg",
-    resolution: "1x1",
     size: "1mb",
     extension: ".jpg",
     upload_date: "1.2.2001",
@@ -199,7 +191,6 @@ const data1: Image[] = [
     category: "adar",
     price: 31,
     base64_url: "/images/beyaz1.jpg",
-    resolution: "1x1",
     size: "1mb",
     extension: ".jpg",
     upload_date: "1.2.2001",

@@ -11,19 +11,19 @@ export default class Query {
     this.where = "true"
   }
 
-  /* private getSelect = () => {
-    return this.select
-  } */
+  getSelectColumns = () => {
+    return this.selectColumns
+  }
 
-  private setSelectColumns = (value: string) => {
+  setSelectColumns = (value: string) => {
     this.selectColumns = value
   }
 
-  /* private getWhere = () => {
+  getWhere = () => {
     return this.where
-  } */
+  }
 
-  private setWhere = (value: string) => {
+  setWhere = (value: string) => {
     this.where = value
   }
 
@@ -33,7 +33,7 @@ export default class Query {
     return this
   }
 
-  findOne = async (columns: any) => {
+  find = async (columns: any) => {
     let where: string = Object.keys(columns)
       .map((key) => `${key} = \"${columns[key]}\"`)
       .join(" AND ")
@@ -41,6 +41,20 @@ export default class Query {
     this.setWhere(where)
 
     let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} WHERE ${this.where};`
+
+    let rows = await query(queryString)
+
+    return rows
+  }
+
+  findOne = async (columns: any) => {
+    let where: string = Object.keys(columns)
+      .map((key) => `${key} = \"${columns[key]}\"`)
+      .join(" AND ")
+
+    this.setWhere(where)
+
+    let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} WHERE ${this.where} LIMIT 1;`
 
     let rows = await query(queryString)
 

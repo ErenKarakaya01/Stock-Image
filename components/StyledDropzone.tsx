@@ -46,7 +46,7 @@ export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme, im
       ) : (
         <>
           <Text size="xl" inline>
-            Drag images here or click to select files
+            Drag image here or click to select file
           </Text>
           <Text size="sm" color="dimmed" inline mt={7}>
             Attach only one file, the file should not exceed 16mb

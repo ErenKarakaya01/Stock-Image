@@ -8,7 +8,9 @@ import {
 } from "@mantine/core"
 import { useForm } from "@mantine/form"
 import { UseFormReturnType } from "@mantine/form/lib/use-form"
+import { showNotification } from "@mantine/notifications"
 import axios from "axios"
+import { useRouter } from "next/router"
 import Link from "next/link"
 import formStyles from "../sass/form.module.scss"
 
@@ -23,6 +25,7 @@ interface FormValues {
 }
 
 const RegisterForm = () => {
+  const router = useRouter()
 
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {
@@ -62,7 +65,20 @@ const RegisterForm = () => {
   const handleSubmit = (values: FormValues) => {
     axios
       .post("/users/register", values)
-      .then(() => console.log("success"))
+      .then(({ data }) => {
+        if (data.isRegistered) {
+          router.push("/login")
+        } else {
+          data.errors.forEach((v: string) =>
+            showNotification({
+              autoClose: 5000,
+              title: "Error",
+              message: v,
+              color: "red",
+            })
+          )
+        }
+      })
       .catch((e: any) => console.log(e))
   }
 

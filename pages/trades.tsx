@@ -28,7 +28,6 @@ interface Image {
   category: string
   price: number
   base64_url: string
-  resolution: string
   size: string
   extension: string
   upload_date: string
@@ -45,7 +44,6 @@ const Trades = () => {
       category: "adar",
       price: 31,
       base64_url: "/images/beyaz1.jpg",
-      resolution: "1x1",
       size: "1mb",
       extension: ".jpg",
       upload_date: "1.2.2001",
@@ -59,7 +57,6 @@ const Trades = () => {
       category: "adar",
       price: 31,
       base64_url: "/images/beyaz1.jpg",
-      resolution: "1x1",
       size: "1mb",
       extension: ".jpg",
       upload_date: "1.2.2001",
@@ -73,7 +70,6 @@ const Trades = () => {
       category: "adar",
       price: 31,
       base64_url: "/images/beyaz1.jpg",
-      resolution: "1x1",
       size: "1mb",
       extension: ".jpg",
       upload_date: "1.2.2001",
@@ -87,7 +83,6 @@ const Trades = () => {
       category: "adar",
       price: 31,
       base64_url: "/images/beyaz1.jpg",
-      resolution: "1x1",
       size: "1mb",
       extension: ".jpg",
       upload_date: "1.2.2001",
@@ -101,7 +96,6 @@ const Trades = () => {
       category: "adar",
       price: 31,
       base64_url: "/images/beyaz1.jpg",
-      resolution: "1x1",
       size: "1mb",
       extension: ".jpg",
       upload_date: "1.2.2001",

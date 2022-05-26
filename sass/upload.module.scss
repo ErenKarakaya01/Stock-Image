@@ -10,9 +10,15 @@
       .col1 {
         max-height: 100%;
 
-        .button {
-          width: 100%;
-          margin-top: 1em;
+        .priceAndButton {
+          position: relative;
+
+          .button {
+            width: 100%;
+            position: absolute;
+            top: 28px;
+            right: 0;
+        }
         }
       }
       .col2 {

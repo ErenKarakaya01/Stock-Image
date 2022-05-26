@@ -43,69 +43,25 @@ const Browse = () => {
     .fill(0)
     .map((_, index) => `Item ${index}`)
 
-  useEffect(() => {
-    axios.get("/users/isauthenticated").then((res) => console.log(res))
-    console.log(user)
-  }, [])
+  const [images, setImages] = useState<Image[]>([])
 
-  const [data1, setData1] = useState<Image[]>([
-    {
-      image_id: 1,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz1.jpg",
-      liked: true,
-    },
-    {
-      image_id: 2,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz2.jpg",
-      liked: false,
-    },
-    {
-      image_id: 3,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz3.jpg",
-      liked: true,
-    },
-    {
-      image_id: 4,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz4.jpg",
-      liked: false,
-    },
-    {
-      image_id: 5,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz5.jpg",
-      liked: true,
-    },
-    {
-      image_id: 6,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz6.jpg",
-      liked: true,
-    },
-  ])
+  useEffect(() => {
+    if (user === null) return
+
+    (async () => {
+      const { data } = await axios.get(`/images/browse/${user!.id}`)
+      console.log(data.images)
+      setImages(data.images)
+    })()
+  }, [user])
 
   const handleLike = (image_id: number) => {
-    data1.forEach((v, i) => {
+    images.forEach((v, i) => {
       if (v.image_id === image_id) {
-        data1[i].liked = !data1[i].liked
+        images[i].liked = !images[i].liked
       }
     })
-    setData1([...data1])
+    setImages([...images])
   }
 
   return (
@@ -152,7 +108,7 @@ const Browse = () => {
             <Grid className={browseStyles.images}>
               {[0, 1, 2, 3].map((value, index) => (
                 <Col key={index} span={3} className={browseStyles.column}>
-                  {data1
+                  {images
                     .filter((_, i) => i % 4 === value)
                     .map((v) => (
                       <Card

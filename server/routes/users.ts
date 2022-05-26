@@ -105,7 +105,7 @@ router.post("/register", forwardAuthenticated, (req: any, res: any) => {
                         table("creator").insertOne({ id: id, balance: 0 })
                       }
 
-                      res.sendStatus(200)
+                      res.send({ isRegistered: true, errors})
                     })
                 })
                 .catch((err) => console.log(err))

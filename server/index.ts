@@ -56,6 +56,7 @@ server.prepare().then(async () => {
 
   // Routes
   app.use("/users", require("./routes/users.ts"))
+  app.use("/images", require("./routes/images.ts"))
 
   app.all("*", (req: any, res: any) => {
     return handle(req, res)

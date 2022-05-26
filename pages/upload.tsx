@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import pageStyles from "../sass/pages.module.scss"
 import uploadStyles from "../sass/upload.module.scss"
 import {
@@ -29,21 +29,26 @@ import { useForm } from "@mantine/form"
 import { UseFormReturnType } from "@mantine/form/lib/use-form"
 import { CurrencyDollar, Photo } from "tabler-icons-react"
 import CreatorProtected from "./../components/protectedLayouts/CreatorProtected"
+import axios from "axios"
+import UserContext from "components/contexts/user"
+import { useRouter } from "next/router"
 
 interface FormValues {
   name: string // regular field, same as inferred type
   category: string
-  price: number
+  price: string
 }
 
 const Upload = () => {
   const [img, setImg] = useState<any | null>(null)
+  const { user } = useContext(UserContext)
+  const router = useRouter()
 
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {
       name: "",
       category: "",
-      price: 0,
+      price: "",
     },
 
     validate: (values: FormValues) => ({
@@ -59,14 +64,55 @@ const Upload = () => {
           : values.category.length >= 60
           ? "Too Long Category"
           : null,
-      price: typeof values.price !== "number" ? "Price Must Be Number" : null,
+      price:  !isNumeric(values.price) ? "Price Needs To Be Numeric" : null,
     }),
   })
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault()
-    console.log(img)
+  const handleSubmit = async (values: FormValues) => {
+    if (!img)
+      return showNotification({
+        autoClose: 5000,
+        title: "Image Was Not Selected",
+        message: "You need to select an image",
+        color: "red",
+      })
+
+    let base64_url = await toBase64(img)
+
+    const { data } = await axios.post("/images/upload", {
+      ...values,
+      base64_url: base64_url,
+      creator_id: user!.id,
+    })
+
+    if (data.wasUploaded) {
+      showNotification({
+        autoClose: 5000,
+        title: "Image Uploaded",
+        message: `You uploaded the image ${img.name}`,
+        color: "green",
+      })
+      router.push("/gallery")
+    } else
+      showNotification({
+        autoClose: 5000,
+        title: "File Was Not Uploaded",
+        message: "An error occurred, try again",
+        color: "red",
+      })
   }
+
+  const isNumeric = (str: any) => {
+    return !isNaN(str) && !isNaN(parseFloat(str))
+  }
+
+  const toBase64 = (file: File) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = (error) => reject(error)
+    })
 
   return (
     <CreatorProtected>
@@ -74,7 +120,10 @@ const Upload = () => {
         <NavbarSimple />
         <ScrollArea style={{ height: "101vh" }}>
           <Grid className={pageStyles.pageContent}>
-            <form onSubmit={handleSubmit} className={uploadStyles.form}>
+            <form
+              onSubmit={form.onSubmit((values) => handleSubmit(values))}
+              className={uploadStyles.form}
+            >
               <Group
                 className={uploadStyles.group}
                 direction="column"
@@ -119,14 +168,16 @@ const Upload = () => {
                       {...form.getInputProps("category")}
                     />
 
-                    <TextInput
-                      label="Price"
-                      placeholder="Price"
-                      {...form.getInputProps("price")}
-                    />
-                    <Button className={uploadStyles.button} type="submit">
-                      Submit
-                    </Button>
+                    <Group className={uploadStyles.priceAndButton} direction="row" grow>
+                      <TextInput
+                        label="Price"
+                        placeholder="Price"
+                        {...form.getInputProps("price")}
+                      />
+                      <Button className={uploadStyles.button} type="submit">
+                        Submit
+                      </Button>
+                    </Group>
                   </Col>
                   <Col className={uploadStyles.col2} span={6}>
                     <Center className={uploadStyles.center}>

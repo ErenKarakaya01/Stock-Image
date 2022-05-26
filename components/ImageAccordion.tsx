@@ -11,7 +11,6 @@ interface Image {
   category: string,
   price: number,
   base64_url: string,
-  resolution: string,
   size: string,
   extension: string,
   upload_date: string,
@@ -49,9 +48,6 @@ const ImageAccordion = ({ data, isTradeCard }: { data: Image[], isTradeCard: boo
               </Col>
               <Col span={9} className={accordionStyles.col9}>
                 <Group position="apart" className={accordionStyles.row} grow>
-                  <Text>
-                    {`Resolution: ${v.resolution}`}
-                  </Text>
                   <Text>
                     {`Size: ${v.size}`}
                   </Text>
