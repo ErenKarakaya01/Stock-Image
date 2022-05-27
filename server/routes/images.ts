@@ -99,17 +99,35 @@ router.get("/image/:image_id", async (req: any, res: any) => {
   try {
     const { image_id } = req.params
 
-    const image = await table("image")
-      .select(["name", "category", "price", "base64_url", "upload_date"])
-      .findOne({ image_id: image_id })
-
-    console.log(image)
+    const image = await table("image").findOne({ image_id: image_id })
 
     res.send({ image: image })
   } catch (e) {
     console.log(e)
   }
 })
+
+router.post("/buy", async (req: any, res: any) => {
+  try {
+    const { customer_id, creator_id, image_id, price } = req.body
+
+    const trade_date = new Date().toISOString().slice(0, 19).replace("T", " ")
+
+    await table("creator").updateOne({ id: creator_id }, { balance: `balance + ${price}`})
+
+    await table("trading").insertOne({
+      trade_date: trade_date,
+      customer_id: customer_id,
+      creator_id: creator_id,
+      image_id: image_id,
+    })
+
+    res.send({ wasBought: true })
+  } catch (e) {
+    console.log(e)
+  }
+})
+
 
 module.exports = router
 

@@ -3,9 +3,17 @@
   align-items: center;
   padding: 1em;
 
-  .image {
-    max-width: 100%;
+  .imagePaper {
+    width: 100%;
+    height: 100%;
+
+    .image {
     padding: 1em 1em 2em 1em;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    margin: 0;
+  }
   }
 }
 
@@ -23,7 +31,7 @@
       justify-content: space-around;
 
       .text {
-        color: #339AF0;
+        color: #339af0;
         font-size: 1.5em;
       }
     }

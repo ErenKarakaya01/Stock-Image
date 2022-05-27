@@ -3,12 +3,12 @@ const query = require("./db_config")
 export default class Query {
   private table: string
   private selectColumns: string
-  private where: string
+  private whereString: string
 
   constructor(table: string) {
     this.table = table
     this.selectColumns = "*"
-    this.where = "true"
+    this.whereString = "true"
   }
 
   getSelectColumns = () => {
@@ -19,12 +19,12 @@ export default class Query {
     this.selectColumns = value
   }
 
-  getWhere = () => {
-    return this.where
+  getWhereString = () => {
+    return this.whereString
   }
 
-  setWhere = (value: string) => {
-    this.where = value
+  setWhereString = (value: string) => {
+    this.whereString = value
   }
 
   select = (columns: string[]) => {
@@ -33,16 +33,20 @@ export default class Query {
     return this
   }
 
+  where = (columns: any) => {
+    let where: string = Object.keys(columns)
+      .map((key) => `${key} = \"${columns[key]}\"`)
+      .join(" AND ")
+
+    this.setWhereString(where)
+  }
+
   find = async (columns?: any) => {
     if (columns) {
-      let where: string = Object.keys(columns)
-        .map((key) => `${key} = \"${columns[key]}\"`)
-        .join(" AND ")
-
-      this.setWhere(where)
+      this.where(columns)
     }
 
-    let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} WHERE ${this.where};`
+    let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} WHERE ${this.whereString};`
 
     let rows = await query(queryString)
 
@@ -50,13 +54,9 @@ export default class Query {
   }
 
   findOne = async (columns: any) => {
-    let where: string = Object.keys(columns)
-      .map((key) => `${key} = \"${columns[key]}\"`)
-      .join(" AND ")
+    this.where(columns)
 
-    this.setWhere(where)
-
-    let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} WHERE ${this.where} LIMIT 1;`
+    let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} WHERE ${this.whereString} LIMIT 1;`
 
     let rows = await query(queryString)
 
@@ -77,16 +77,51 @@ export default class Query {
   }
 
   deleteOne = async (columns: any) => {
-    let where: string = Object.keys(columns)
-      .map((key) => `${key} = \"${columns[key]}\"`)
-      .join(" AND ")
+    this.where(columns)
 
-    this.setWhere(where)
-
-    let queryString: string = `DELETE FROM ${this.table} WHERE ${this.where};`
+    let queryString: string = `DELETE FROM ${this.table} WHERE ${this.whereString};`
 
     let rows = await query(queryString)
 
     return rows[0]
+  }
+
+  updateOne = async (where: any, columns: any) => {
+    let setString: string = Object.keys(columns)
+      .map((key) => `${key} = ${columns[key]}`)
+      .join(",")
+
+    this.where(where)
+
+    let queryString: string = `UPDATE ${this.table} SET ${setString} WHERE ${this.whereString};`
+
+    let rows = await query(queryString)
+
+    return rows[0]
+  }
+
+  /* SELECT customer_id, trade_date, price FROM trading 
+  LEFT JOIN image ON trading.image_id = image.image_id 
+  UNION 
+  SELECT customer_id, trade_date, price FROM image 
+  RIGHT JOIN trading ON image.image_id = trading.image_id; */
+  fullJoin = async (tables: [string, string], leftColumns: any, rightColumns: any) => {
+    const getWhereFormat = (table: string, columns: any) => {
+      let where: string = Object.keys(columns)
+      .map((key) => `${table}.${key} = \"${columns[key]}\"`)
+      .join(" AND ")
+
+      return where
+    }
+
+    const select: string = `SELECT ${this.select} FROM`
+    const leftJoin: string = `LEFT JOIN ${tables[1]} ON ${getWhereFormat(tables[0], leftColumns)}}`
+    const rightJoin: string = `RIGHT JOIN ${tables[0]} ON ${getWhereFormat(tables[1], rightColumns)}`
+
+    const queryString: string = `${select} ${tables[0]} ${leftJoin} UNION ${select} ${tables[1]} ${rightJoin};`
+
+    const rows = await query(queryString)
+
+    return rows
   }
 }
