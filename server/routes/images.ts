@@ -53,14 +53,16 @@ router.get("/browse/:id", ensureAuthenticated, async (req: any, res: any) => {
       await table("likes").select(["image_id"]).find({ id: id })
     ).map((v: any) => v.image_id)
 
-    let images = (await table("image")
-      .select(["image_id", "name", "category", "price", "base64_url"])
-      .find()).map((v: any) => {
-        return {
-          ...v,
-          liked: likes.includes(v.image_id)
-        }
-      })
+    let images = (
+      await table("image")
+        .select(["image_id", "name", "category", "price", "base64_url"])
+        .find()
+    ).map((v: any) => {
+      return {
+        ...v,
+        liked: likes.includes(v.image_id),
+      }
+    })
 
     res.send({ images: images })
   } catch (e) {
@@ -86,9 +88,24 @@ router.post("/toggle-like", async (req: any, res: any) => {
 router.get("/image-ids", async (_req: any, res: any) => {
   try {
     const image_ids = await table("image").select(["image_id"]).find()
-    console.log(image_ids)
 
     res.send({ image_ids: image_ids })
+  } catch (e) {
+    console.log(e)
+  }
+})
+
+router.get("/image/:image_id", async (req: any, res: any) => {
+  try {
+    const { image_id } = req.params
+
+    const image = await table("image")
+      .select(["name", "category", "price", "base64_url", "upload_date"])
+      .findOne({ image_id: image_id })
+
+    console.log(image)
+
+    res.send({ image: image })
   } catch (e) {
     console.log(e)
   }

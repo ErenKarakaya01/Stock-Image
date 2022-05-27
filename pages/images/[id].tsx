@@ -202,7 +202,7 @@ const data1: Image[] = [
 
 export const getStaticPaths = async (url: object) => {
   const { data } = await axios.get("http://localhost:3000/images/image-ids")
-  
+
   return {
     paths: data.image_ids.map((v: any) => {
       return {
@@ -216,9 +216,11 @@ export const getStaticPaths = async (url: object) => {
 }
 
 export const getStaticProps: GetStaticProps = async (url: any) => {
+  const { data } = await axios.get(`http://localhost:3000/images/image/${url.params.id}`)
+
   return {
     props: {
-      image: data1[url.params.id],
-    },
+      image: data.image,
+    }
   }
 }
