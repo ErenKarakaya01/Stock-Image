@@ -17,8 +17,8 @@ interface FormValues {
 
 const LoginForm = () => {
   const router = useRouter()
-  const { user, setUser } = useContext(UserContext)
-  const { isAuth, setIsAuth } = useContext(AuthenticateContext)
+  const { setUser } = useContext(UserContext)
+  const { setIsAuth } = useContext(AuthenticateContext)
 
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {
@@ -40,7 +40,6 @@ const LoginForm = () => {
           const { data } = await axios.get("/users/getuser")
 
           setUser!(data.user)
-          console.log(user)
 
           if (data.user.type === "customer") {
             router.push("/browse")
@@ -57,10 +56,6 @@ const LoginForm = () => {
         }
       })
       .catch((e: any) => console.log(e))
-  }
-
-  const handleTest = () => {
-    axios.get("/users/isauthenticated").then((res: any) => console.log(res))
   }
 
   return (
@@ -83,7 +78,6 @@ const LoginForm = () => {
       <Group position="apart" mt="md">
         <Link href="/register">Register</Link>
         <Button type="submit">Submit</Button>
-        <Button onClick={handleTest}>asgd</Button>
       </Group>
     </form>
   )

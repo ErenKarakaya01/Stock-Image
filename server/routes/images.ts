@@ -48,7 +48,6 @@ router.get("/gallery/:id", ensureAuthenticated, async (req: any, res: any) => {
 router.get("/browse/:id", ensureAuthenticated, async (req: any, res: any) => {
   try {
     const { id } = req.params
-    console.log(id)
 
     let likes = (
       await table("likes").select(["image_id"]).find({ id: id })
@@ -63,15 +62,13 @@ router.get("/browse/:id", ensureAuthenticated, async (req: any, res: any) => {
         }
       })
 
-    console.log(likes)
-
     res.send({ images: images })
   } catch (e) {
     console.log(e)
   }
 })
 
-router.post("/toggle_like", async (req: any, res: any) => {
+router.post("/toggle-like", async (req: any, res: any) => {
   try {
     const { id, image_id } = req.body
 
@@ -81,6 +78,17 @@ router.post("/toggle_like", async (req: any, res: any) => {
     else await table("likes").insertOne({ id: id, image_id: image_id })
 
     res.send({ isToggled: true })
+  } catch (e) {
+    console.log(e)
+  }
+})
+
+router.get("/image-ids", async (_req: any, res: any) => {
+  try {
+    const image_ids = await table("image").select(["image_id"]).find()
+    console.log(image_ids)
+
+    res.send({ image_ids: image_ids })
   } catch (e) {
     console.log(e)
   }

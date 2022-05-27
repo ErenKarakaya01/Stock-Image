@@ -48,7 +48,7 @@ const Browse = () => {
   useEffect(() => {
     if (user === null) return
 
-    (async () => {
+    ;(async () => {
       const { data } = await axios.get(`/images/browse/${user!.id}`)
 
       setImages(data.images)
@@ -56,15 +56,20 @@ const Browse = () => {
   }, [user])
 
   const handleLike = async (image_id: number) => {
-    const { data } = await axios.post("/images/toggle_like", { id: user!.id, image_id: image_id })
-    console.log(data)
-
-    images.forEach((v, i) => {
-      if (v.image_id === image_id) {
-        images[i].liked = !images[i].liked
-      }
+    const { data } = await axios.post("/images/toggle-like", {
+      id: user!.id,
+      image_id: image_id,
     })
-    setImages([...images])
+
+    if (data.isToggled) {
+      images.forEach((v, i) => {
+        if (v.image_id === image_id) {
+          images[i].liked = !images[i].liked
+        }
+      })
+
+      setImages([...images])
+    }
   }
 
   return (
@@ -122,7 +127,7 @@ const Browse = () => {
                       >
                         <Link href={`/images/${v.image_id}`}>
                           <Card.Section className={browseStyles.image}>
-                            <Image src={v.base64_url} alt={v.name} />
+                            <img src={v.base64_url} alt={v.name} />
                           </Card.Section>
                         </Link>
 

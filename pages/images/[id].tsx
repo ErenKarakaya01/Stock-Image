@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from "next"
 import { ParsedUrlQuery } from "querystring"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   Group,
   Grid,
@@ -27,6 +27,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import { useToggle } from "@mantine/hooks"
 import Authenticated from "../../components/protectedLayouts/Authenticated"
 import CustomerProtected from "../../components/protectedLayouts/CustomerProtected"
+import axios from "axios"
 
 interface Image {
   image_id: number
@@ -199,12 +200,14 @@ const data1: Image[] = [
   },
 ]
 
-export const getStaticPaths = (url: object) => {
+export const getStaticPaths = async (url: object) => {
+  const { data } = await axios.get("http://localhost:3000/images/image-ids")
+  
   return {
-    paths: data1.map((v) => {
+    paths: data.image_ids.map((v: any) => {
       return {
         params: {
-          id: (v.image_id - 1).toString(),
+          id: v.image_id.toString(),
         },
       }
     }),
