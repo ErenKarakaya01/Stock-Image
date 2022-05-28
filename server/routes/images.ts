@@ -90,7 +90,7 @@ router.post("/browse", ensureAuthenticated, async (req: any, res: any) => {
         .innerJoin({ 1: 1 }, "trading")
         .groupBy("image.image_id")
         .orderBy(`${order_by} DESC`)
-        .setWhereString(`lower(name) LIKE \"%${name}\" AND lower(category) LIKE \"%${category}\"`)
+        .setWhereString(`lower(name) LIKE \"${name}%\" AND lower(category) LIKE \"${category}%\"`)
         .find()
     ).map((v: any) => {
       return {

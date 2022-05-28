@@ -17,6 +17,7 @@ import {
   Button,
   ScrollArea,
   Image,
+  TextInput
 } from "@mantine/core"
 import { Search } from "tabler-icons-react"
 import Link from "next/link"
@@ -39,9 +40,9 @@ interface Image {
 const Browse = () => {
   const { user } = useContext(UserContext)
   const [images, setImages] = useState<Image[]>([])
-  const [name, setName] = useState<string | null>("")
-  const [category, setCategory] = useState<string | null>("")
-  const [orderBy, setOrderBy] = useState<string | null>("Best Selling")
+  const [name, setName] = useState("")
+  const [category, setCategory] = useState("")
+  const [orderBy, setOrderBy] = useState("Best Selling")
 
   useEffect(() => {
     if (user === null) return
@@ -83,30 +84,20 @@ const Browse = () => {
         <ScrollArea style={{ height: "101vh" }}>
           <Grid className={pageStyles.pageContent}>
             <Group position="apart" grow className={browseStyles.header}>
-              <Select
+              <TextInput
                 value={name}
-                onChange={setName}
+                onChange={(event) => setName(event.currentTarget.value)}
                 placeholder="Name"
-                searchable
-                nothingFound="No picture"
-                maxDropdownHeight={280}
-                data={images.map((v) => v.name)}
               />
-              <Select
+              <TextInput
                 value={category}
-                onChange={setCategory}
+                onChange={(event) => setCategory(event.currentTarget.value)}
                 placeholder="Category"
-                searchable
-                nothingFound="No picture"
-                maxDropdownHeight={280}
-                data={images.map((v) => v.category)}
               />
-              <Select
+              <TextInput
                 value={orderBy}
-                onChange={setOrderBy}
+                onChange={(event) => setOrderBy(event.currentTarget.value)}
                 placeholder="Sort By"
-                maxDropdownHeight={280}
-                data={["Best Selling", "Recent Uploaded"]}
               />
             </Group>
 
