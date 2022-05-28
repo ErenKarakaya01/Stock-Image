@@ -170,8 +170,7 @@ export default class Query {
     }
 
     let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} ${this.leftJoinString} ${this.innerJoinString} WHERE ${this.whereString} ${this.groupByString} ${this.orderByString};`
-    console.log(queryString)
-    console.log("-------------------------------------------------------------------------------")
+
     let rows = await query(queryString)
 
     return rows

@@ -42,7 +42,7 @@ const Browse = () => {
   const [images, setImages] = useState<Image[]>([])
   const [name, setName] = useState("")
   const [category, setCategory] = useState("")
-  const [orderBy, setOrderBy] = useState("Best Selling")
+  const [orderBy, setOrderBy] = useState<string | null>("Best Selling")
 
   useEffect(() => {
     if (user === null) return
@@ -53,8 +53,6 @@ const Browse = () => {
         category: category,
         order_by: orderBy === "Best Selling" ? "sales_count" : "upload_date"
       })
-
-      console.log(data.images)
 
       setImages(data.images)
     })()
@@ -94,10 +92,12 @@ const Browse = () => {
                 onChange={(event) => setCategory(event.currentTarget.value)}
                 placeholder="Category"
               />
-              <TextInput
+              <Select
                 value={orderBy}
-                onChange={(event) => setOrderBy(event.currentTarget.value)}
+                onChange={setOrderBy}
                 placeholder="Sort By"
+                maxDropdownHeight={280}
+                data={["Best Selling", "Recent Uploaded"]}
               />
             </Group>
 
