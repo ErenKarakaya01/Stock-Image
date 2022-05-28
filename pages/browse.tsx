@@ -38,22 +38,26 @@ interface Image {
 
 const Browse = () => {
   const { user } = useContext(UserContext)
-
-  const data = Array(50)
-    .fill(0)
-    .map((_, index) => `Item ${index}`)
-
   const [images, setImages] = useState<Image[]>([])
+  const [name, setName] = useState<string | null>("")
+  const [category, setCategory] = useState<string | null>("")
+  const [orderBy, setOrderBy] = useState<string | null>("Best Selling")
 
   useEffect(() => {
     if (user === null) return
-
     ;(async () => {
-      const { data } = await axios.get(`/images/browse/${user!.id}`)
+      const { data } = await axios.post("/images/browse", {
+        id: user!.id,
+        name: name,
+        category: category,
+        order_by: orderBy === "Best Selling" ? "sales_count" : "upload_date"
+      })
+
+      console.log(data.images)
 
       setImages(data.images)
     })()
-  }, [user])
+  }, [user, name, category, orderBy])
 
   const handleLike = async (image_id: number) => {
     const { data } = await axios.post("/images/toggle-like", {
@@ -80,23 +84,29 @@ const Browse = () => {
           <Grid className={pageStyles.pageContent}>
             <Group position="apart" grow className={browseStyles.header}>
               <Select
+                value={name}
+                onChange={setName}
                 placeholder="Name"
                 searchable
                 nothingFound="No picture"
                 maxDropdownHeight={280}
-                data={data}
+                data={images.map((v) => v.name)}
               />
               <Select
+                value={category}
+                onChange={setCategory}
                 placeholder="Category"
                 searchable
                 nothingFound="No picture"
                 maxDropdownHeight={280}
-                data={data}
+                data={images.map((v) => v.category)}
               />
               <Select
+                value={orderBy}
+                onChange={setOrderBy}
                 placeholder="Sort By"
                 maxDropdownHeight={280}
-                data={data}
+                data={["Best Selling", "Recent Uploaded"]}
               />
             </Group>
 

@@ -67,6 +67,12 @@ const RegisterForm = () => {
       .post("/users/register", values)
       .then(({ data }) => {
         if (data.isRegistered) {
+          showNotification({
+            autoClose: 5000,
+            title: "Login Success",
+            message: "Login was successful",
+            color: "green",
+          })
           router.push("/login")
         } else {
           data.errors.forEach((v: string) =>

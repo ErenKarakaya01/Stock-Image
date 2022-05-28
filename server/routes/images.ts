@@ -9,19 +9,10 @@ const { ensureAuthenticated } = require("../config/auth")
 router.post("/upload", ensureAuthenticated, async (req: any, res: any) => {
   try {
     const { name, category, price, base64_url, creator_id } = req.body
-    const date: Date = new Date()
-    const upload_date: string =
-      date.getUTCFullYear() +
-      "-" +
-      ("00" + (date.getUTCMonth() + 1)).slice(-2) +
-      "-" +
-      ("00" + date.getUTCDate()).slice(-2) +
-      " " +
-      ("00" + date.getUTCHours()).slice(-2) +
-      ":" +
-      ("00" + date.getUTCMinutes()).slice(-2) +
-      ":" +
-      ("00" + date.getUTCSeconds()).slice(-2)
+    const upload_date: string = new Date()
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ")
 
     await table("image").insertOne({
       creator_id: creator_id,
@@ -57,17 +48,49 @@ router.get("/gallery/:id", ensureAuthenticated, async (req: any, res: any) => {
   }
 })
 
-router.get("/browse/:id", ensureAuthenticated, async (req: any, res: any) => {
+/* SELECT image.image_id,image.name,image.category,image.price,image.base64_url,
+sum(case when image.image_id = image.image_id then 1 else 0 end) salesCount 
+FROM image   
+INNER JOIN trading
+WHERE true 
+GROUP BY image.image_id 
+ORDER BY salesCount DESC; */
+
+/* SELECT image.image_id,image.name,image.category,image.price,image.base64_url, sum(case when image.image_id = trading.image_id then 1 else 0 end) salesCount FROM image INNER JOIN trading WHERE true GROUP BY image.image_id ORDER BY salesCount DESC; */
+router.post("/browse", ensureAuthenticated, async (req: any, res: any) => {
   try {
-    const { id } = req.params
+    const { id, name, category, order_by } = req.body
 
     let likes = (
       await table("likes").select(["image_id"]).find({ id: id })
     ).map((v: any) => v.image_id)
+    /*
+      let images = (
+        await table("image")
+          .select(["image_id", "name", "category", "price", "base64_url"])
+          .find()
+      ).map((v: any) => {
+        return {
+          ...v,
+          liked: likes.includes(v.image_id),
+        }
+      }) */
 
     let images = (
       await table("image")
-        .select(["image_id", "name", "category", "price", "base64_url"])
+        .select([
+          "image.image_id",
+          "image.name",
+          "image.category",
+          "image.price",
+          "image.base64_url",
+          "image.upload_date",
+          "sum(case when image.image_id = trading.image_id then 1 else 0 end) sales_count",
+        ])
+        .innerJoin({ 1: 1 }, "trading")
+        .groupBy("image.image_id")
+        .orderBy(`${order_by} DESC`)
+        .setWhereString(`lower(name) LIKE \"%${name}\" AND lower(category) LIKE \"%${category}\"`)
         .find()
     ).map((v: any) => {
       return {
@@ -75,6 +98,19 @@ router.get("/browse/:id", ensureAuthenticated, async (req: any, res: any) => {
         liked: likes.includes(v.image_id),
       }
     })
+
+    /*  SELECT image.image_id,image.name,image.category,image.price,image.base64_url, 
+        sum(case when image.image_id = trading.image_id then 1 else 0 end) salesCount,
+        IF(likes.id=4, true, false) as liked
+        FROM image 
+        INNER JOIN trading
+        LEFT JOIN likes ON (likes.image_id = image.image_id)
+        WHERE true 
+        GROUP BY image.image_id 
+        ORDER BY salesCount DESC;*/
+
+    /*  SELECT * FROM image WHERE name LIKE "%" AND category LIKE "%"; */
+    /* select trading.image_id, image.name, sum(case when trading.image_id = trading.image_id then 1 else 0 end) salesCount from trading INNER JOIN image ON image.image_id=trading.image_id GROUP BY trading.image_id ORDER BY salesCount DESC; */
 
     res.send({ images: images })
   } catch (e) {
@@ -123,19 +159,10 @@ router.post("/buy", async (req: any, res: any) => {
   try {
     const { customer_id, creator_id, image_id, price } = req.body
 
-    const date: Date = new Date()
-    const trade_date =
-      date.getUTCFullYear() +
-      "-" +
-      ("00" + (date.getUTCMonth() + 1)).slice(-2) +
-      "-" +
-      ("00" + date.getUTCDate()).slice(-2) +
-      " " +
-      ("00" + date.getUTCHours()).slice(-2) +
-      ":" +
-      ("00" + date.getUTCMinutes()).slice(-2) +
-      ":" +
-      ("00" + date.getUTCSeconds()).slice(-2)
+    const trade_date: string = new Date()
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ")
 
     await table("creator").updateOne(
       { id: creator_id },
@@ -155,9 +182,6 @@ router.post("/buy", async (req: any, res: any) => {
   }
 })
 
-/*  SELECT trading.customer_id, trading.trade_date, image.price FROM trading 
-      LEFT JOIN image ON trading.image_id = image.image_id 
-      WHERE trading.creator_id = 7; */
 router.get("/trades/:id", ensureAuthenticated, async (req: any, res: any) => {
   const { id } = req.params
 

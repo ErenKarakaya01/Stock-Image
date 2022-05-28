@@ -51,19 +51,10 @@ router.post("/register", forwardAuthenticated, (req: any, res: any) => {
             errors,
           })
         } else {
-          const date: Date = new Date()
-          const created_at: string =
-            date.getUTCFullYear() +
-            "-" +
-            ("00" + (date.getUTCMonth() + 1)).slice(-2) +
-            "-" +
-            ("00" + date.getUTCDate()).slice(-2) +
-            " " +
-            ("00" + date.getUTCHours()).slice(-2) +
-            ":" +
-            ("00" + date.getUTCMinutes()).slice(-2) +
-            ":" +
-            ("00" + date.getUTCSeconds()).slice(-2)
+          const created_at: string = new Date()
+            .toISOString()
+            .slice(0, 19)
+            .replace("T", " ")
 
           // Creating new user
           const newUser = {
