@@ -1,26 +1,46 @@
-import React, { useState } from 'react'
+import React, { useState } from "react"
 import accordionStyles from "../sass/accordion.module.scss"
 import pageStyles from "../sass/pages.module.scss"
-import { Group, Grid, Col, Paper, Select, Divider, Box, Card, Text, Badge, Highlight, Button, ScrollArea, Accordion, Image } from "@mantine/core"
+import {
+  Group,
+  Grid,
+  Col,
+  Paper,
+  Select,
+  Divider,
+  Box,
+  Card,
+  Text,
+  Badge,
+  Highlight,
+  Button,
+  ScrollArea,
+  Accordion,
+  Image,
+} from "@mantine/core"
 import StyledAccordion from "components/StyledAccordion"
 
-
 interface Image {
-  image_id: number,
-  name: string,
-  category: string,
-  price: number,
-  base64_url: string,
-  size: string,
-  extension: string,
-  upload_date: string,
-  creator?: string,
-  customer?: string,
+  image_id: number
+  name: string
+  category: string
+  price: number
+  base64_url: string
+  size: string
+  extension: string
+  upload_date: string
+  creator?: string
+  customer?: string
   trade_date?: string
 }
 
-const ImageAccordion = ({ data, isTradeCard }: { data: Image[], isTradeCard: boolean }) => {
-
+const ImageAccordion = ({
+  data,
+  isTradeCard,
+}: {
+  data: Image[]
+  isTradeCard: boolean
+}) => {
   return (
     <StyledAccordion>
       {data.map((v, i) => (
@@ -29,15 +49,9 @@ const ImageAccordion = ({ data, isTradeCard }: { data: Image[], isTradeCard: boo
           className={accordionStyles.accordionItem}
           label={
             <Group position="apart">
-              <Text>
-                {`Name: ${v.name}`}
-              </Text>
-              <Text>
-                {`Category: ${v.category}`}
-              </Text>
-              <Text>
-                {`$${v.price}`}
-              </Text>
+              <Text>{`Name: ${v.name}`}</Text>
+              <Text>{`Category: ${v.category}`}</Text>
+              <Text>{`$${v.price}`}</Text>
             </Group>
           }
         >
@@ -47,31 +61,27 @@ const ImageAccordion = ({ data, isTradeCard }: { data: Image[], isTradeCard: boo
                 <Image src={v.base64_url} className={accordionStyles.image} />
               </Col>
               <Col span={9} className={accordionStyles.col9}>
-                <Group position="apart" className={accordionStyles.row} grow>
-                  <Text>
-                    {`Size: ${v.size}`}
-                  </Text>
-                  <Text>
-                    {`Extention: ${v.extension}`}
-                  </Text>
+                <Group position="apart" className={accordionStyles.row}>
+                  <Text>{`Size: ${v.size}`}</Text>
+                  <Text>{`Extention: ${v.extension}`}</Text>
                 </Group>
                 {isTradeCard && (
-                  <Group position="apart" className={accordionStyles.row} grow>
-                    <Text>
-                      {`Creator: ${v.creator}`}
-                    </Text>
-                    <Text>
-                      {`Customer: ${v.customer}`}
-                    </Text>
-                    <Text>
-                      {`Trade Date: ${v.trade_date}`}
-                    </Text>
+                  <Group position="apart" className={accordionStyles.row}>
+                    <Text>{`Creator: ${v.creator}`}</Text>
+                    <Text>{`Customer: ${v.customer}`}</Text>
+                    <Text>{`Trade Date: ${new Date(v.upload_date)
+                      .toISOString()
+                      .slice(0, 19)
+                      .replace("T", " ")}`}</Text>
                   </Group>
                 )}
 
                 <Group position="right" className={accordionStyles.row}>
                   <Text>
-                    {`Upload Date: ${v.upload_date}`}
+                    {`Upload Date: ${new Date(v.upload_date)
+                      .toISOString()
+                      .slice(0, 19)
+                      .replace("T", " ")}`}
                   </Text>
                 </Group>
               </Col>

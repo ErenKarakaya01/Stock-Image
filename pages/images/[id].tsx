@@ -46,21 +46,17 @@ interface Image {
 const ImagePage = ({ image }: { image: Image }) => {
   const { user } = useContext(UserContext)
   const [bought, setBought] = useState<boolean>(image.bought)
-  const [liked, toggleLiked] = useToggle<boolean>(image.liked, [
-    true,
-    false,
-  ])
+  const [liked, toggleLiked] = useToggle<boolean>(image.liked, [true, false])
 
   const handleBuy = async () => {
     const { data } = await axios.post("/images/buy", {
       customer_id: user!.id,
       creator_id: image.creator_id,
       image_id: image.image_id,
-      price: image.price
+      price: image.price,
     })
 
-    if (data.wasBought)
-      setBought(true)
+    if (data.wasBought) setBought(true)
   }
 
   const handleLike = async () => {
@@ -70,6 +66,21 @@ const ImagePage = ({ image }: { image: Image }) => {
     })
 
     if (data.isToggled) toggleLiked()
+  }
+
+  const getFileType = (base64_url: string) => {
+    return base64_url
+      .substring("data:image/".length, base64_url.indexOf(";base64"))
+      .toUpperCase()
+  }
+
+  const getSize = (base64_url: string) => {
+    let stringLength = base64_url.length - "data:image/png;base64,".length
+
+    let sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812
+    let sizeInKb = sizeInBytes / 1024
+
+    return sizeInKb.toFixed(0)
   }
 
   return (
@@ -131,12 +142,18 @@ const ImagePage = ({ image }: { image: Image }) => {
               <Text className={imageStyles.text}>Price: {image.price}</Text>
             </Group>
             <Group className={imageStyles.row} grow>
-              <Text className={imageStyles.text}>Size: {image.size}</Text>
               <Text className={imageStyles.text}>
-                Extension: {image.extension}
+                Size: {getSize(image.base64_url)} Kb
               </Text>
               <Text className={imageStyles.text}>
-                Upload Date: {image.upload_date}
+                Extension: {getFileType(image.base64_url)}
+              </Text>
+              <Text className={imageStyles.text}>
+                Upload Date:{" "}
+                {new Date(image.upload_date)
+                  .toISOString()
+                  .slice(0, 19)
+                  .replace("T", " ")}
               </Text>
             </Group>
             <Group className={imageStyles.row}>
@@ -147,7 +164,9 @@ const ImagePage = ({ image }: { image: Image }) => {
                   <FavoriteBorderIcon color="error" />
                 )}
               </IconButton>
-              <Button disabled={bought} onClick={handleBuy}>Buy</Button>
+              <Button disabled={bought} onClick={handleBuy}>
+                Buy
+              </Button>
             </Group>
           </Group>
         </Col>

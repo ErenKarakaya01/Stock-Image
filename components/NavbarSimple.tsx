@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react"
-import { createStyles, Navbar, Group, Code } from "@mantine/core"
+import { createStyles, Navbar, Group, Code, Text } from "@mantine/core"
 import {
   Fingerprint,
   Key,
@@ -150,6 +150,9 @@ export default function NavbarSimple() {
           <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
             <Code sx={{ fontWeight: 700 }}>npm run dev</Code>
           </a>
+          <Text className={pageStyles.navbarText}>
+            Stock Beyaz
+          </Text>
         </Group>
         {links}
       </Navbar.Section>

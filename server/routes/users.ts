@@ -5,7 +5,7 @@ const router = express.Router()
 const bcrypt = require("bcryptjs")
 const passport = require("passport")
 
-const { ensureAuthenticated ,forwardAuthenticated } = require("../config/auth")
+const { ensureAuthenticated, forwardAuthenticated } = require("../config/auth")
 
 // Get isAuthenticated
 router.get("/isauthenticated", (req: any, res: any) => {
@@ -14,30 +14,7 @@ router.get("/isauthenticated", (req: any, res: any) => {
 
 // Get user info
 router.get("/getuser", ensureAuthenticated, async (req: any, res: any) => {
-  interface LooseObject {
-    [key: string]: any
-  }
-
-  let userObject: LooseObject = {
-    created_at: req.user.created_at,
-    name: req.user.name,
-    surname: req.user.surname,
-    email: req.user.email,
-    id: req.user.id,
-  }
-
-  let customer = await table("customer").findOne({ id: req.user.id })
-
-  if (customer) {
-    userObject.type = "customer"
-  } else {
-    let creator = await table("creator").findOne({ id: req.user.id })
-
-    userObject.type = "creator"
-    userObject.balance = creator.balance
-  }
-
-  res.send({ user: userObject })
+  res.send({ user: req.user })
 })
 
 // Register
@@ -74,10 +51,19 @@ router.post("/register", forwardAuthenticated, (req: any, res: any) => {
             errors,
           })
         } else {
-          const created_at = new Date()
-            .toISOString()
-            .slice(0, 19)
-            .replace("T", " ")
+          const date: Date = new Date()
+          const created_at: string =
+            date.getUTCFullYear() +
+            "-" +
+            ("00" + (date.getUTCMonth() + 1)).slice(-2) +
+            "-" +
+            ("00" + date.getUTCDate()).slice(-2) +
+            " " +
+            ("00" + date.getUTCHours()).slice(-2) +
+            ":" +
+            ("00" + date.getUTCMinutes()).slice(-2) +
+            ":" +
+            ("00" + date.getUTCSeconds()).slice(-2)
 
           // Creating new user
           const newUser = {
@@ -105,7 +91,7 @@ router.post("/register", forwardAuthenticated, (req: any, res: any) => {
                         table("creator").insertOne({ id: id, balance: 0 })
                       }
 
-                      res.send({ isRegistered: true, errors})
+                      res.send({ isRegistered: true, errors })
                     })
                 })
                 .catch((err) => console.log(err))
@@ -142,8 +128,10 @@ router.post("/login", forwardAuthenticated, (req: any, res: any, next: any) => {
 // Logout
 router.get("/logout", ensureAuthenticated, (req: any, res: any, next: any) => {
   req.logout((err: any) => {
-    if (err) { return next(err); }
-  });
+    if (err) {
+      return next(err)
+    }
+  })
   res.send({ isLoggedOut: true })
 })
 

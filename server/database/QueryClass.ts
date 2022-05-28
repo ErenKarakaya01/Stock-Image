@@ -4,11 +4,17 @@ export default class Query {
   private table: string
   private selectColumns: string
   private whereString: string
+  private onString: string
+  private leftJoinString: string
+  private innerJoinString: string
 
   constructor(table: string) {
     this.table = table
     this.selectColumns = "*"
     this.whereString = "true"
+    this.onString = ""
+    this.leftJoinString = ""
+    this.innerJoinString = ""
   }
 
   getSelectColumns = () => {
@@ -27,6 +33,30 @@ export default class Query {
     this.whereString = value
   }
 
+  getOnString = () => {
+    return this.onString
+  }
+
+  setOnString = (value: string) => {
+    this.onString = value
+  }
+
+  getLeftJoinString = () => {
+    return this.leftJoinString
+  }
+
+  setLeftJoinString = (value: string) => {
+    this.leftJoinString = value
+  }
+
+  getInnerJoinString = () => {
+    return this.innerJoinString
+  }
+
+  setInnerJoinString = (value: string) => {
+    this.innerJoinString = value
+  }
+
   select = (columns: string[]) => {
     this.setSelectColumns(columns.join(","))
 
@@ -39,6 +69,16 @@ export default class Query {
       .join(" AND ")
 
     this.setWhereString(where)
+
+    return this
+  }
+
+  on = (columns: any) => {
+    let on: string = Object.keys(columns)
+      .map((key) => `${key} = ${columns[key]}`)
+      .join(" AND ")
+
+    this.setOnString(on)
   }
 
   find = async (columns?: any) => {
@@ -46,7 +86,7 @@ export default class Query {
       this.where(columns)
     }
 
-    let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} WHERE ${this.whereString};`
+    let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} ${this.leftJoinString} ${this.innerJoinString} WHERE ${this.whereString};`
 
     let rows = await query(queryString)
 
@@ -100,28 +140,51 @@ export default class Query {
     return rows[0]
   }
 
-  /* SELECT customer_id, trade_date, price FROM trading 
-  LEFT JOIN image ON trading.image_id = image.image_id 
-  UNION 
-  SELECT customer_id, trade_date, price FROM image 
-  RIGHT JOIN trading ON image.image_id = trading.image_id; */
-  fullJoin = async (tables: [string, string], leftColumns: any, rightColumns: any) => {
+  fullJoin = async (
+    tables: [string, string],
+    leftColumns: any,
+    rightColumns: any
+  ) => {
     const getWhereFormat = (table: string, columns: any) => {
       let where: string = Object.keys(columns)
-      .map((key) => `${table}.${key} = \"${columns[key]}\"`)
-      .join(" AND ")
+        .map((key) => `${table}.${key} = \"${columns[key]}\"`)
+        .join(" AND ")
 
       return where
     }
 
     const select: string = `SELECT ${this.select} FROM`
-    const leftJoin: string = `LEFT JOIN ${tables[1]} ON ${getWhereFormat(tables[0], leftColumns)}}`
-    const rightJoin: string = `RIGHT JOIN ${tables[0]} ON ${getWhereFormat(tables[1], rightColumns)}`
+    const leftJoin: string = `LEFT JOIN ${tables[1]} ON ${getWhereFormat(
+      tables[0],
+      leftColumns
+    )}}`
+    const rightJoin: string = `RIGHT JOIN ${tables[0]} ON ${getWhereFormat(
+      tables[1],
+      rightColumns
+    )}`
 
     const queryString: string = `${select} ${tables[0]} ${leftJoin} UNION ${select} ${tables[1]} ${rightJoin};`
 
     const rows = await query(queryString)
 
     return rows
+  }
+
+  leftJoin = (columns: any, table: string) => {
+    this.on(columns)
+
+    this.setLeftJoinString(`LEFT JOIN ${table} ON ${this.onString}`)
+
+    return this
+  }
+
+  innerJoin = (columns: any, table: string) => {
+    this.on(columns)
+
+    this.setInnerJoinString(
+      `${this.innerJoinString} INNER JOIN ${table} ON ${this.onString}`
+    )
+
+    return this
   }
 }

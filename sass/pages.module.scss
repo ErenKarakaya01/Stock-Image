@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Allan&display=swap");
+
 .grid {
   width: 100vw;
   height: 100vh;
@@ -10,6 +12,11 @@
     width: 17em;
     display: inline-flex;
     padding: 1em;
+
+    .navbarText {
+      font-family: "Allan", cursive;
+      font-size: 2em;
+    }
 
     a {
       &:hover {

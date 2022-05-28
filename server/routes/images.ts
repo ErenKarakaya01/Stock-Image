@@ -9,7 +9,19 @@ const { ensureAuthenticated } = require("../config/auth")
 router.post("/upload", ensureAuthenticated, async (req: any, res: any) => {
   try {
     const { name, category, price, base64_url, creator_id } = req.body
-    const upload_date = new Date().toISOString().slice(0, 19).replace("T", " ")
+    const date: Date = new Date()
+    const upload_date: string =
+      date.getUTCFullYear() +
+      "-" +
+      ("00" + (date.getUTCMonth() + 1)).slice(-2) +
+      "-" +
+      ("00" + date.getUTCDate()).slice(-2) +
+      " " +
+      ("00" + date.getUTCHours()).slice(-2) +
+      ":" +
+      ("00" + date.getUTCMinutes()).slice(-2) +
+      ":" +
+      ("00" + date.getUTCSeconds()).slice(-2)
 
     await table("image").insertOne({
       creator_id: creator_id,
@@ -111,9 +123,24 @@ router.post("/buy", async (req: any, res: any) => {
   try {
     const { customer_id, creator_id, image_id, price } = req.body
 
-    const trade_date = new Date().toISOString().slice(0, 19).replace("T", " ")
+    const date: Date = new Date()
+    const trade_date =
+      date.getUTCFullYear() +
+      "-" +
+      ("00" + (date.getUTCMonth() + 1)).slice(-2) +
+      "-" +
+      ("00" + date.getUTCDate()).slice(-2) +
+      " " +
+      ("00" + date.getUTCHours()).slice(-2) +
+      ":" +
+      ("00" + date.getUTCMinutes()).slice(-2) +
+      ":" +
+      ("00" + date.getUTCSeconds()).slice(-2)
 
-    await table("creator").updateOne({ id: creator_id }, { balance: `balance + ${price}`})
+    await table("creator").updateOne(
+      { id: creator_id },
+      { balance: `balance + ${price}` }
+    )
 
     await table("trading").insertOne({
       trade_date: trade_date,
@@ -128,6 +155,35 @@ router.post("/buy", async (req: any, res: any) => {
   }
 })
 
+/*  SELECT trading.customer_id, trading.trade_date, image.price FROM trading 
+      LEFT JOIN image ON trading.image_id = image.image_id 
+      WHERE trading.creator_id = 7; */
+router.get("/trades/:id", ensureAuthenticated, async (req: any, res: any) => {
+  const { id } = req.params
+
+  const whereColumn: string =
+    req.user.type === "customer" ? "trading.customer_id" : "trading.creator_id"
+
+  let trades = await table("trading")
+    .select([
+      "trading.trade_date",
+      "customer.name AS customer",
+      "creator.name AS creator",
+      "trading.image_id",
+      "image.price",
+      "image.category",
+      "image.name",
+      "image.upload_date",
+      "image.base64_url",
+    ])
+    .leftJoin({ "trading.image_id": "image.image_id" }, "image")
+    .innerJoin({ "customer.id": "trading.customer_id" }, "user AS customer")
+    .innerJoin({ "creator.id": "trading.creator_id" }, "user AS creator")
+    .where({ [whereColumn]: id })
+    .find()
+
+  res.send({ trades: trades })
+})
 
 module.exports = router
 

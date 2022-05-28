@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import pageStyles from "../sass/pages.module.scss"
 import {
   Group,
@@ -21,6 +21,8 @@ import { CurrencyDollar } from "tabler-icons-react"
 import NavbarSimple from "components/NavbarSimple"
 import ImageAccordion from "components/ImageAccordion"
 import Authenticated from "./../components/protectedLayouts/Authenticated"
+import UserContext from "components/contexts/user"
+import axios from "axios"
 
 interface Image {
   image_id: number
@@ -37,73 +39,41 @@ interface Image {
 }
 
 const Trades = () => {
-  const [data1, setData1] = useState<Image[]>([
-    {
-      image_id: 1,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz1.jpg",
-      size: "1mb",
-      extension: ".jpg",
-      upload_date: "1.2.2001",
-      creator: "eren",
-      customer: "adar",
-      trade_date: "1.2.2002",
-    },
-    {
-      image_id: 1,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz1.jpg",
-      size: "1mb",
-      extension: ".jpg",
-      upload_date: "1.2.2001",
-      creator: "eren",
-      customer: "adar",
-      trade_date: "1.2.2002",
-    },
-    {
-      image_id: 1,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz1.jpg",
-      size: "1mb",
-      extension: ".jpg",
-      upload_date: "1.2.2001",
-      creator: "eren",
-      customer: "adar",
-      trade_date: "1.2.2002",
-    },
-    {
-      image_id: 1,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz1.jpg",
-      size: "1mb",
-      extension: ".jpg",
-      upload_date: "1.2.2001",
-      creator: "eren",
-      customer: "adar",
-      trade_date: "1.2.2002",
-    },
-    {
-      image_id: 1,
-      name: "eren",
-      category: "adar",
-      price: 31,
-      base64_url: "/images/beyaz1.jpg",
-      size: "1mb",
-      extension: ".jpg",
-      upload_date: "1.2.2001",
-      creator: "eren",
-      customer: "adar",
-      trade_date: "1.2.2002",
-    },
-  ])
+  const [images, setImages] = useState<Image[]>([])
+  const { user } = useContext(UserContext)
+
+  useEffect(() => {
+    if (user === null) return
+
+    ;(async () => {
+      const { data } = await axios.get(`/images/trades/${user!.id}`)
+
+      console.log(data)
+
+      setImages(data.trades.map((image: Image) => {
+        return {
+          ...image,
+          extension: getFileType(image.base64_url),
+          size: getSize(image.base64_url)
+        }
+      }))
+    })()
+  }, [user])
+
+  const getFileType = (base64_url: string) => {
+    return base64_url
+      .substring("data:image/".length, base64_url.indexOf(";base64"))
+      .toUpperCase()
+  }
+
+  const getSize = (base64_url: string) => {
+    let stringLength = base64_url.length - "data:image/png;base64,".length
+
+    let sizeInBytes = 4 * Math.ceil(stringLength / 3) * 0.5624896334383812
+    let sizeInKb = sizeInBytes / 1024
+
+    return sizeInKb.toFixed(0)
+  }
 
   return (
     <Authenticated>
@@ -137,7 +107,7 @@ const Trades = () => {
               }
             />
 
-            <ImageAccordion data={data1} isTradeCard={true} />
+            <ImageAccordion data={images} isTradeCard={true} />
           </Grid>
         </ScrollArea>
       </Grid>

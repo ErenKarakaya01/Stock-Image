@@ -23,7 +23,6 @@ import ImageAccordion from "components/ImageAccordion"
 import CreatorProtected from "./../components/protectedLayouts/CreatorProtected"
 import axios from "axios"
 import UserContext from "components/contexts/user"
-import { useRouter } from "next/router"
 
 interface RawImage {
   image_id: number

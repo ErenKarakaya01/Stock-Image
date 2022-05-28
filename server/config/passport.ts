@@ -46,8 +46,27 @@ module.exports = function (passport: any) {
     table("user")
       .select(["id", "name", "surname", "email", "created_at"])
       .findOne({ id: id })
-      .then((user) => {
-        done(null, user)
+      .then(async (user) => {
+        interface LooseObject {
+          [key: string]: any
+        }
+
+        let userObject: LooseObject = {
+          ...user,
+        }
+
+        let customer = await table("customer").findOne({ id: id })
+
+        if (customer) {
+          userObject.type = "customer"
+        } else {
+          let creator = await table("creator").findOne({ id: id })
+
+          userObject.type = "creator"
+          userObject.balance = creator.balance
+        }
+        
+        done(null, userObject)
       })
   })
 }
