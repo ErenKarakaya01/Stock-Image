@@ -1,20 +1,21 @@
 const mysql = require("mysql")
-const util = require("util")
+const util = require('util');
 
 const db_config = {
   host: "localhost",
   user: "root",
-  database: "dbms_eren_aysegul"
+  database: "deneme",
 }
 
-let connection: any
+let connection: any = mysql.createConnection(db_config)
 
-let query: any
+const query = util.promisify(connection.query).bind(connection);
 
 const handleDisconnect = async () => {
-  /* let conString = "mysql://ht8g9jqdwjgvijkn:slw5d31f56s7uoa7@i54jns50s3z6gbjt.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/lsunasu7vjaz9dy9" */
-  connection = await mysql.createConnection(db_config)
-  query = await util.promisify(connection.query).bind(connection)
+  /* "mysql://ht8g9jqdwjgvijkn:slw5d31f56s7uoa7@i54jns50s3z6gbjt.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/lsunasu7vjaz9dy9" */
+  connection = mysql.createConnection(db_config)
+  // Recreate the connection, since
+  // the old one cannot be reused.
 
   await connection.connect((err: any) => {
     // The server is either down
@@ -35,7 +36,12 @@ const handleDisconnect = async () => {
 
 handleDisconnect().then(() => {
   console.log("DB Connected!")
+  connection.query("SELECT 1", (err: any, rows: any[]) => {
+    if (err) throw err
+    console.log(rows)
+  })
 })
+
 
 module.exports = query
 
