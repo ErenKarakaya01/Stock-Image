@@ -92,7 +92,7 @@ router.post("/browse", ensureAuthenticated, async (req: any, res: any) => {
           "image.upload_date",
           "sum(case when image.image_id = trading.image_id then 1 else 0 end) sales_count",
         ])
-        .innerJoin({ 1: 1 }, "trading")
+        .leftJoin({ 1: 1 }, "trading")
         .groupBy("image.image_id")
         .orderBy(`${order_by} DESC`)
         .setWhereString(
@@ -125,7 +125,7 @@ router.post("/browse", ensureAuthenticated, async (req: any, res: any) => {
 
     /*  SELECT * FROM image WHERE name LIKE "%" AND category LIKE "%"; */
     /* select trading.image_id, image.name, sum(case when trading.image_id = trading.image_id then 1 else 0 end) salesCount from trading INNER JOIN image ON image.image_id=trading.image_id GROUP BY trading.image_id ORDER BY salesCount DESC; */
-
+  
     res.send({ images: images })
   } catch (e) {
     console.log(e)

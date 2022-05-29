@@ -162,7 +162,7 @@ const Browse = () => {
                             )}
                           </IconButton>
 
-                          <Link href={`/image/${v.image_id}`}>
+                          <Link href={`/images/${v.image_id}`}>
                             <Button
                               disabled={v.bought}
                               variant="outline"

@@ -69,8 +69,8 @@ const RegisterForm = () => {
         if (data.isRegistered) {
           showNotification({
             autoClose: 5000,
-            title: "Login Success",
-            message: "Login was successful",
+            title: "Register Success",
+            message: "Register was successful",
             color: "green",
           })
           router.push("/login")
