@@ -17,7 +17,7 @@ import {
   Button,
   ScrollArea,
   Image,
-  TextInput
+  TextInput,
 } from "@mantine/core"
 import { Search } from "tabler-icons-react"
 import Link from "next/link"
@@ -35,6 +35,7 @@ interface Image {
   price: number
   base64_url: string
   liked: boolean
+  bought: boolean
 }
 
 const Browse = () => {
@@ -51,8 +52,10 @@ const Browse = () => {
         id: user!.id,
         name: name,
         category: category,
-        order_by: orderBy === "Best Selling" ? "sales_count" : "upload_date"
+        order_by: orderBy === "Best Selling" ? "sales_count" : "upload_date",
       })
+
+      console.log(data.images)
 
       setImages(data.images)
     })()
@@ -152,15 +155,16 @@ const Browse = () => {
                           </Badge>
 
                           <IconButton onClick={() => handleLike(v.image_id)}>
-                            {v.liked === true ? (
+                            {v.liked ? (
                               <FavoriteIcon color="error" />
                             ) : (
                               <FavoriteBorderIcon color="error" />
                             )}
                           </IconButton>
 
-                          <Link href={`/images/${v.image_id}`}>
+                          <Link href={`/image/${v.image_id}`}>
                             <Button
+                              disabled={v.bought}
                               variant="outline"
                               radius={"xl"}
                               gradient={{ from: "teal", to: "blue", deg: 60 }}

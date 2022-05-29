@@ -64,6 +64,11 @@ router.post("/browse", ensureAuthenticated, async (req: any, res: any) => {
     let likes = (
       await table("likes").select(["image_id"]).find({ id: id })
     ).map((v: any) => v.image_id)
+
+    let bought = (
+      await table("trading").select(["image_id"]).find({ customer_id: id })
+    ).map((v: any) => v.image_id)
+
     /*
       let images = (
         await table("image")
@@ -90,14 +95,23 @@ router.post("/browse", ensureAuthenticated, async (req: any, res: any) => {
         .innerJoin({ 1: 1 }, "trading")
         .groupBy("image.image_id")
         .orderBy(`${order_by} DESC`)
-        .setWhereString(`lower(name) LIKE \"${name}%\" AND lower(category) LIKE \"${category}%\"`)
+        .setWhereString(
+          `lower(name) LIKE \"${name}%\" AND lower(category) LIKE \"${category}%\"`
+        )
         .find()
-    ).map((v: any) => {
-      return {
-        ...v,
-        liked: likes.includes(v.image_id),
-      }
-    })
+    )
+      .map((v: any) => {
+        return {
+          ...v,
+          liked: likes.includes(v.image_id),
+        }
+      })
+      .map((v: any) => {
+        return {
+          ...v,
+          bought: bought.includes(v.image_id),
+        }
+      })
 
     /*  SELECT image.image_id,image.name,image.category,image.price,image.base64_url, 
         sum(case when image.image_id = trading.image_id then 1 else 0 end) salesCount,
