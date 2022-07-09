@@ -147,7 +147,9 @@ export default class Query {
   leftJoin = (columns: any, table: string) => {
     this.on(columns)
 
-    this.setLeftJoinString(`LEFT JOIN ${table} ON ${this.onString}`)
+    this.setLeftJoinString(
+      `${this.leftJoinString} LEFT JOIN ${table} ON ${this.onString}`
+    )
 
     return this
   }
@@ -161,7 +163,6 @@ export default class Query {
 
     return this
   }
-
 
   // Queries
   find = async (columns?: any) => {
@@ -179,7 +180,7 @@ export default class Query {
   findOne = async (columns: any) => {
     this.where(columns)
 
-    let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} WHERE ${this.whereString} LIMIT 1;`
+    let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} ${this.leftJoinString} ${this.innerJoinString} WHERE ${this.whereString} ${this.groupByString} ${this.orderByString} LIMIT 1;`
 
     let rows = await query(queryString)
 

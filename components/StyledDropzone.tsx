@@ -40,7 +40,7 @@ export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme, im
             {img.name}
           </Text>
           <Text size="sm" color="dimmed" inline mt={7}>
-            You selected the file, you can change it if you want
+            You selected the file up to 1MB, you can change it if you want
           </Text>
         </>
       ) : (
@@ -79,7 +79,7 @@ export default function StyledDropzone({ img, setImg }: { img: any, setImg: Reac
           color: 'red',
         })
       }}
-      maxSize={3 * 1024 ** 2}
+      maxSize={(3 * 1024) ** 2}
       accept={IMAGE_MIME_TYPE}
       multiple={false}
     >

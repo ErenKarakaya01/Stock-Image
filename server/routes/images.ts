@@ -48,15 +48,6 @@ router.get("/gallery/:id", ensureAuthenticated, async (req: any, res: any) => {
   }
 })
 
-/* SELECT image.image_id,image.name,image.category,image.price,image.base64_url,
-sum(case when image.image_id = image.image_id then 1 else 0 end) salesCount 
-FROM image   
-INNER JOIN trading
-WHERE true 
-GROUP BY image.image_id 
-ORDER BY salesCount DESC; */
-
-/* SELECT image.image_id,image.name,image.category,image.price,image.base64_url, sum(case when image.image_id = trading.image_id then 1 else 0 end) salesCount FROM image INNER JOIN trading WHERE true GROUP BY image.image_id ORDER BY salesCount DESC; */
 router.post("/browse", ensureAuthenticated, async (req: any, res: any) => {
   try {
     const { id, name, category, order_by } = req.body
@@ -68,18 +59,6 @@ router.post("/browse", ensureAuthenticated, async (req: any, res: any) => {
     let bought = (
       await table("trading").select(["image_id"]).find({ customer_id: id })
     ).map((v: any) => v.image_id)
-
-    /*
-      let images = (
-        await table("image")
-          .select(["image_id", "name", "category", "price", "base64_url"])
-          .find()
-      ).map((v: any) => {
-        return {
-          ...v,
-          liked: likes.includes(v.image_id),
-        }
-      }) */
 
     let images = (
       await table("image")
@@ -113,19 +92,6 @@ router.post("/browse", ensureAuthenticated, async (req: any, res: any) => {
         }
       })
 
-    /*  SELECT image.image_id,image.name,image.category,image.price,image.base64_url, 
-        sum(case when image.image_id = trading.image_id then 1 else 0 end) salesCount,
-        IF(likes.id=4, true, false) as liked
-        FROM image 
-        INNER JOIN trading
-        LEFT JOIN likes ON (likes.image_id = image.image_id)
-        WHERE true 
-        GROUP BY image.image_id 
-        ORDER BY salesCount DESC;*/
-
-    /*  SELECT * FROM image WHERE name LIKE "%" AND category LIKE "%"; */
-    /* select trading.image_id, image.name, sum(case when trading.image_id = trading.image_id then 1 else 0 end) salesCount from trading INNER JOIN image ON image.image_id=trading.image_id GROUP BY trading.image_id ORDER BY salesCount DESC; */
-  
     res.send({ images: images })
   } catch (e) {
     console.log(e)
@@ -147,23 +113,32 @@ router.post("/toggle-like", async (req: any, res: any) => {
   }
 })
 
-router.get("/image-ids", async (_req: any, res: any) => {
-  try {
-    const image_ids = await table("image").select(["image_id"]).find()
-
-    res.send({ image_ids: image_ids })
-  } catch (e) {
-    console.log(e)
-  }
-})
-
-router.get("/image/:image_id", async (req: any, res: any) => {
+/* router.get("/image/:image_id", async (req: any, res: any) => {
   try {
     const { image_id } = req.params
 
     const image = await table("image").findOne({ image_id: image_id })
 
     res.send({ image: image })
+  } catch (e) {
+    console.log(e)
+  }
+}) */
+
+router.get("/image/:image_id/user/:user_id", async (req: any, res: any) => {
+  try {
+    const { image_id, user_id } = req.params
+
+    const imageStatus = await table("image")
+      .select([
+        "CASE WHEN image.image_id = trading.image_id THEN 1 ELSE 0 END AS bought",
+        "CASE WHEN image.image_id = likes.image_id THEN 1 ELSE 0 END AS liked",
+      ])
+      .leftJoin({ "likes.id": user_id }, "likes")
+      .leftJoin({ "trading.customer_id": user_id }, "trading")
+      .findOne({ "image.image_id": image_id })
+
+    res.send({ imageStatus })
   } catch (e) {
     console.log(e)
   }

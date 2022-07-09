@@ -20,6 +20,7 @@ const LoginForm = () => {
   const { setUser } = useContext(UserContext)
   const { setIsAuth } = useContext(AuthenticateContext)
 
+  // Validate text input formats
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {
       email: "",
@@ -31,6 +32,7 @@ const LoginForm = () => {
     }),
   })
 
+  // Handles post request of login
   const handleSubmit = (values: FormValues) => {
     axios
       .post("/users/login", values)
@@ -77,7 +79,7 @@ const LoginForm = () => {
 
       <Group position="apart" mt="md">
         <Link href="/register">Register</Link>
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Login</Button>
       </Group>
     </form>
   )

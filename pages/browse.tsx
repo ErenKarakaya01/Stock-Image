@@ -129,7 +129,7 @@ const Browse = () => {
                         shadow="xl"
                         radius={"lg"}
                       >
-                        <Link href={`/images/${v.image_id}`}>
+                        <Link href={`/images/${user!.id}/${v.image_id}`}>
                           <Card.Section className={browseStyles.image}>
                             <img src={v.base64_url} alt={v.name} />
                           </Card.Section>
@@ -162,7 +162,7 @@ const Browse = () => {
                             )}
                           </IconButton>
 
-                          <Link href={`/images/${v.image_id}`}>
+                          <Link href={`/images/${user!.id}/${v.image_id}`}>
                             <Button
                               disabled={v.bought}
                               variant="outline"

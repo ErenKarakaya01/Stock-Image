@@ -27,6 +27,7 @@ interface FormValues {
 const RegisterForm = () => {
   const router = useRouter()
 
+  // Handles form input formats
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {
       name: "",
@@ -62,6 +63,7 @@ const RegisterForm = () => {
     }),
   })
 
+  // Handles post request of register
   const handleSubmit = (values: FormValues) => {
     axios
       .post("/users/register", values)

@@ -54,6 +54,7 @@ server.prepare().then(async () => {
       origin: "http://localhost:3000",
     })
   )
+  
 
   // Routes
   app.use("/users", require("./routes/users.ts"))

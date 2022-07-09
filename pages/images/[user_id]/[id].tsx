@@ -19,15 +19,16 @@ import {
   Image,
 } from "@mantine/core"
 import { Photo } from "tabler-icons-react"
-import pageStyles from "../../sass/pages.module.scss"
-import imageStyles from "../../sass/image.module.scss"
+import pageStyles from "../../../sass/pages.module.scss"
+import imageStyles from "../../../sass/image.module.scss"
 import { IconButton } from "@mui/material"
 import FavoriteIcon from "@mui/icons-material/Favorite"
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import { useToggle } from "@mantine/hooks"
-import CustomerProtected from "../../components/protectedLayouts/CustomerProtected"
+import CustomerProtected from "../../../components/protectedLayouts/CustomerProtected"
 import axios from "axios"
 import UserContext from "components/contexts/user"
+import table from "../../../server/database/table"
 
 interface Image {
   image_id: number
@@ -35,8 +36,6 @@ interface Image {
   category: string
   price: number
   base64_url: string
-  size: string
-  extension: string
   upload_date: string
   creator_id: number
   liked: boolean
@@ -45,8 +44,23 @@ interface Image {
 
 const ImagePage = ({ image }: { image: Image }) => {
   const { user } = useContext(UserContext)
-  const [bought, setBought] = useState<boolean>(image.bought)
-  const [liked, toggleLiked] = useToggle<boolean>(image.liked, [true, false])
+  const [bought, setBought] = useState<boolean>(false)
+  const [liked, toggleLiked] = useToggle<boolean>(false, [true, false])
+
+  useEffect(() => {
+    if (user === null || user === undefined) return
+
+    ;(async () => {
+      const { data } = await axios.get(`/images/image/${image.image_id}/user/${user.id}`)
+
+      console.log(data)
+
+      setBought(data.imageStatus.bought == 1 ? true : false)
+      toggleLiked(data.imageStatus.liked == 1 ? true : false)
+      console.log(liked)
+      console.log(bought)
+    })()
+  }, [user])
 
   const handleBuy = async () => {
     const { data } = await axios.post("/images/buy", {
@@ -177,13 +191,14 @@ const ImagePage = ({ image }: { image: Image }) => {
 
 export default ImagePage
 
-export const getStaticPaths = async (url: object) => {
-  const { data } = await axios.get("http://localhost:3000/images/image-ids")
+export const getStaticPaths = async () => {
+  const ids = await table("customer, image").select(["id", "image_id"]).find()
 
   return {
-    paths: data.image_ids.map((v: any) => {
+    paths: ids.map((v: any) => {
       return {
         params: {
+          user_id: v.id.toString(),
           id: v.image_id.toString(),
         },
       }
@@ -193,13 +208,28 @@ export const getStaticPaths = async (url: object) => {
 }
 
 export const getStaticProps: GetStaticProps = async (url: any) => {
-  const { data } = await axios.get(
-    `http://localhost:3000/images/image/${url.params.id}`
-  )
+  const image = await table("image")
+    .select([
+      "image.image_id",
+      "image.name",
+      "image.category",
+      "image.price",
+      "image.base64_url",
+      "image.upload_date",
+      "image.creator_id",
+      "CASE WHEN image.image_id = trading.image_id THEN 1 ELSE 0 END AS bought",
+      "CASE WHEN image.image_id = likes.image_id THEN 1 ELSE 0 END AS liked",
+    ])
+    .leftJoin({ "likes.id": url.params.user_id }, "likes")
+    .leftJoin({ "trading.customer_id": url.params.user_id }, "trading")
+    .findOne({ "image.image_id": url.params.id })
 
   return {
     props: {
-      image: data.image,
+      image: {
+        ...image,
+        upload_date: image.upload_date.toString(),
+      },
     },
   }
 }
