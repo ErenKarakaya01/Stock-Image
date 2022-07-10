@@ -172,6 +172,7 @@ export default class Query {
 
     let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} ${this.leftJoinString} ${this.innerJoinString} WHERE ${this.whereString} ${this.groupByString} ${this.orderByString};`
 
+    console.log(queryString)
     let rows = await query(queryString)
 
     return rows
@@ -182,6 +183,7 @@ export default class Query {
 
     let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} ${this.leftJoinString} ${this.innerJoinString} WHERE ${this.whereString} ${this.groupByString} ${this.orderByString} LIMIT 1;`
 
+    console.log(queryString)
     let rows = await query(queryString)
 
     return rows[0]

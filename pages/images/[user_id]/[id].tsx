@@ -216,9 +216,7 @@ export const getStaticProps: GetStaticProps = async (url: any) => {
       "image.price",
       "image.base64_url",
       "image.upload_date",
-      "image.creator_id",
-      "CASE WHEN image.image_id = trading.image_id THEN 1 ELSE 0 END AS bought",
-      "CASE WHEN image.image_id = likes.image_id THEN 1 ELSE 0 END AS liked",
+      "image.creator_id"
     ])
     .leftJoin({ "likes.id": url.params.user_id }, "likes")
     .leftJoin({ "trading.customer_id": url.params.user_id }, "trading")

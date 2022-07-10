@@ -134,8 +134,8 @@ router.get("/image/:image_id/user/:user_id", async (req: any, res: any) => {
         "CASE WHEN image.image_id = trading.image_id THEN 1 ELSE 0 END AS bought",
         "CASE WHEN image.image_id = likes.image_id THEN 1 ELSE 0 END AS liked",
       ])
-      .leftJoin({ "likes.id": user_id }, "likes")
-      .leftJoin({ "trading.customer_id": user_id }, "trading")
+      .leftJoin({ "likes.id": user_id, "likes.image_id": image_id }, "likes")
+      .leftJoin({ "trading.customer_id": user_id, "trading.image_id": image_id }, "trading")
       .findOne({ "image.image_id": image_id })
 
     res.send({ imageStatus })
