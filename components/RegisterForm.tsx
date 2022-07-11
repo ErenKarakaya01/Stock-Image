@@ -135,7 +135,7 @@ const RegisterForm = () => {
         <Link href="/login">
           Login
         </Link>
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Register</Button>
       </Group>
     </form>
   )

@@ -34,9 +34,11 @@ const App = (props: AppProps) => {
     AOS.init()
     AOS.refresh()
     ;(async () => {
+      // Fetching authentication status
       const { data } = await axios.get("/users/isauthenticated")
 
       if (data.isAuthenticated) {
+        // Fetching user infos
         const { data } = await axios.get("/users/getuser")
 
         setUser(data.user)
@@ -60,7 +62,6 @@ const App = (props: AppProps) => {
         withGlobalStyles
         withNormalizeCSS
         theme={{
-          /** Put your mantine theme override here */
           colorScheme: "light",
         }}
       >

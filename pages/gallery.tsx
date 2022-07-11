@@ -1,20 +1,12 @@
 import NavbarSimple from "components/NavbarSimple"
 import React, { useEffect, useState, useContext } from "react"
-import galleryStyles from "../sass/browse.module.scss"
 import pageStyles from "../sass/pages.module.scss"
 import {
   Group,
   Grid,
-  Col,
-  Paper,
-  Select,
   Divider,
   Box,
-  Card,
   Text,
-  Badge,
-  Highlight,
-  Button,
   ScrollArea,
   Image,
 } from "@mantine/core"
@@ -46,20 +38,20 @@ interface Image {
 
 const Gallery = () => {
   const [images, setImages] = useState<Image[]>([])
-
   const { user } = useContext(UserContext)
 
   useEffect(() => {
     if (user === null) return
 
     ;(async () => {
+      // Fetching the image datas that the user uploaded
       const { data } = await axios.get(`/images/gallery/${user!.id}`)
 
       setImages(data.images.map((v: RawImage) => {
         return {
           ...v,
-          size: getSize(v.base64_url),
-          extension: getFileType(v.base64_url),
+          size: getSize(v.base64_url), // Calculating size of an image
+          extension: getFileType(v.base64_url), // Getting the extension type of and image
         }
       }))
     })()

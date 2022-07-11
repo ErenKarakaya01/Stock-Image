@@ -1,20 +1,11 @@
-import React, { useState } from "react"
+import React from "react"
 import accordionStyles from "../sass/accordion.module.scss"
-import pageStyles from "../sass/pages.module.scss"
 import {
   Group,
   Grid,
   Col,
-  Paper,
-  Select,
-  Divider,
-  Box,
   Card,
   Text,
-  Badge,
-  Highlight,
-  Button,
-  ScrollArea,
   Accordion,
   Image,
 } from "@mantine/core"
@@ -41,6 +32,8 @@ const ImageAccordion = ({
   data: Image[]
   isTradeCard: boolean
 }) => {
+  const dateOptions: any = { year: "numeric", month: "long", day: "numeric" }
+
   return (
     <StyledAccordion>
       {data.map((v, i) => (
@@ -62,26 +55,25 @@ const ImageAccordion = ({
               </Col>
               <Col span={9} className={accordionStyles.col9}>
                 <Group position="apart" className={accordionStyles.row}>
-                  <Text>{`Size: ${v.size}`}</Text>
+                  <Text>{`Size: ${v.size}KB`}</Text>
                   <Text>{`Extention: ${v.extension}`}</Text>
                 </Group>
                 {isTradeCard && (
                   <Group position="apart" className={accordionStyles.row}>
                     <Text>{`Creator: ${v.creator}`}</Text>
                     <Text>{`Customer: ${v.customer}`}</Text>
-                    <Text>{`Trade Date: ${new Date(v.upload_date)
-                      .toISOString()
-                      .slice(0, 19)
-                      .replace("T", " ")}`}</Text>
+                    <Text>{`Trade Date: ${new Date(
+                      v.upload_date
+                    ).toLocaleString("en-US", dateOptions)}`}</Text>
                   </Group>
                 )}
 
                 <Group position="right" className={accordionStyles.row}>
                   <Text>
-                    {`Upload Date: ${new Date(v.upload_date)
-                      .toISOString()
-                      .slice(0, 19)
-                      .replace("T", " ")}`}
+                    {`Upload Date: ${new Date(v.upload_date).toLocaleString(
+                      "en-US",
+                      dateOptions
+                    )}`}
                   </Text>
                 </Group>
               </Col>

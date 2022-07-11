@@ -49,11 +49,20 @@
 
         div {
           margin: 1em 0;
-          font-size: 1.2em;
+          font-size: 1.3em;
+          font-family: cursive;
         }
 
         .nickname {
           font-size: 2em;
+        }
+
+        .nameSurname {
+          * {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
         }
 
         .footer {

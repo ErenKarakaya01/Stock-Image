@@ -6,14 +6,12 @@ import {
   Group,
   Grid,
   Col,
-  Paper,
   Select,
   Divider,
   Box,
   Card,
   Text,
   Badge,
-  Highlight,
   Button,
   ScrollArea,
   Image,
@@ -48,6 +46,7 @@ const Browse = () => {
   useEffect(() => {
     if (user === null) return
     ;(async () => {
+      // Getting images in the order based on the inputs a user entered 
       const { data } = await axios.post("/images/browse", {
         id: user!.id,
         name: name,
@@ -55,12 +54,11 @@ const Browse = () => {
         order_by: orderBy === "Best Selling" ? "sales_count" : "upload_date",
       })
 
-      console.log(data.images)
-
       setImages(data.images)
     })()
   }, [user, name, category, orderBy])
 
+  // Handles like process
   const handleLike = async (image_id: number) => {
     const { data } = await axios.post("/images/toggle-like", {
       id: user!.id,

@@ -46,9 +46,8 @@ const Trades = () => {
     if (user === null) return
 
     ;(async () => {
+      // Getting the image infos that the user sold or purchased
       const { data } = await axios.get(`/images/trades/${user!.id}`)
-
-      console.log(data)
 
       setImages(data.trades.map((image: Image) => {
         return {

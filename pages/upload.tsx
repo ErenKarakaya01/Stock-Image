@@ -44,6 +44,7 @@ const Upload = () => {
   const { user } = useContext(UserContext)
   const router = useRouter()
 
+  // Manages and validates the form values
   const form: UseFormReturnType<FormValues> = useForm<FormValues>({
     initialValues: {
       name: "",
@@ -69,6 +70,7 @@ const Upload = () => {
   })
 
   const handleSubmit = async (values: FormValues) => {
+    // Checking if the image was selected
     if (!img)
       return showNotification({
         autoClose: 5000,
@@ -85,6 +87,7 @@ const Upload = () => {
       creator_id: user!.id,
     })
 
+    // Checking if the image was uploaded
     if (data.wasUploaded) {
       showNotification({
         autoClose: 5000,

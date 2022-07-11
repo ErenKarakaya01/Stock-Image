@@ -1,21 +1,14 @@
-import { GetStaticPaths, GetStaticProps } from "next"
-import { ParsedUrlQuery } from "querystring"
+import { GetStaticProps } from "next"
 import React, { useState, useEffect, useContext } from "react"
 import {
   Group,
   Grid,
   Col,
   Paper,
-  Select,
   Divider,
   Box,
-  Card,
   Text,
-  Badge,
-  Highlight,
   Button,
-  ScrollArea,
-  Accordion,
   Image,
 } from "@mantine/core"
 import { Photo } from "tabler-icons-react"
@@ -48,20 +41,19 @@ const ImagePage = ({ image }: { image: Image }) => {
   const [liked, toggleLiked] = useToggle<boolean>(false, [true, false])
 
   useEffect(() => {
+    // Checking if user context loaded
     if (user === null || user === undefined) return
 
     ;(async () => {
+      // Getting image status
       const { data } = await axios.get(`/images/image/${image.image_id}/user/${user.id}`)
-
-      console.log(data)
 
       setBought(data.imageStatus.bought == 1 ? true : false)
       toggleLiked(data.imageStatus.liked == 1 ? true : false)
-      console.log(liked)
-      console.log(bought)
     })()
   }, [user])
 
+  // Handles purchase process
   const handleBuy = async () => {
     const { data } = await axios.post("/images/buy", {
       customer_id: user!.id,
@@ -73,6 +65,7 @@ const ImagePage = ({ image }: { image: Image }) => {
     if (data.wasBought) setBought(true)
   }
 
+  // Handles purchase process
   const handleLike = async () => {
     const { data } = await axios.post("/images/toggle-like", {
       id: user!.id,
@@ -192,6 +185,7 @@ const ImagePage = ({ image }: { image: Image }) => {
 export default ImagePage
 
 export const getStaticPaths = async () => {
+  // Getting ids of users and images
   const ids = await table("customer, image").select(["id", "image_id"]).find()
 
   return {
@@ -208,6 +202,7 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async (url: any) => {
+  // Fetching image attributes
   const image = await table("image")
     .select([
       "image.image_id",

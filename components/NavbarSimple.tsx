@@ -1,18 +1,12 @@
-import React, { useState, useContext } from "react"
+import React, { useContext } from "react"
 import { createStyles, Navbar, Group, Code, Text } from "@mantine/core"
 import {
-  Fingerprint,
-  Key,
-  Settings,
-  TwoFA,
-  DatabaseImport,
   Receipt2,
   Upload,
-  SwitchHorizontal,
   Logout,
   Search,
   Photo,
-  Users,
+  User,
 } from "tabler-icons-react"
 import Link from "next/link"
 import pageStyles from "../sass/pages.module.scss"
@@ -103,6 +97,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
   }
 })
 
+// Sidebar item datas
 const data = [
   { link: "/browse", label: "Browse", icon: Search, type: "customer" },
   { link: "/upload", label: "Upload", icon: Upload, type: "creator" },
@@ -113,9 +108,10 @@ const data = [
 export default function NavbarSimple() {
   const { classes } = useStyles()
   const { user, setUser } = useContext(UserContext)
-  const { isAuth, setIsAuth } = useContext(AuthenticateContext)
+  const { setIsAuth } = useContext(AuthenticateContext)
   const router = useRouter()
 
+  // Sidebar items
   const links = data
     .filter((v) => v.type === user?.type || v.type === "everyone")
     .map((item) => (
@@ -127,6 +123,7 @@ export default function NavbarSimple() {
       </Link>
     ))
 
+  // Handles logout
   const handleLogout = async () => {
     const { data } = await axios.get("/users/logout")
 
@@ -158,10 +155,10 @@ export default function NavbarSimple() {
       </Navbar.Section>
 
       <Navbar.Section className={classes.footer}>
-        <Link href="/creators">
+        <Link href="/creator">
           <div className={classes.link}>
-            <Users className={classes.linkIcon} />
-            <span>Creators</span>
+            <User className={classes.linkIcon} />
+            <span>Creator</span>
           </div>
         </Link>
 
