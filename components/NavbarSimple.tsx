@@ -147,9 +147,7 @@ export default function NavbarSimple() {
           <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank">
             <Code sx={{ fontWeight: 700 }}>npm run dev</Code>
           </a>
-          <Text className={pageStyles.navbarText}>
-            Stock Beyaz
-          </Text>
+          <Text className={pageStyles.navbarText}>Stock Beyaz</Text>
         </Group>
         {links}
       </Navbar.Section>
@@ -162,10 +160,7 @@ export default function NavbarSimple() {
           </div>
         </Link>
 
-        <div
-          className={classes.link}
-          onClick={handleLogout}
-        >
+        <div className={classes.link} onClick={handleLogout}>
           <Logout className={classes.linkIcon} />
           <span>Logout</span>
         </div>

@@ -32,7 +32,7 @@ const ImageAccordion = ({
   data: Image[]
   isTradeCard: boolean
 }) => {
-  const dateOptions: any = { year: "numeric", month: "long", day: "numeric" }
+  const dateOptions: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" }
 
   return (
     <StyledAccordion>

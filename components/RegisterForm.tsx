@@ -14,7 +14,6 @@ import { useRouter } from "next/router"
 import Link from "next/link"
 import formStyles from "../sass/form.module.scss"
 
-
 interface FormValues {
   name: string // regular field, same as inferred type
   surname: string
@@ -43,14 +42,14 @@ const RegisterForm = () => {
         values.name.length <= 1
           ? "Too Short Name"
           : values.name.length >= 60
-            ? "Too Long Name"
-            : null,
+          ? "Too Long Name"
+          : null,
       surname:
         values.surname.length <= 1
           ? "Too Short Surname"
           : values.surname.length >= 60
-            ? "Too Long Surname"
-            : null,
+          ? "Too Long Surname"
+          : null,
       email: /^\S+@\S+$/.test(values.email) ? null : "Invalid email",
       password:
         values.password.length <= 8
@@ -87,7 +86,7 @@ const RegisterForm = () => {
           )
         }
       })
-      .catch((e: any) => console.log(e))
+      .catch((e: Error) => console.log(e))
   }
 
   return (
@@ -132,9 +131,7 @@ const RegisterForm = () => {
       </RadioGroup>
 
       <Group position="apart" mt="md">
-        <Link href="/login">
-          Login
-        </Link>
+        <Link href="/login">Login</Link>
         <Button type="submit">Register</Button>
       </Group>
     </form>

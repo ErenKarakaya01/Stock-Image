@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import AuthenticateContext from "components/contexts/authenticate"
 import Loading from "components/Loading"
 import { showNotification } from "@mantine/notifications"
 
-const Authenticated = ({ children }: { children: any }) => {
+const Authenticated = ({ children }: { children: React.ReactNode }) => {
   const { isAuth } = useContext(AuthenticateContext)
   const router = useRouter()
   const [load, setLoad] = useState<boolean | null>(null)

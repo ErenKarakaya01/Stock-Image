@@ -1,7 +1,11 @@
-import { useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 
 // This hook makes an effect like keyboard writing of texts
-const useWriteDelayed = (writing: string, setWriting: React.Dispatch<React.SetStateAction<string>>, article: string) => {
+const useWriteDelayed = (
+  writing: string,
+  setWriting: React.Dispatch<React.SetStateAction<string>>,
+  article: string
+) => {
   const [index, setIndex] = useState(0)
   const [time, setTime] = useState(500)
 

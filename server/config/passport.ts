@@ -24,7 +24,7 @@ module.exports = function (passport: any) {
             bcrypt.compare(
               password,
               user.password,
-              (err: any, isMatch: any) => {
+              (err: Error, isMatch: boolean) => {
                 if (err) throw err
                 if (isMatch) {
                   return done(null, user)
@@ -42,7 +42,7 @@ module.exports = function (passport: any) {
     done(null, user.id)
   })
 
-  passport.deserializeUser(function (id: any, done: any) {
+  passport.deserializeUser(function (id: number, done: any) {
     table("user")
       .select(["id", "name", "surname", "email", "created_at"])
       .findOne({ id: id })

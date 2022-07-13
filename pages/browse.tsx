@@ -46,7 +46,7 @@ const Browse = () => {
   useEffect(() => {
     if (user === null) return
     ;(async () => {
-      // Getting images in the order based on the inputs a user entered 
+      // Getting images in the order based on the inputs a user entered
       const { data } = await axios.post("/images/browse", {
         id: user!.id,
         name: name,

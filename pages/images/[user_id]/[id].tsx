@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next"
+import { GetStaticProps, GetStaticPaths } from "next"
 import React, { useState, useEffect, useContext } from "react"
 import {
   Group,
@@ -43,10 +43,11 @@ const ImagePage = ({ image }: { image: Image }) => {
   useEffect(() => {
     // Checking if user context loaded
     if (user === null || user === undefined) return
-
     ;(async () => {
       // Getting image status
-      const { data } = await axios.get(`/images/image/${image.image_id}/user/${user.id}`)
+      const { data } = await axios.get(
+        `/images/image/${image.image_id}/user/${user.id}`
+      )
 
       setBought(data.imageStatus.bought == 1 ? true : false)
       toggleLiked(data.imageStatus.liked == 1 ? true : false)
@@ -184,12 +185,17 @@ const ImagePage = ({ image }: { image: Image }) => {
 
 export default ImagePage
 
-export const getStaticPaths = async () => {
+interface Id {
+  id: number
+  image_id: number
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
   // Getting ids of users and images
   const ids = await table("customer, image").select(["id", "image_id"]).find()
 
   return {
-    paths: ids.map((v: any) => {
+    paths: ids.map((v: Id) => {
       return {
         params: {
           user_id: v.id.toString(),
@@ -211,12 +217,12 @@ export const getStaticProps: GetStaticProps = async (url: any) => {
       "image.price",
       "image.base64_url",
       "image.upload_date",
-      "image.creator_id"
+      "image.creator_id",
     ])
     .leftJoin({ "likes.id": url.params.user_id }, "likes")
-    .leftJoin({ "trading.customer_id": url.params.user_id }, "trading")
-    .findOne({ "image.image_id": url.params.id })
-
+    .leftJoin({ "trading.customer_id": url.user_id }, "trading")
+    .findOne({ "image.image_id": url.id })
+url
   return {
     props: {
       image: {

@@ -29,7 +29,7 @@ function ImageUploadIcon({
   return <Photo {...props} />;
 }
 
-export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme, img: any) => (
+export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme, img: File) => (
   <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
     <ImageUploadIcon status={{ accepted: img !== null, rejected: false }} style={{ color: getIconColor(status, theme) }} size={80} />
 
@@ -57,7 +57,7 @@ export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme, im
   </Group>
 );
 
-export default function StyledDropzone({ img, setImg }: { img: any, setImg: React.Dispatch<any> }) {
+export default function StyledDropzone({ img, setImg }: { img: File, setImg: React.Dispatch<File> }) {
   const theme = useMantineTheme();
   return (
     <Dropzone

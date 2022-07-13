@@ -5,7 +5,7 @@ import UserContext from "components/contexts/user"
 import Loading from "components/Loading"
 import { showNotification } from "@mantine/notifications"
 
-const CustomerProtected = ({ children }: { children: any }) => {
+const CustomerProtected = ({ children }: { children: React.ReactNode }) => {
   const { isAuth } = useContext(AuthenticateContext)
   const { user } = useContext(UserContext)
   const router = useRouter()

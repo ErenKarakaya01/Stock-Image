@@ -1,5 +1,9 @@
 const query = require("./db_config")
 
+interface LooseObject {
+  [key: string]: any
+}
+
 export default class Query {
   private table: string
   private selectColumns: string
@@ -84,7 +88,7 @@ export default class Query {
     return this
   }
 
-  where = (columns: any) => {
+  where = (columns: LooseObject) => {
     let where: string = Object.keys(columns)
       .map((key) => `${key} = \"${columns[key]}\"`)
       .join(" AND ")
@@ -94,7 +98,7 @@ export default class Query {
     return this
   }
 
-  on = (columns: any) => {
+  on = (columns: LooseObject) => {
     let on: string = Object.keys(columns)
       .map((key) => `${key} = ${columns[key]}`)
       .join(" AND ")
@@ -116,10 +120,10 @@ export default class Query {
 
   /* fullJoin = async (
     tables: [string, string],
-    leftColumns: any,
-    rightColumns: any
+    leftColumns: LooseObject,
+    rightColumns: LooseObject
   ) => {
-    const getWhereFormat = (table: string, columns: any) => {
+    const getWhereFormat = (table: string, columns: LooseObject) => {
       let where: string = Object.keys(columns)
         .map((key) => `${table}.${key} = \"${columns[key]}\"`)
         .join(" AND ")
@@ -144,7 +148,7 @@ export default class Query {
     return rows
   } */
 
-  leftJoin = (columns: any, table: string) => {
+  leftJoin = (columns: LooseObject, table: string) => {
     this.on(columns)
 
     this.setLeftJoinString(
@@ -154,7 +158,7 @@ export default class Query {
     return this
   }
 
-  innerJoin = (columns: any, table: string) => {
+  innerJoin = (columns: LooseObject, table: string) => {
     this.on(columns)
 
     this.setInnerJoinString(
@@ -165,7 +169,7 @@ export default class Query {
   }
 
   // Queries
-  find = async (columns?: any) => {
+  find = async (columns?: LooseObject) => {
     if (columns) {
       this.where(columns)
     }
@@ -177,7 +181,7 @@ export default class Query {
     return rows
   }
 
-  findOne = async (columns: any) => {
+  findOne = async (columns: LooseObject) => {
     this.where(columns)
 
     let queryString: string = `SELECT ${this.selectColumns} FROM ${this.table} ${this.leftJoinString} ${this.innerJoinString} WHERE ${this.whereString} ${this.groupByString} ${this.orderByString} LIMIT 1;`
@@ -187,7 +191,7 @@ export default class Query {
     return rows[0]
   }
 
-  insertOne = async (columns: any) => {
+  insertOne = async (columns: LooseObject) => {
     let columnItems = `(${Object.keys(columns).join(",")})`
     let valueItems = `(${Object.values(columns)
       .map((v) => `\"${v}\"`)
@@ -200,7 +204,7 @@ export default class Query {
     return rows
   }
 
-  deleteOne = async (columns: any) => {
+  deleteOne = async (columns: LooseObject) => {
     this.where(columns)
 
     let queryString: string = `DELETE FROM ${this.table} WHERE ${this.whereString};`
@@ -210,7 +214,7 @@ export default class Query {
     return rows[0]
   }
 
-  updateOne = async (where: any, columns: any) => {
+  updateOne = async (where: LooseObject, columns: LooseObject) => {
     let setString: string = Object.keys(columns)
       .map((key) => `${key} = ${columns[key]}`)
       .join(",")

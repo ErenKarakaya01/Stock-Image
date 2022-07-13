@@ -95,7 +95,11 @@ const Creator = () => {
                   <Group className={creatorsStyles.nickname} position="center">
                     {erenNickname}
                   </Group>
-                  <Group className={creatorsStyles.nameSurname} position="apart" grow>
+                  <Group
+                    className={creatorsStyles.nameSurname}
+                    position="apart"
+                    grow
+                  >
                     <Text
                       variant="gradient"
                       gradient={{ from: "indigo", to: "cyan", deg: 45 }}
@@ -111,7 +115,10 @@ const Creator = () => {
                   </Group>
 
                   <Group className={creatorsStyles.footer} position="center">
-                    <a href="https://www.linkedin.com/in/eren-karakaya-b1a034206/" target="_blank">
+                    <a
+                      href="https://www.linkedin.com/in/eren-karakaya-b1a034206/"
+                      target="_blank"
+                    >
                       <BrandLinkedin
                         className={creatorsStyles.linkedin}
                         size={30}
@@ -136,8 +143,6 @@ const Creator = () => {
                 </Card.Section>
               </Card>
             </Col>
-
-            
           </Grid>
         </Grid>
       </Grid>

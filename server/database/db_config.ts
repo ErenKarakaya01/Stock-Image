@@ -4,34 +4,14 @@ const dotenv = require("dotenv")
 
 dotenv.config()
 
-/* const db_config = {
-  host: "localhost",
-  user: "root",
-  database: "deneme",
-} */
-
+// Setting the connection to DB
 let connection: any = mysql.createConnection(process.env.MYSQL_URI)
 
+// Promisifying the connection to use async, await
 const query = util.promisify(connection.query).bind(connection)
 
-/* const handleDisconnect = async () => {
-  connection = await mysql.createConnection(
-    "mysql://b7c317a6536a15:e01681c5@eu-cdbr-west-03.cleardb.net/heroku_fb154a1c8e2c548?reconnect=true"
-  )
-
-  await connection.connect((err: any) => {
-    if (err) {
-      console.log("An error occurred when connecting to DB:", err)
-      setTimeout(handleDisconnect, 2000)
-    }
-  })
-  connection.on("error", async () => {
-    await handleDisconnect()
-    console.log("Reconnected to ClearDB Database!")
-  })
-} */
-
-connection.connect(async (err: any) => {
+// Connecting
+connection.connect(async (err: Error) => {
   if (err) {
     console.log("An error occurred when connecting to DB:", err)
   } else {

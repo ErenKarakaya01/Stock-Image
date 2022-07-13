@@ -3,18 +3,10 @@ import pageStyles from "../sass/pages.module.scss"
 import {
   Group,
   Grid,
-  Col,
-  Paper,
-  Select,
   Divider,
   Box,
-  Card,
   Text,
-  Badge,
-  Highlight,
-  Button,
   ScrollArea,
-  Accordion,
   Image,
 } from "@mantine/core"
 import { CurrencyDollar } from "tabler-icons-react"
@@ -44,18 +36,19 @@ const Trades = () => {
 
   useEffect(() => {
     if (user === null) return
-
     ;(async () => {
       // Getting the image infos that the user sold or purchased
       const { data } = await axios.get(`/images/trades/${user!.id}`)
 
-      setImages(data.trades.map((image: Image) => {
-        return {
-          ...image,
-          extension: getFileType(image.base64_url),
-          size: getSize(image.base64_url)
-        }
-      }))
+      setImages(
+        data.trades.map((image: Image) => {
+          return {
+            ...image,
+            extension: getFileType(image.base64_url),
+            size: getSize(image.base64_url),
+          }
+        })
+      )
     })()
   }, [user])
 

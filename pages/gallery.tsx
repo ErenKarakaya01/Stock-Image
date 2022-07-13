@@ -42,18 +42,19 @@ const Gallery = () => {
 
   useEffect(() => {
     if (user === null) return
-
     ;(async () => {
       // Fetching the image datas that the user uploaded
       const { data } = await axios.get(`/images/gallery/${user!.id}`)
 
-      setImages(data.images.map((v: RawImage) => {
-        return {
-          ...v,
-          size: getSize(v.base64_url), // Calculating size of an image
-          extension: getFileType(v.base64_url), // Getting the extension type of and image
-        }
-      }))
+      setImages(
+        data.images.map((v: RawImage) => {
+          return {
+            ...v,
+            size: getSize(v.base64_url), // Calculating size of an image
+            extension: getFileType(v.base64_url), // Getting the extension type of and image
+          }
+        })
+      )
     })()
   }, [user])
 

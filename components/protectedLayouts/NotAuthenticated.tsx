@@ -4,7 +4,7 @@ import AuthenticateContext from "components/contexts/authenticate"
 import Loading from "components/Loading"
 import { showNotification } from "@mantine/notifications"
 
-const NotAuthenticated = ({ children }: { children: any }) => {
+const NotAuthenticated = ({ children }: { children: React.ReactNode }) => {
   const { isAuth } = useContext(AuthenticateContext)
   const router = useRouter()
   const [load, setLoad] = useState<boolean | null>(null)

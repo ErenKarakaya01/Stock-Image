@@ -1,14 +1,26 @@
+import { Request, Response, NextFunction } from "express"
+
 module.exports = {
-  ensureAuthenticated: function (req: any, _res: any, next: any) {
+  // Middleware to ensure authentication
+  ensureAuthenticated: function (
+    req: Request,
+    _res: Response,
+    next: NextFunction
+  ) {
     if (req.isAuthenticated()) {
       return next()
     }
   },
-  forwardAuthenticated: function (req: any, _res: any, next: any) {
+  // Middleware not to ensure authentication
+  forwardAuthenticated: function (
+    req: Request,
+    _res: Response,
+    next: NextFunction
+  ) {
     if (!req.isAuthenticated()) {
       return next()
     }
-  }
+  },
 }
 
 export {}

@@ -5,20 +5,11 @@ import {
   Group,
   Grid,
   Col,
-  Paper,
-  Select,
   Divider,
   Box,
-  Card,
   Text,
-  Badge,
-  Highlight,
   Button,
   ScrollArea,
-  Image,
-  PasswordInput,
-  Radio,
-  RadioGroup,
   TextInput,
   Center,
 } from "@mantine/core"
@@ -34,13 +25,13 @@ import UserContext from "components/contexts/user"
 import { useRouter } from "next/router"
 
 interface FormValues {
-  name: string // regular field, same as inferred type
+  name: string
   category: string
   price: string
 }
 
 const Upload = () => {
-  const [img, setImg] = useState<any | null>(null)
+  const [img, setImg] = useState<File | null>(null)
   const { user } = useContext(UserContext)
   const router = useRouter()
 
@@ -65,7 +56,7 @@ const Upload = () => {
           : values.category.length >= 60
           ? "Too Long Category"
           : null,
-      price:  !isNumeric(values.price) ? "Price Needs To Be Numeric" : null,
+      price: !isNumeric(values.price) ? "Price Needs To Be Numeric" : null,
     }),
   })
 
@@ -105,8 +96,8 @@ const Upload = () => {
       })
   }
 
-  const isNumeric = (str: any) => {
-    return !isNaN(str) && !isNaN(parseFloat(str))
+  const isNumeric = (str: string) => {
+    return !isNaN(parseFloat(str))
   }
 
   const toBase64 = (file: File) =>
@@ -171,7 +162,11 @@ const Upload = () => {
                       {...form.getInputProps("category")}
                     />
 
-                    <Group className={uploadStyles.priceAndButton} direction="row" grow>
+                    <Group
+                      className={uploadStyles.priceAndButton}
+                      direction="row"
+                      grow
+                    >
                       <TextInput
                         label="Price"
                         placeholder="Price"
@@ -197,7 +192,7 @@ const Upload = () => {
                   </Col>
                 </Grid>
 
-                <StyledDropzone img={img} setImg={setImg} />
+                <StyledDropzone img={img!} setImg={setImg} />
               </Group>
             </form>
           </Grid>

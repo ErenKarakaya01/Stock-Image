@@ -57,7 +57,7 @@ const LoginForm = () => {
           )
         }
       })
-      .catch((e: any) => console.log(e))
+      .catch((e: Error) => console.log(e))
   }
 
   return (
