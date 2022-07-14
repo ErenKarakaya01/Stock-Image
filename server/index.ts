@@ -5,6 +5,7 @@ import passport from "passport"
 import session from "express-session"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import { ConnectingAirportsOutlined } from "@mui/icons-material"
 const dotenv = require("dotenv")
 
 dotenv.config()
@@ -15,6 +16,8 @@ const port = process.env.PORT || 3000
 const dev = process.env.NODE_ENV !== "production"
 const server = next({ dev })
 const handle = server.getRequestHandler()
+
+console.log(process.env.PORT)
 
 server.prepare().then(async () => {
   const app = express()
