@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react"
 import pageStyles from "../sass/pages.module.scss"
+import tradesStyles from "../sass/trades.module.scss"
 import {
   Group,
   Grid,
@@ -98,6 +99,12 @@ const Trades = () => {
                 </>
               }
             />
+
+            {user && user.type === "creator" ? (
+              <Group className={tradesStyles.balance} position="right">
+                {`Balance: ${user?.balance}$`}
+              </Group>
+            ) : null}
 
             <ImageAccordion data={images} isTradeCard={true} />
           </Grid>

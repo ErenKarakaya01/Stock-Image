@@ -97,7 +97,7 @@ const Upload = () => {
   }
 
   const isNumeric = (str: string) => {
-    return !isNaN(parseFloat(str))
+    return /^-?\d+$/.test(str)
   }
 
   const toBase64 = (file: File) =>
@@ -137,6 +137,7 @@ const Upload = () => {
                     UPLOAD
                   </Text>
                 </Group>
+
                 <Divider
                   my="xs"
                   variant="dashed"
@@ -148,6 +149,7 @@ const Upload = () => {
                     </>
                   }
                 />
+
                 <Grid className={uploadStyles.inputGrid}>
                   <Col className={uploadStyles.col1} span={6}>
                     <TextInput

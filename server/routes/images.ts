@@ -6,13 +6,23 @@ const router = express.Router()
 
 const { ensureAuthenticated } = require("../config/auth")
 
+interface RequestBodyObject {
+  [key: string]: string
+}
+
 // Upload image
 router.post(
   "/upload",
   ensureAuthenticated,
   async (req: Request, res: Response) => {
     try {
-      const { name, category, price, base64_url, creator_id } = req.body
+      const {
+        name,
+        category,
+        price,
+        base64_url,
+        creator_id,
+      }: RequestBodyObject = req.body
       const upload_date: string = new Date()
         .toISOString()
         .slice(0, 19)
@@ -69,11 +79,11 @@ interface ImageWithoutLikedAndBoughtColumn {
 }
 
 interface ImageWithoutBoughtColumn extends ImageWithoutLikedAndBoughtColumn {
-  liked: boolean
+  liked: number
 }
 
 interface Image extends ImageWithoutBoughtColumn {
-  bought: boolean
+  bought: number
 }
 
 // Browse page
@@ -82,7 +92,7 @@ router.post(
   ensureAuthenticated,
   async (req: Request, res: Response) => {
     try {
-      const { id, name, category, order_by } = req.body
+      const { id, name, category, order_by }: RequestBodyObject = req.body
 
       let likes = (
         await table("likes").select(["image_id"]).find({ id: id })
@@ -131,12 +141,20 @@ router.post(
   }
 )
 
+interface ImagePersonLiked {
+  id: number
+  image_id: number
+}
+
 // Toggling like of an image
 router.post("/toggle-like", async (req: Request, res: Response) => {
   try {
-    const { id, image_id } = req.body
+    const { id, image_id }: RequestBodyObject = req.body
 
-    const liked = await table("likes").findOne({ id: id, image_id: image_id })
+    const liked: ImagePersonLiked[] = await table("likes").findOne({
+      id: id,
+      image_id: image_id,
+    })
 
     if (liked) await table("likes").deleteOne({ id: id, image_id: image_id })
     else await table("likes").insertOne({ id: id, image_id: image_id })
@@ -147,14 +165,19 @@ router.post("/toggle-like", async (req: Request, res: Response) => {
   }
 })
 
+interface ImageStatus {
+  bought: number
+  liked: number
+}
+
 // Image status for a specific user
 router.get(
   "/image/:image_id/user/:user_id",
   async (req: Request, res: Response) => {
     try {
-      const { image_id, user_id } = req.params
+      const { image_id, user_id }: RequestBodyObject = req.params
 
-      const imageStatus = await table("image")
+      const imageStatus: ImageStatus = await table("image")
         .select([
           "CASE WHEN image.image_id = trading.image_id THEN 1 ELSE 0 END AS bought",
           "CASE WHEN image.image_id = likes.image_id THEN 1 ELSE 0 END AS liked",
@@ -176,7 +199,8 @@ router.get(
 // Purchase process
 router.post("/buy", async (req: Request, res: Response) => {
   try {
-    const { customer_id, creator_id, image_id, price } = req.body
+    const { customer_id, creator_id, image_id, price }: RequestBodyObject =
+      req.body
 
     const trade_date: string = new Date()
       .toISOString()
@@ -215,32 +239,36 @@ router.get(
   "/trades/:id",
   ensureAuthenticated,
   async (req: MyRequestObj, res: Response) => {
-    const { id } = req.params
+    try {
+      const { id } = req.params
 
-    const whereColumn: string =
-      req.user.type === "customer"
-        ? "trading.customer_id"
-        : "trading.creator_id"
+      const whereColumn: string =
+        req.user.type === "customer"
+          ? "trading.customer_id"
+          : "trading.creator_id"
 
-    let trades = await table("trading")
-      .select([
-        "trading.trade_date",
-        "customer.name AS customer",
-        "creator.name AS creator",
-        "trading.image_id",
-        "image.price",
-        "image.category",
-        "image.name",
-        "image.upload_date",
-        "image.base64_url",
-      ])
-      .leftJoin({ "trading.image_id": "image.image_id" }, "image")
-      .innerJoin({ "customer.id": "trading.customer_id" }, "user AS customer")
-      .innerJoin({ "creator.id": "trading.creator_id" }, "user AS creator")
-      .where({ [whereColumn]: id })
-      .find()
+      let trades = await table("trading")
+        .select([
+          "trading.trade_date",
+          "customer.name AS customer",
+          "creator.name AS creator",
+          "trading.image_id",
+          "image.price",
+          "image.category",
+          "image.name",
+          "image.upload_date",
+          "image.base64_url",
+        ])
+        .leftJoin({ "trading.image_id": "image.image_id" }, "image")
+        .innerJoin({ "customer.id": "trading.customer_id" }, "user AS customer")
+        .innerJoin({ "creator.id": "trading.creator_id" }, "user AS creator")
+        .where({ [whereColumn]: id })
+        .find()
 
-    res.send({ trades: trades })
+      res.send({ trades: trades })
+    } catch (e) {
+      console.log(e)
+    }
   }
 )
 

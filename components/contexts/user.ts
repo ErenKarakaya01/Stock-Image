@@ -7,6 +7,7 @@ interface UserModal {
   email: string,
   type: "customer" | "creator"
   created_at: string
+  balance?: number
 }
 
 interface User {
