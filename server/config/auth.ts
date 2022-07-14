@@ -1,9 +1,13 @@
 import { Request, Response, NextFunction } from "express"
 
+interface RequestWithIsAuthenticated extends Request {
+  isAuthenticated: any
+}
+
 module.exports = {
   // Middleware to ensure authentication
   ensureAuthenticated: function (
-    req: Request,
+    req: RequestWithIsAuthenticated,
     _res: Response,
     next: NextFunction
   ) {
@@ -13,7 +17,7 @@ module.exports = {
   },
   // Middleware not to ensure authentication
   forwardAuthenticated: function (
-    req: Request,
+    req: RequestWithIsAuthenticated,
     _res: Response,
     next: NextFunction
   ) {
