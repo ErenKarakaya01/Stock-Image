@@ -5,7 +5,6 @@ import passport from "passport"
 import session from "express-session"
 import cookieParser from "cookie-parser"
 import cors from "cors"
-import { ConnectingAirportsOutlined } from "@mui/icons-material"
 const dotenv = require("dotenv")
 
 dotenv.config()
