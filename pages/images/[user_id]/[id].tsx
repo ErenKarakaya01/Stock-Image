@@ -220,9 +220,9 @@ export const getStaticProps: GetStaticProps = async (url: any) => {
       "image.creator_id",
     ])
     .leftJoin({ "likes.id": url.params.user_id }, "likes")
-    .leftJoin({ "trading.customer_id": url.user_id }, "trading")
-    .findOne({ "image.image_id": url.id })
-url
+    .leftJoin({ "trading.customer_id": url.params.user_id }, "trading")
+    .findOne({ "image.image_id": url.params.id })
+    
   return {
     props: {
       image: {
