@@ -5,7 +5,9 @@ import passport from "passport"
 import session from "express-session"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+const dotenv = require("dotenv")
 
+dotenv.config()
 
 const MemoryStore = require("memorystore")(session)
 
