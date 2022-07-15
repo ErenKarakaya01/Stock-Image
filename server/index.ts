@@ -61,9 +61,9 @@ try {
     //"heroku-postbuild": "npm run build"
     console.log("eren4")
     // Routes
-    app.use("/users", require("./routes/users.ts"))
+    app.use("/users", require("./routes/users"))
     console.log("eren7")
-    app.use("/images", require("./routes/images.ts"))
+    app.use("/images", require("./routes/images"))
     console.log("eren6")
     app.all("*", (req: any, res: any) => {
       return handle(req, res)
