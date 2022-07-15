@@ -48,7 +48,7 @@ const Browse = () => {
     ;(async () => {
       // Getting images in the order based on the inputs a user entered
       const { data } = await axios.post("/images/browse", {
-        id: user!.id,
+        id: user?.id,
         name: name,
         category: category,
         order_by: orderBy === "Best Selling" ? "sales_count" : "upload_date",
@@ -61,7 +61,7 @@ const Browse = () => {
   // Handles like process
   const handleLike = async (image_id: number) => {
     const { data } = await axios.post("/images/toggle-like", {
-      id: user!.id,
+      id: user?.id,
       image_id: image_id,
     })
 
@@ -127,7 +127,7 @@ const Browse = () => {
                         shadow="xl"
                         radius={"lg"}
                       >
-                        <Link href={`/images/${user!.id}/${v.image_id}`}>
+                        <Link href={`/images/${user?.id}/${v.image_id}`}>
                           <Card.Section className={browseStyles.image}>
                             <img src={v.base64_url} alt={v.name} />
                           </Card.Section>
@@ -160,7 +160,7 @@ const Browse = () => {
                             )}
                           </IconButton>
 
-                          <Link href={`/images/${user!.id}/${v.image_id}`}>
+                          <Link href={`/images/${user?.id}/${v.image_id}`}>
                             <Button
                               disabled={v.bought}
                               variant="outline"
