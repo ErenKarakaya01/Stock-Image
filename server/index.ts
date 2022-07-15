@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 const dotenv = require("dotenv")
 
-dotenv.config()
+dotenv.config({ path: "./config/config.env" })
 
 const MemoryStore = require("memorystore")(session)
 
@@ -16,7 +16,9 @@ const dev = process.env.NODE_ENV !== "production"
 const server = next({ dev })
 const handle = server.getRequestHandler()
 
-console.log(process.env.PORT)
+console.log("process.env.PORT is: " + process.env.PORT)
+console.log("port is: " + port)
+
 
 server.prepare().then(async () => {
   const app = express()
