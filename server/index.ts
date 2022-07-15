@@ -5,9 +5,9 @@ import passport from "passport"
 import session from "express-session"
 import cookieParser from "cookie-parser"
 import cors from "cors"
-/* const dotenv = require("dotenv")
+const dotenv = require("dotenv")
 
-dotenv.config({ path: "./config/config.env" }) */
+dotenv.config()
 
 const MemoryStore = require("memorystore")(session)
 
@@ -28,9 +28,9 @@ try {
     // Body parser middlewares
     app.use(express.json({ limit: "50mb" }))
     app.use(express.urlencoded({ extended: false, limit: "50mb" }))
-  
+
     app.use(express.static(path.join(__dirname, "public")))
-  
+
     // Session middleware
     app.use(
       session({
@@ -47,7 +47,7 @@ try {
     app.use(passport.initialize())
     app.use(passport.session())
     require("./config/passport")(passport)
-  
+
     // Cookieparser middleware
     app.use(cookieParser())
     console.log("eren3")
@@ -57,12 +57,8 @@ try {
       res.header("Access-Control-Allow-Headers", "X-Requested-With")
       next()
     })
-    app.use(
-      cors({
-        origin: "*",
-      })
-    )
-    
+    app.use(cors())
+
     console.log("eren4")
     // Routes
     app.use("/users", require("./routes/users.ts"))
