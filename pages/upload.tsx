@@ -47,16 +47,20 @@ const Upload = () => {
       name:
         values.name.length <= 1
           ? "Too Short Name"
-          : values.name.length >= 60
+          : values.name.length >= 12
           ? "Too Long Name"
           : null,
       category:
         values.category.length <= 1
           ? "Too Short Category"
-          : values.category.length >= 60
+          : values.category.length >= 12
           ? "Too Long Category"
           : null,
-      price: !isNumeric(values.price) ? "Price Needs To Be Numeric" : null,
+      price: !isNumeric(values.price)
+        ? "Price Needs To Be Numeric"
+        : values.price.length > 5
+        ? "Too Much Price"
+        : null,
     }),
   })
 
