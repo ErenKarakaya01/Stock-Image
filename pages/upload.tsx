@@ -179,7 +179,7 @@ const Upload = () => {
                         {...form.getInputProps("price")}
                       />
                       <Button className={uploadStyles.button} type="submit">
-                        Submit
+                        Upload
                       </Button>
                     </Group>
                   </Col>
