@@ -74,5 +74,3 @@ server.prepare().then(async () => {
     console.log(`> Ready on http://localhost:${port}`)
   })
 })
-
-export {}
