@@ -24,7 +24,7 @@ console.log("dev: " + dev)
 
 server.prepare().then(async () => {
   const app = express()
-
+  console.log("eren1")
   // Body parser middlewares
   app.use(express.json({ limit: "50mb" }))
   app.use(express.urlencoded({ extended: false, limit: "50mb" }))
@@ -42,7 +42,7 @@ server.prepare().then(async () => {
       }),
     })
   )
-
+  console.log("eren2")
   // Passport middleware
   app.use(passport.initialize())
   app.use(passport.session())
@@ -50,7 +50,7 @@ server.prepare().then(async () => {
 
   // Cookieparser middleware
   app.use(cookieParser())
-
+  console.log("eren3")
   // CORS middleware
   app.use((_req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*")
@@ -63,7 +63,7 @@ server.prepare().then(async () => {
     })
   )
   
-
+  console.log("eren4")
   // Routes
   app.use("/users", require("./routes/users.ts"))
   app.use("/images", require("./routes/images.ts"))
@@ -71,7 +71,7 @@ server.prepare().then(async () => {
   app.all("*", (req: any, res: any) => {
     return handle(req, res)
   })
-
+  console.log("eren5")
   app.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`)
   })
