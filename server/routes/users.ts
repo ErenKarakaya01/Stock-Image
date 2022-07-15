@@ -9,13 +9,19 @@ const passport = require("passport")
 
 const { ensureAuthenticated, forwardAuthenticated } = require("../config/auth")
 
-interface RequestBodyObject {
+/* interface RequestBodyObject {
   [key: string]: string
-}
+} */
 
 // Get isAuthenticated
-router.get("/isauthenticated", (req: Request, res: Response) => {
-  res.send({ isAuthenticated: req.isAuthenticated() })
+router.get("/isauthenticated", (req: any, res: any) => {
+  console.log("eren12")
+  try {
+    res.send({ isAuthenticated: req.isAuthenticated() })
+  } catch (e) {
+    console.log(e)
+  }
+  
 })
 console.log("eren9")
 
@@ -23,28 +29,28 @@ console.log("eren9")
 router.get(
   "/getuser",
   ensureAuthenticated,
-  async (req: Request, res: Response) => {
+  async (req: any, res: any) => {
     res.send({ user: req.user })
   }
 )
 
-interface NewUser {
+/* interface NewUser {
   name: string
   surname: string
   email: string
   password: string
   created_at: string
-}
+} */
 
-interface User extends NewUser {
+/* interface User extends NewUser {
   id: number
-}
+} */
 console.log("eren10")
 // Register
 router.post(
   "/register",
   forwardAuthenticated,
-  (req: Request, res: Response) => {
+  (req: any, res: any) => {
     const {
       name,
       surname,
@@ -52,7 +58,7 @@ router.post(
       password,
       confirmPassword,
       type,
-    }: RequestBodyObject = req.body
+    }: any = req.body
 
     let errors: string[] = []
 
@@ -77,7 +83,7 @@ router.post(
     } else {
       table("user")
         .findOne({ email: email })
-        .then((user: User) => {
+        .then((user: any) => {
           if (user) {
             errors.push("Email already exists")
             res.send({
@@ -91,7 +97,7 @@ router.post(
               .replace("T", " ")
 
             // Creating new user
-            const newUser: NewUser = {
+            const newUser: any = {
               name,
               surname,
               email,
@@ -134,7 +140,7 @@ router.post(
   }
 )
 
-interface UserToLogin {
+/* interface UserToLogin {
   id: number
   name: string
   surname: string
@@ -142,14 +148,14 @@ interface UserToLogin {
   created_at: Date
   type: string
   balance?: number
-}
+} */
 console.log("eren11")
 // Login
 router.post(
   "/login",
   forwardAuthenticated,
-  (req: Request, res: Response, next: NextFunction) => {
-    passport.authenticate("local", (err: Error, user: UserToLogin, _info: any) => {
+  (req: any, res: any, next: NextFunction) => {
+    passport.authenticate("local", (err: Error, user: any, _info: any) => {
       if (err) {
         return next(err)
       }
@@ -171,15 +177,15 @@ router.post(
   }
 )
 
-interface RequestWithLogout extends Request {
+/* interface RequestWithLogout extends Request {
   logout: any
-}
+} */
 
 // Logout
 router.get(
   "/logout",
   ensureAuthenticated,
-  (req: RequestWithLogout, res: Response, next: NextFunction) => {
+  (req: any, res: any, next: NextFunction) => {
     req.logout((err: any) => {
       if (err) {
         return next(err)

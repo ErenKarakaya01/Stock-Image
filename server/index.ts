@@ -14,7 +14,7 @@ const MemoryStore = require("memorystore")(session)
 const port = process.env.PORT || 3000
 const dev = process.env.NODE_ENV !== "production"
 const server = next({ dev })
-//const handle = server.getRequestHandler()
+const handle = server.getRequestHandler()
 
 console.log("process.env.PORT is: " + process.env.PORT)
 console.log("port is: " + port)
@@ -65,13 +65,13 @@ try {
     
     console.log("eren4")
     // Routes
-    app.use("/images", require("./routes/images.ts"))
-    console.log("eren7")
     app.use("/users", require("./routes/users.ts"))
+    console.log("eren7")
+    app.use("/images", require("./routes/images.ts"))
     console.log("eren6")
-    /* app.all("*", (req: any, res: any) => {
+    app.all("*", (req: any, res: any) => {
       return handle(req, res)
-    }) */
+    })
     app.listen(port, () => {
       console.log(`> Ready on http://localhost:${port}`)
     })
