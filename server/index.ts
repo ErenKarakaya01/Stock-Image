@@ -5,9 +5,9 @@ import passport from "passport"
 import session from "express-session"
 import cookieParser from "cookie-parser"
 import cors from "cors"
-const dotenv = require("dotenv")
+/* const dotenv = require("dotenv")
 
-dotenv.config({ path: "./config/config.env" })
+dotenv.config({ path: "./config/config.env" }) */
 
 const MemoryStore = require("memorystore")(session)
 
@@ -18,6 +18,8 @@ const handle = server.getRequestHandler()
 
 console.log("process.env.PORT is: " + process.env.PORT)
 console.log("port is: " + port)
+console.log("process.env.NODE_ENV : " + process.env.NODE_ENV)
+console.log("dev: " + dev)
 
 
 server.prepare().then(async () => {
