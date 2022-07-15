@@ -21,58 +21,61 @@ console.log("port is: " + port)
 console.log("process.env.NODE_ENV : " + process.env.NODE_ENV)
 console.log("dev: " + dev)
 
-
-server.prepare().then(async () => {
-  const app = express()
-  console.log("eren1")
-  // Body parser middlewares
-  app.use(express.json({ limit: "50mb" }))
-  app.use(express.urlencoded({ extended: false, limit: "50mb" }))
-
-  app.use(express.static(path.join(__dirname, "public")))
-
-  // Session middleware
-  app.use(
-    session({
-      secret: "secret",
-      resave: false,
-      saveUninitialized: true,
-      store: new MemoryStore({
-        checkPeriod: 86400000, // prune expired entries every 24h
-      }),
-    })
-  )
-  console.log("eren2")
-  // Passport middleware
-  app.use(passport.initialize())
-  app.use(passport.session())
-  require("./config/passport")(passport)
-
-  // Cookieparser middleware
-  app.use(cookieParser())
-  console.log("eren3")
-  // CORS middleware
-  app.use((_req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*")
-    res.header("Access-Control-Allow-Headers", "X-Requested-With")
-    next()
-  })
-  app.use(
-    cors({
-      origin: "http://localhost:3000",
-    })
-  )
+try {
+  server.prepare().then(async () => {
+    const app = express()
+    console.log("eren1")
+    // Body parser middlewares
+    app.use(express.json({ limit: "50mb" }))
+    app.use(express.urlencoded({ extended: false, limit: "50mb" }))
   
-  console.log("eren4")
-  // Routes
-  app.use("/users", require("./routes/users.ts"))
-  app.use("/images", require("./routes/images.ts"))
-  console.log("eren6")
-  app.all("*", (req: any, res: any) => {
-    return handle(req, res)
+    app.use(express.static(path.join(__dirname, "public")))
+  
+    // Session middleware
+    app.use(
+      session({
+        secret: "secret",
+        resave: false,
+        saveUninitialized: true,
+        store: new MemoryStore({
+          checkPeriod: 86400000, // prune expired entries every 24h
+        }),
+      })
+    )
+    console.log("eren2")
+    // Passport middleware
+    app.use(passport.initialize())
+    app.use(passport.session())
+    require("./config/passport")(passport)
+  
+    // Cookieparser middleware
+    app.use(cookieParser())
+    console.log("eren3")
+    // CORS middleware
+    app.use((_req, res, next) => {
+      res.header("Access-Control-Allow-Origin", "*")
+      res.header("Access-Control-Allow-Headers", "X-Requested-With")
+      next()
+    })
+    app.use(
+      cors({
+        origin: "http://localhost:3000",
+      })
+    )
+    
+    console.log("eren4")
+    // Routes
+    app.use("/users", require("./routes/users.ts"))
+    app.use("/images", require("./routes/images.ts"))
+    console.log("eren6")
+    app.all("*", (req: any, res: any) => {
+      return handle(req, res)
+    })
+    console.log("eren5")
+    app.listen(port, () => {
+      console.log(`> Ready on http://localhost:${port}`)
+    })
   })
-  console.log("eren5")
-  app.listen(port, () => {
-    console.log(`> Ready on http://localhost:${port}`)
-  })
-})
+} catch (e: any) {
+  console.log(e)
+}
