@@ -58,7 +58,7 @@ try {
       next()
     })
     app.use(cors())
-
+    //"heroku-postbuild": "npm run build"
     console.log("eren4")
     // Routes
     app.use("/users", require("./routes/users.ts"))
