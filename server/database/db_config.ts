@@ -5,7 +5,7 @@ const dotenv = require("dotenv")
 dotenv.config({ path: "../config/config.env" })
 
 // Setting the connection to DB
-let connection: any = mysql.createConnection(process.env.MYSQL_URI)
+let connection: any = mysql.createConnection("mysql://b7c317a6536a15:e01681c5@eu-cdbr-west-03.cleardb.net/heroku_fb154a1c8e2c548?reconnect=true")
 
 // Promisifying the connection to use async, await
 const query = util.promisify(connection.query).bind(connection)
