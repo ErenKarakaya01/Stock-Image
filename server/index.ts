@@ -65,9 +65,9 @@ try {
     
     console.log("eren4")
     // Routes
-    app.use("/users", require("./routes/users.ts"))
-    console.log("eren7")
     app.use("/images", require("./routes/images.ts"))
+    console.log("eren7")
+    app.use("/users", require("./routes/users.ts"))
     console.log("eren6")
     /* app.all("*", (req: any, res: any) => {
       return handle(req, res)
