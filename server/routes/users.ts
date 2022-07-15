@@ -188,5 +188,3 @@ router.get(
 )
 
 module.exports = router
-
-export {}
