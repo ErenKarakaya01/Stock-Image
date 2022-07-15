@@ -22,7 +22,7 @@ console.log("process.env.NODE_ENV : " + process.env.NODE_ENV)
 console.log("dev: " + dev)
 
 try {
-  server.prepare().then(async () => {
+  server.prepare().then(() => {
     const app = express()
     console.log("eren1")
     // Body parser middlewares
@@ -65,9 +65,6 @@ try {
     
     console.log("eren4")
     // Routes
-    app.listen(port, () => {
-      console.log(`> Ready on http://localhost:${port}`)
-    })
     app.use("/users", require("./routes/users.ts"))
     console.log("eren7")
     app.use("/images", require("./routes/images.ts"))
@@ -75,6 +72,9 @@ try {
     /* app.all("*", (req: any, res: any) => {
       return handle(req, res)
     }) */
+    app.listen(port, () => {
+      console.log(`> Ready on http://localhost:${port}`)
+    })
     console.log("eren5")
   })
 } catch (e: any) {

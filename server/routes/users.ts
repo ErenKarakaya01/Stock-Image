@@ -1,3 +1,4 @@
+console.log("eren8")
 import table from "../database/table"
 import { Request, Response, NextFunction } from "express"
 
@@ -16,6 +17,7 @@ interface RequestBodyObject {
 router.get("/isauthenticated", (req: Request, res: Response) => {
   res.send({ isAuthenticated: req.isAuthenticated() })
 })
+console.log("eren9")
 
 // Get user info
 router.get(
@@ -37,7 +39,7 @@ interface NewUser {
 interface User extends NewUser {
   id: number
 }
-
+console.log("eren10")
 // Register
 router.post(
   "/register",
@@ -141,7 +143,7 @@ interface UserToLogin {
   type: string
   balance?: number
 }
-
+console.log("eren11")
 // Login
 router.post(
   "/login",
