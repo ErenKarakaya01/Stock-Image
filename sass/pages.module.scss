@@ -1,4 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Allan&display=swap");
+@font-face {
+  font-family: Allan;
+  src: url(Allan-Regular.ttf);
+}
 
 .grid {
   width: 100vw;
@@ -14,7 +17,7 @@
     padding: 1em;
 
     .navbarText {
-      font-family: "Allan", cursive;
+      font-family: "Allan";
       font-size: 2em;
     }
 
