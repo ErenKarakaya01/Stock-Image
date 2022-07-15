@@ -1,6 +1,5 @@
-console.log("eren8")
 import table from "../database/table"
-/* import { Request, Response, NextFunction } from "express" */
+import { Request, Response, NextFunction } from "express"
 
 const express = require("express")
 const router = express.Router()
@@ -9,138 +8,143 @@ const passport = require("passport")
 
 const { ensureAuthenticated, forwardAuthenticated } = require("../config/auth")
 
-/* interface RequestBodyObject {
+interface RequestBodyObject {
   [key: string]: string
-} */
+}
 
 // Get isAuthenticated
-router.get("/isauthenticated", (req: any, res: any) => {
-  console.log("eren12")
+router.get("/isauthenticated", (req: Request, res: Response) => {
   try {
     res.send({ isAuthenticated: req.isAuthenticated() })
   } catch (e) {
     console.log(e)
   }
-  
 })
-console.log("eren9")
 
 // Get user info
 router.get(
   "/getuser",
   ensureAuthenticated,
-  async (req: any, res: any) => {
-    res.send({ user: req.user })
+  async (req: Request, res: Response) => {
+    try {
+      res.send({ user: req.user })
+    } catch (e) {
+      console.log(e)
+    }
   }
 )
 
-/* interface NewUser {
+interface NewUser {
   name: string
   surname: string
   email: string
   password: string
   created_at: string
-} */
+}
 
-/* interface User extends NewUser {
+interface User extends NewUser {
   id: number
-} */
-console.log("eren10")
+}
+
 // Register
 router.post(
   "/register",
   forwardAuthenticated,
-  (req: any, res: any) => {
-    const {
-      name,
-      surname,
-      email,
-      password,
-      confirmPassword,
-      type,
-    }: any = req.body
+  (req: Request, res: Response) => {
+    try {
+      const {
+        name,
+        surname,
+        email,
+        password,
+        confirmPassword,
+        type,
+      }: RequestBodyObject = req.body
 
-    let errors: string[] = []
+      let errors: string[] = []
 
-    // Checking the errors
-    if (!name || !email || !password || !confirmPassword) {
-      errors.push("Please enter all fields")
-    }
+      // Checking the errors
+      if (!name || !email || !password || !confirmPassword) {
+        errors.push("Please enter all fields")
+      }
 
-    if (password != confirmPassword) {
-      errors.push("Passwords do not match")
-    }
+      if (password != confirmPassword) {
+        errors.push("Passwords do not match")
+      }
 
-    if (password === undefined || password.length < 6) {
-      errors.push("Password must be at least 6 characters")
-    }
+      if (password === undefined || password.length < 6) {
+        errors.push("Password must be at least 6 characters")
+      }
 
-    if (errors.length > 0) {
-      res.send({
-        isRegistered: false,
-        errors,
-      })
-    } else {
-      table("user")
-        .findOne({ email: email })
-        .then((user: any) => {
-          if (user) {
-            errors.push("Email already exists")
-            res.send({
-              isRegistered: false,
-              errors,
-            })
-          } else {
-            const created_at: string = new Date()
-              .toISOString()
-              .slice(0, 19)
-              .replace("T", " ")
-
-            // Creating new user
-            const newUser: any = {
-              name,
-              surname,
-              email,
-              password,
-              created_at,
-            }
-
-            bcrypt.genSalt(10, (_err: Error, salt: string) => {
-              // Encrypting the password
-              bcrypt.hash(
-                newUser.password,
-                salt,
-                (err: Error, hash: string) => {
-                  if (err) throw err
-
-                  newUser.password = hash
-
-                  table("user")
-                    .insertOne(newUser)
-                    .then((_) => {
-                      table("user")
-                        .findOne({ email: email })
-                        .then(({ id }: { id: number }) => {
-                          if (type === "customer") {
-                            table("customer").insertOne({ id: id })
-                          } else {
-                            table("creator").insertOne({ id: id, balance: 0 })
-                          }
-
-                          res.send({ isRegistered: true, errors })
-                        })
-                    })
-                    .catch((err: Error) => console.log(err))
-                }
-              )
-            })
-          }
+      if (errors.length > 0) {
+        res.send({
+          isRegistered: false,
+          errors,
         })
+      } else {
+        table("user")
+          .findOne({ email: email })
+          .then((user: User) => {
+            if (user) {
+              errors.push("Email already exists")
+              res.send({
+                isRegistered: false,
+                errors,
+              })
+            } else {
+              const created_at: string = new Date()
+                .toISOString()
+                .slice(0, 19)
+                .replace("T", " ")
+
+              // Creating new user
+              const newUser: NewUser = {
+                name,
+                surname,
+                email,
+                password,
+                created_at,
+              }
+
+              bcrypt.genSalt(10, (_err: Error, salt: string) => {
+                // Encrypting the password
+                bcrypt.hash(
+                  newUser.password,
+                  salt,
+                  (err: Error, hash: string) => {
+                    if (err) throw err
+
+                    newUser.password = hash
+
+                    table("user")
+                      .insertOne(newUser)
+                      .then((_) => {
+                        table("user")
+                          .findOne({ email: email })
+                          .then(({ id }: { id: number }) => {
+                            if (type === "customer") {
+                              table("customer").insertOne({ id: id })
+                            } else {
+                              table("creator").insertOne({ id: id, balance: 0 })
+                            }
+
+                            res.send({ isRegistered: true, errors })
+                          })
+                      })
+                      .catch((err: Error) => console.log(err))
+                  }
+                )
+              })
+            }
+          })
+      }
+    } catch (e) {
+      console.log(e)
     }
   }
 )
 
-/* interface UserToLogin {
+interface UserToLogin {
   id: number
   name: string
   surname: string
@@ -148,50 +152,61 @@ router.post(
   created_at: Date
   type: string
   balance?: number
-} */
-console.log("eren11")
+}
+
 // Login
 router.post(
   "/login",
   forwardAuthenticated,
-  (req: any, res: any, next: any) => {
-    passport.authenticate("local", (err: Error, user: any, _info: any) => {
-      if (err) {
-        return next(err)
-      }
+  (req: Request, res: Response, next: NextFunction) => {
+    try {
+      passport.authenticate(
+        "local",
+        (err: Error, user: UserToLogin, _info: any) => {
+          if (err) {
+            return next(err)
+          }
 
-      if (!user) {
-        return res.send({
-          isLoggedIn: false,
-          errors: ["Wrong password or email!"],
-        })
-      }
+          if (!user) {
+            return res.send({
+              isLoggedIn: false,
+              errors: ["Wrong password or email!"],
+            })
+          }
 
-      req.logIn(user, (err: Error) => {
-        if (err) {
-          return next(err)
+          req.logIn(user, (err: Error) => {
+            if (err) {
+              return next(err)
+            }
+            return res.send({ isLoggedIn: true, errors: [] })
+          })
         }
-        return res.send({ isLoggedIn: true, errors: [] })
-      })
-    })(req, res, next)
+      )(req, res, next)
+    } catch (e) {
+      console.log(e)
+    }
   }
 )
 
-/* interface RequestWithLogout extends Request {
+interface RequestWithLogout extends Request {
   logout: any
-} */
+}
 
 // Logout
 router.get(
   "/logout",
   ensureAuthenticated,
-  (req: any, res: any, next: any) => {
-    req.logout((err: any) => {
-      if (err) {
-        return next(err)
-      }
-    })
-    res.send({ isLoggedOut: true })
+  (req: RequestWithLogout, res: Response, next: NextFunction) => {
+    try {
+      req.logout((err: any) => {
+        if (err) {
+          return next(err)
+        }
+      })
+      res.send({ isLoggedOut: true })
+    } catch (e) {
+      console.log(e)
+    }
   }
 )
 
