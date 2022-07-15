@@ -2,7 +2,7 @@ const mysql = require("mysql")
 const util = require("util")
 const dotenv = require("dotenv")
 
-dotenv.config()
+dotenv.config({ path: "../config/config.env" })
 
 // Setting the connection to DB
 let connection: any = mysql.createConnection(process.env.MYSQL_URI)
