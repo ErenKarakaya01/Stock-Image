@@ -1,6 +1,6 @@
 console.log("eren8")
 import table from "../database/table"
-import { Request, Response, NextFunction } from "express"
+/* import { Request, Response, NextFunction } from "express" */
 
 const express = require("express")
 const router = express.Router()
@@ -154,7 +154,7 @@ console.log("eren11")
 router.post(
   "/login",
   forwardAuthenticated,
-  (req: any, res: any, next: NextFunction) => {
+  (req: any, res: any, next: any) => {
     passport.authenticate("local", (err: Error, user: any, _info: any) => {
       if (err) {
         return next(err)
@@ -185,7 +185,7 @@ router.post(
 router.get(
   "/logout",
   ensureAuthenticated,
-  (req: any, res: any, next: NextFunction) => {
+  (req: any, res: any, next: any) => {
     req.logout((err: any) => {
       if (err) {
         return next(err)
