@@ -203,6 +203,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         },
       }
     }),
+    // New added images will be served in SSR
     fallback: "blocking",
   }
 }
