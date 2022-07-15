@@ -203,7 +203,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         },
       }
     }),
-    fallback: true,
+    fallback: "blocking",
   }
 }
 
