@@ -9,7 +9,7 @@ https://docs.google.com/document/d/1FZR00Sdhh5rKsz2jsTROXjhCLRHWLKxWlpNpg2rJjfc
 ---
 
 ### Website
-https://sprinkaichat.herokuapp.com
+[https://sprinkaichat.herokuapp.com](https://sprinkaistockbeyaz.herokuapp.com/login)
 
 ---
 
