@@ -66,48 +66,50 @@ const Upload = () => {
 
   const handleSubmit = async (values: FormValues) => {
     
+    let isUploadClosed = true
     // UPLOADING IMAGE IS TEMPORARILY DISABLED
-    showNotification({
-      autoClose: 5000,
-      title: "Uploading Image Closed",
-      message: "Uploading image is closed because of the server costs :(",
-      color: "red",
-    })
-    return
-
-    // Checking if the image was selected
-    if (!img)
-      return showNotification({
-        autoClose: 5000,
-        title: "Image Was Not Selected",
-        message: "You need to select an image",
-        color: "red",
-      })
-
-    let base64_url = await toBase64(img)
-
-    const { data } = await axios.post("/images/upload", {
-      ...values,
-      base64_url: base64_url,
-      creator_id: user!.id,
-    })
-
-    // Checking if the image was uploaded
-    if (data.wasUploaded) {
+    if (isUploadClosed) {
       showNotification({
         autoClose: 5000,
-        title: "Image Uploaded",
-        message: `You uploaded the image ${img.name}`,
-        color: "green",
-      })
-      router.push("/gallery")
-    } else
-      showNotification({
-        autoClose: 5000,
-        title: "File Was Not Uploaded",
-        message: "An error occurred, try again",
+        title: "Uploading Image Closed",
+        message: "Uploading image is closed because of the server costs :(",
         color: "red",
       })
+    } else {
+      // Checking if the image was selected
+      if (!img)
+        return showNotification({
+          autoClose: 5000,
+          title: "Image Was Not Selected",
+          message: "You need to select an image",
+          color: "red",
+        })
+
+      let base64_url = await toBase64(img)
+
+      const { data } = await axios.post("/images/upload", {
+        ...values,
+        base64_url: base64_url,
+        creator_id: user!.id,
+      })
+
+      // Checking if the image was uploaded
+      if (data.wasUploaded) {
+        showNotification({
+          autoClose: 5000,
+          title: "Image Uploaded",
+          message: `You uploaded the image ${img.name}`,
+          color: "green",
+        })
+        router.push("/gallery")
+      } else
+        showNotification({
+          autoClose: 5000,
+          title: "File Was Not Uploaded",
+          message: "An error occurred, try again",
+          color: "red",
+        })
+    }
   }
 
   const isNumeric = (str: string) => {
