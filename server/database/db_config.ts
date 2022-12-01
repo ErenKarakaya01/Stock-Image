@@ -17,7 +17,7 @@ connection.connect(async (err: Error) => {
   } else {
     console.log("DB Connected!")
 
-    setInterval(async () => {
+    setInterval(() => {
       query("SELECT 1").then(() => {
         console.log("Request was sent to ClearDB...")
       })
