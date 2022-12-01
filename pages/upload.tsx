@@ -65,15 +65,15 @@ const Upload = () => {
   })
 
   const handleSubmit = async (values: FormValues) => {
-
+    
     // UPLOADING IMAGE IS TEMPORARILY DISABLED
-    if (true)
-      showNotification({
-        autoClose: 5000,
-        title: "Uploading Image Closed",
-        message: "Uploading image is closed because of the server costs :(",
-        color: "red",
-      })
+    showNotification({
+      autoClose: 5000,
+      title: "Uploading Image Closed",
+      message: "Uploading image is closed because of the server costs :(",
+      color: "red",
+    })
+    return
 
     // Checking if the image was selected
     if (!img)
