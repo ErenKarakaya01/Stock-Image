@@ -65,8 +65,8 @@ const Upload = () => {
   })
 
   const handleSubmit = async (values: FormValues) => {
-    
-    let isUploadClosed = true
+
+    let isUploadClosed = false
     // UPLOADING IMAGE IS TEMPORARILY DISABLED
     if (isUploadClosed) {
       showNotification({
