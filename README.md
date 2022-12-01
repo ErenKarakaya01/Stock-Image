@@ -1,24 +1,21 @@
-# Custom server with TypeScript + Nodemon example
+# Stock Image
 
-The example shows how you can use [TypeScript](https://typescriptlang.com) on both the server and the client while using [Nodemon](https://nodemon.io/) to live reload the server code without affecting the Next.js universal code.
+## Overview
 
-Server entry point is `server/index.ts` in development and `dist/index.js` in production.
-The second directory should be added to `.gitignore`.
+Hi, I'm Eren and I study at Eskisehir Technical University as a Computer Science 2. grade student. I made a stock image web app using Next.js and Node.js! This web app was my Database Management course project. Check the report below!
 
-## Deploy your own
+https://docs.google.com/document/d/1FZR00Sdhh5rKsz2jsTROXjhCLRHWLKxWlpNpg2rJjfc
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/custom-server-typescript)
+---
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/custom-server-typescript)
+### Website
+[https://sprinkaichat.herokuapp.com](https://sprinkaistockbeyaz.herokuapp.com/)
 
-## How to use
+---
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+## Screenshots
 
-```bash
-npx create-next-app --example custom-server-typescript custom-server-typescript-app
-# or
-yarn create next-app --example custom-server-typescript custom-server-typescript-app
-# or
-pnpm create next-app -- --example custom-server-typescript custom-server-typescript-app
-```
+
+![Screenshot_6](https://user-images.githubusercontent.com/58625563/201694256-77a197a6-69f2-455f-a23f-000bfa19c39d.png)
+
+![Screenshot_7](https://user-images.githubusercontent.com/58625563/201694220-7ac2b7e3-bd38-456e-af39-16bdf10a6f6f.png)
